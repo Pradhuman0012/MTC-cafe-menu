@@ -2,235 +2,238 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>MTC Cafe Menu</title>
+  <title>MTC Cafe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
     :root {
-      --bg-main: #0f172a;
-      --bg-card: #020617;
-      --border: #1e293b;
-      --text-main: #e5e7eb;
-      --text-muted: #94a3b8;
-      --accent: #22c55e;
+      --bg: #0b0f1a;
+      --card: #111827;
+      --border: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #c7a14a; /* premium gold */
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg-main);
-      color: var(--text-main);
+      background: radial-gradient(1200px 600px at top, #111827, var(--bg));
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
     }
 
+    /* ===== HEADER ===== */
     header {
-      background: linear-gradient(180deg, #020617, #020617dd);
-      padding: 20px 16px 16px;
+      padding: 28px 16px 20px;
       text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 1px solid var(--border);
     }
 
     header img {
-      width: 76px;
-      height: 76px;
+      width: 84px;
+      height: 84px;
       border-radius: 50%;
       object-fit: cover;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.45);
-      margin-bottom: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      margin-bottom: 14px;
     }
 
     header h1 {
       margin: 0;
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 600;
-      color: var(--accent);
-      letter-spacing: 0.4px;
+      letter-spacing: 0.6px;
     }
 
-    header span {
-      font-size: 12px;
-      color: var(--text-muted);
+    header p {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.3px;
     }
 
+    /* ===== CONTAINER ===== */
     .container {
-      max-width: 600px;
+      max-width: 620px;
       margin: auto;
-      padding: 18px 14px 28px;
+      padding: 12px 14px 40px;
     }
 
+    /* ===== CATEGORY ===== */
     .category {
-      margin-bottom: 36px;
+      margin-top: 42px;
     }
 
     .category h2 {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 600;
-      margin-bottom: 14px;
-      padding-left: 12px;
-      border-left: 4px solid var(--accent);
-      color: #f8fafc;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #f9fafb;
     }
 
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 12px;
+    .category h2::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      opacity: 0.6;
+    }
+
+    /* ===== ITEM ROW ===== */
+    .item {
       display: flex;
       justify-content: space-between;
-      gap: 14px;
-      transition: transform 0.15s ease;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px dashed var(--border);
     }
 
-    .card:active {
-      transform: scale(0.98);
-    }
-
-    .item-info {
-      flex: 1;
+    .item:last-child {
+      border-bottom: none;
     }
 
     .item-name {
       font-size: 15px;
       font-weight: 500;
-      line-height: 1.3;
     }
 
     .item-desc {
       font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 3px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.4;
     }
 
     .price {
-      font-weight: 600;
       font-size: 15px;
+      font-weight: 600;
       color: var(--accent);
       white-space: nowrap;
     }
 
+    /* ===== FOOTER ===== */
     .note {
+      margin-top: 40px;
       text-align: center;
       font-size: 12px;
-      color: var(--text-muted);
-      margin: 28px 0 6px;
+      color: var(--muted);
     }
 
     footer {
+      margin-top: 10px;
       text-align: center;
-      font-size: 12px;
-      color: #64748b;
-      padding-bottom: 24px;
+      font-size: 11px;
+      color: #6b7280;
     }
   </style>
 </head>
 
 <body>
 
+  <!-- HEADER -->
   <header>
     <img src="logo.png" alt="MTC Cafe Logo">
-    <h1>MTC Cafe</h1>
-    <span>Fresh • Fast • Hygienic</span>
+    <h1>Mahakaal Themes Cafe</h1>
+    <p>Brewed in the shadows Served with light</p>
   </header>
 
+  <!-- MENU -->
   <div class="container">
 
     <!-- HOT COFFEE -->
-    <div class="category">
-      <h2>☕ Hot Coffee</h2>
+    <section class="category">
+      <h2>Hot Coffee</h2>
 
-      <div class="card">
-        <div class="item-info">
+      <div class="item">
+        <div>
           <div class="item-name">Espresso</div>
-          <div class="item-desc">Strong & classic shot</div>
+          <div class="item-desc">Pure, intense single shot</div>
         </div>
         <div class="price">₹80</div>
       </div>
 
-      <div class="card">
-        <div class="item-info">
+      <div class="item">
+        <div>
           <div class="item-name">Americano</div>
-          <div class="item-desc">Espresso with hot water</div>
+          <div class="item-desc">Espresso diluted with hot water</div>
         </div>
         <div class="price">₹90</div>
       </div>
 
-      <div class="card">
-        <div class="item-info">
+      <div class="item">
+        <div>
           <div class="item-name">Cappuccino</div>
-          <div class="item-desc">Milk, foam & coffee</div>
+          <div class="item-desc">Balanced milk, foam & coffee</div>
         </div>
         <div class="price">₹120</div>
       </div>
 
-      <div class="card">
-        <div class="item-info">
+      <div class="item">
+        <div>
           <div class="item-name">Cafe Latte</div>
-          <div class="item-desc">Smooth & creamy</div>
+          <div class="item-desc">Smooth milk-forward coffee</div>
         </div>
         <div class="price">₹130</div>
       </div>
-    </div>
+    </section>
 
     <!-- COLD COFFEE -->
-    <div class="category">
-      <h2>🧊 Cold Coffee</h2>
+    <section class="category">
+      <h2>Cold Coffee</h2>
 
-      <div class="card">
-        <div class="item-info">
+      <div class="item">
+        <div>
           <div class="item-name">Classic Cold Coffee</div>
           <div class="item-desc">Chilled & creamy</div>
         </div>
         <div class="price">₹140</div>
       </div>
 
-      <div class="card">
-        <div class="item-info">
+      <div class="item">
+        <div>
           <div class="item-name">Chocolate Cold Coffee</div>
-          <div class="item-desc">Rich chocolate flavour</div>
+          <div class="item-desc">Rich cocoa infusion</div>
         </div>
         <div class="price">₹160</div>
       </div>
-    </div>
+    </section>
 
     <!-- SNACKS -->
-    <div class="category">
-      <h2>🥪 Snacks</h2>
+    <section class="category">
+      <h2>Snacks</h2>
 
-      <div class="card">
-        <div class="item-info">
+      <div class="item">
+        <div>
           <div class="item-name">Veg Sandwich</div>
-          <div class="item-desc">Fresh veggies & butter</div>
+          <div class="item-desc">Fresh vegetables, soft bread</div>
         </div>
         <div class="price">₹90</div>
       </div>
 
-      <div class="card">
-        <div class="item-info">
+      <div class="item">
+        <div>
           <div class="item-name">Grilled Cheese Sandwich</div>
-          <div class="item-desc">Cheese loaded</div>
+          <div class="item-desc">Golden grilled, extra cheese</div>
         </div>
         <div class="price">₹110</div>
       </div>
 
-      <div class="card">
-        <div class="item-info">
+      <div class="item">
+        <div>
           <div class="item-name">French Fries</div>
-          <div class="item-desc">Crispy & salted</div>
+          <div class="item-desc">Hand-cut & crispy</div>
         </div>
         <div class="price">₹100</div>
       </div>
-    </div>
+    </section>
 
     <div class="note">
-      Prices are inclusive of taxes
+      Taxes extra as applicable
     </div>
 
   </div>
