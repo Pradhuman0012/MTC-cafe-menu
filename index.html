@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>MTC Cafe</title>
+  <title>Mahakaal Themes Cafe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
@@ -15,17 +15,35 @@
       --accent: #c7a14a; /* premium gold */
     }
 
-    * { box-sizing: border-box; }
+    /* LIGHT MODE (warm paper style) */
+    body.light {
+      --bg: #f6f3ee;
+      --card: #ffffff;
+      --border: #e7e2d8;
+      --text: #2b2b2b;
+      --muted: #6b7280;
+      --accent: #8b5e34; /* coffee brown */
+    }
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
-      background: radial-gradient(1200px 600px at top, #111827, var(--bg));
+      background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    /* Dark mode gradient ONLY */
+    body:not(.light) {
+      background: radial-gradient(1200px 600px at top, #111827, var(--bg));
     }
 
     /* ===== HEADER ===== */
     header {
+      position: relative;
       padding: 28px 16px 20px;
       text-align: center;
     }
@@ -35,8 +53,12 @@
       height: 84px;
       border-radius: 50%;
       object-fit: cover;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
       margin-bottom: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    body.light header img {
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
     }
 
     header h1 {
@@ -50,7 +72,19 @@
       margin: 6px 0 0;
       font-size: 13px;
       color: var(--muted);
-      letter-spacing: 0.3px;
+    }
+
+    #themeToggle {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
     }
 
     /* ===== CONTAINER ===== */
@@ -72,7 +106,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      color: #f9fafb;
     }
 
     .category h2::after {
@@ -83,11 +116,10 @@
       opacity: 0.6;
     }
 
-    /* ===== ITEM ROW ===== */
+    /* ===== ITEM ===== */
     .item {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
       gap: 16px;
       padding: 16px 0;
       border-bottom: 1px dashed var(--border);
@@ -116,7 +148,6 @@
       white-space: nowrap;
     }
 
-    /* ===== FOOTER ===== */
     .note {
       margin-top: 40px;
       text-align: center;
@@ -135,17 +166,16 @@
 
 <body>
 
-  <!-- HEADER -->
   <header>
-    <img src="logo.png" alt="MTC Cafe Logo">
+    <button id="themeToggle">🌙</button>
+
+    <img src="logo.png" alt="Mahakaal Themes Cafe Logo">
     <h1>Mahakaal Themes Cafe</h1>
-    <p>Brewed in the shadows Served with light</p>
+    <p>Brewed in the shadows • Served with light</p>
   </header>
 
-  <!-- MENU -->
   <div class="container">
 
-    <!-- HOT COFFEE -->
     <section class="category">
       <h2>Hot Coffee</h2>
 
@@ -160,7 +190,7 @@
       <div class="item">
         <div>
           <div class="item-name">Americano</div>
-          <div class="item-desc">Espresso diluted with hot water</div>
+          <div class="item-desc">Espresso with hot water</div>
         </div>
         <div class="price">₹90</div>
       </div>
@@ -168,7 +198,7 @@
       <div class="item">
         <div>
           <div class="item-name">Cappuccino</div>
-          <div class="item-desc">Balanced milk, foam & coffee</div>
+          <div class="item-desc">Balanced milk & foam</div>
         </div>
         <div class="price">₹120</div>
       </div>
@@ -176,13 +206,12 @@
       <div class="item">
         <div>
           <div class="item-name">Cafe Latte</div>
-          <div class="item-desc">Smooth milk-forward coffee</div>
+          <div class="item-desc">Smooth & creamy</div>
         </div>
         <div class="price">₹130</div>
       </div>
     </section>
 
-    <!-- COLD COFFEE -->
     <section class="category">
       <h2>Cold Coffee</h2>
 
@@ -203,14 +232,13 @@
       </div>
     </section>
 
-    <!-- SNACKS -->
     <section class="category">
       <h2>Snacks</h2>
 
       <div class="item">
         <div>
           <div class="item-name">Veg Sandwich</div>
-          <div class="item-desc">Fresh vegetables, soft bread</div>
+          <div class="item-desc">Fresh vegetables & butter</div>
         </div>
         <div class="price">₹90</div>
       </div>
@@ -218,7 +246,7 @@
       <div class="item">
         <div>
           <div class="item-name">Grilled Cheese Sandwich</div>
-          <div class="item-desc">Golden grilled, extra cheese</div>
+          <div class="item-desc">Golden grilled cheese</div>
         </div>
         <div class="price">₹110</div>
       </div>
@@ -226,7 +254,7 @@
       <div class="item">
         <div>
           <div class="item-name">French Fries</div>
-          <div class="item-desc">Hand-cut & crispy</div>
+          <div class="item-desc">Crispy & salted</div>
         </div>
         <div class="price">₹100</div>
       </div>
@@ -239,8 +267,26 @@
   </div>
 
   <footer>
-    © MTC Cafe • 100% Vegetarian
+    © Mahakaal Themes Cafe • 100% Vegetarian
   </footer>
+  <br/>
+
+  <script>
+    const toggle = document.getElementById("themeToggle");
+    const body = document.body;
+
+    if (localStorage.getItem("theme") === "light") {
+      body.classList.add("light");
+      toggle.textContent = "☀️";
+    }
+
+    toggle.onclick = () => {
+      body.classList.toggle("light");
+      const isLight = body.classList.contains("light");
+      toggle.textContent = isLight ? "☀️" : "🌙";
+      localStorage.setItem("theme", isLight ? "light" : "dark");
+    };
+  </script>
 
 </body>
 </html>
