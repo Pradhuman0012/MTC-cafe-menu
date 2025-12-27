@@ -15,12 +15,21 @@
 
     header {
       background: #020617;
-      padding: 16px;
+      padding: 18px 16px 14px;
       text-align: center;
       position: sticky;
       top: 0;
       z-index: 10;
       border-bottom: 1px solid #1e293b;
+    }
+
+    header img {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
 
     header h1 {
@@ -29,48 +38,70 @@
       color: #22c55e;
     }
 
+    header p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
     .container {
       padding: 16px;
-      max-width: 520px;
+      max-width: 560px;
       margin: auto;
     }
 
     .category {
-      margin-bottom: 28px;
+      margin-bottom: 32px;
     }
 
     .category h2 {
       font-size: 18px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       border-left: 4px solid #22c55e;
-      padding-left: 8px;
+      padding-left: 10px;
       color: #f9fafb;
     }
 
     .item {
       display: flex;
       justify-content: space-between;
-      padding: 12px;
+      gap: 12px;
+      padding: 12px 14px;
       background: #020617;
-      border-radius: 12px;
+      border-radius: 14px;
       margin-bottom: 10px;
       border: 1px solid #1e293b;
     }
 
     .item-name {
       font-size: 15px;
+      line-height: 1.3;
+    }
+
+    .item-desc {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 2px;
     }
 
     .item-price {
-      font-weight: bold;
+      font-weight: 600;
       color: #22c55e;
+      white-space: nowrap;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #94a3b8;
+      text-align: center;
+      margin: 24px 0 8px;
     }
 
     footer {
       text-align: center;
       font-size: 12px;
-      color: #94a3b8;
-      padding: 20px 0;
+      color: #64748b;
+      padding: 16px 0 24px;
     }
   </style>
 </head>
@@ -78,59 +109,139 @@
 <body>
 
   <header>
-    <img src="logo.png" alt="MTC Cafe Logo"
-         style="width:72px; height:auto; margin-bottom:8px;" />
-  
-    <h1>☕ MTC Cafe</h1>
-  
-    <div style="font-size: 12px; color: #94a3b8;">
-      Scan • Order • Enjoy
-    </div>
+    <img src="logo.png" alt="MTC Cafe Logo" />
+    <h1>MTC Cafe</h1>
+    <p>Scan • Order • Enjoy</p>
   </header>
 
   <div class="container">
 
-    <!-- COFFEE -->
+    <!-- HOT COFFEE -->
     <div class="category">
-      <h2>Coffee</h2>
+      <h2>☕ Hot Coffee</h2>
 
       <div class="item">
-        <div class="item-name">Espresso</div>
+        <div>
+          <div class="item-name">Espresso</div>
+          <div class="item-desc">Strong & classic</div>
+        </div>
         <div class="item-price">₹80</div>
       </div>
 
       <div class="item">
-        <div class="item-name">Cappuccino</div>
+        <div>
+          <div class="item-name">Americano</div>
+          <div class="item-desc">Espresso with hot water</div>
+        </div>
+        <div class="item-price">₹90</div>
+      </div>
+
+      <div class="item">
+        <div>
+          <div class="item-name">Cappuccino</div>
+          <div class="item-desc">Coffee with milk foam</div>
+        </div>
         <div class="item-price">₹120</div>
       </div>
 
       <div class="item">
-        <div class="item-name">Latte</div>
+        <div>
+          <div class="item-name">Cafe Latte</div>
+          <div class="item-desc">Smooth & milky</div>
+        </div>
         <div class="item-price">₹130</div>
+      </div>
+    </div>
+
+    <!-- COLD COFFEE -->
+    <div class="category">
+      <h2>🧊 Cold Coffee</h2>
+
+      <div class="item">
+        <div>
+          <div class="item-name">Classic Cold Coffee</div>
+          <div class="item-desc">Chilled & creamy</div>
+        </div>
+        <div class="item-price">₹140</div>
+      </div>
+
+      <div class="item">
+        <div>
+          <div class="item-name">Chocolate Cold Coffee</div>
+          <div class="item-desc">With chocolate syrup</div>
+        </div>
+        <div class="item-price">₹160</div>
+      </div>
+    </div>
+
+    <!-- TEA -->
+    <div class="category">
+      <h2>🍵 Tea</h2>
+
+      <div class="item">
+        <div class="item-name">Masala Tea</div>
+        <div class="item-price">₹40</div>
+      </div>
+
+      <div class="item">
+        <div class="item-name">Green Tea</div>
+        <div class="item-price">₹50</div>
       </div>
     </div>
 
     <!-- SNACKS -->
     <div class="category">
-      <h2>Snacks</h2>
+      <h2>🥪 Snacks</h2>
 
       <div class="item">
-        <div class="item-name">Veg Sandwich</div>
+        <div>
+          <div class="item-name">Veg Sandwich</div>
+          <div class="item-desc">Fresh veggies & butter</div>
+        </div>
         <div class="item-price">₹90</div>
       </div>
 
       <div class="item">
-        <div class="item-name">French Fries</div>
+        <div>
+          <div class="item-name">Grilled Cheese Sandwich</div>
+          <div class="item-desc">Cheese loaded</div>
+        </div>
+        <div class="item-price">₹110</div>
+      </div>
+
+      <div class="item">
+        <div>
+          <div class="item-name">French Fries</div>
+          <div class="item-desc">Crispy & salted</div>
+        </div>
         <div class="item-price">₹100</div>
       </div>
+    </div>
+
+    <!-- COMBOS -->
+    <div class="category">
+      <h2>🔥 Combos</h2>
+
+      <div class="item">
+        <div class="item-name">Coffee + Sandwich</div>
+        <div class="item-price">₹180</div>
+      </div>
+
+      <div class="item">
+        <div class="item-name">Cold Coffee + Fries</div>
+        <div class="item-price">₹220</div>
+      </div>
+    </div>
+
+    <div class="note">
+      Prices are inclusive of taxes
     </div>
 
   </div>
 
   <footer>
-    © MTC Cafe
+    © MTC Cafe • All items are vegetarian
   </footer>
 
 </body>
 </html>
-<!-- pages rebuild trigger -->
