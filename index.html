@@ -6,102 +6,128 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #020617;
+      --border: #1e293b;
+      --text-main: #e5e7eb;
+      --text-muted: #94a3b8;
+      --accent: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
+      background: var(--bg-main);
+      color: var(--text-main);
     }
 
     header {
-      background: #020617;
-      padding: 18px 16px 14px;
+      background: linear-gradient(180deg, #020617, #020617dd);
+      padding: 20px 16px 16px;
       text-align: center;
       position: sticky;
       top: 0;
       z-index: 10;
-      border-bottom: 1px solid #1e293b;
+      border-bottom: 1px solid var(--border);
     }
 
     header img {
-      width: 72px;
-      height: 72px;
-      object-fit: cover;
+      width: 76px;
+      height: 76px;
       border-radius: 50%;
-      margin-bottom: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      object-fit: cover;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+      margin-bottom: 10px;
     }
 
     header h1 {
       margin: 0;
       font-size: 22px;
-      color: #22c55e;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.4px;
     }
 
-    header p {
-      margin: 4px 0 0;
+    header span {
       font-size: 12px;
-      color: #94a3b8;
+      color: var(--text-muted);
     }
 
     .container {
-      padding: 16px;
-      max-width: 560px;
+      max-width: 600px;
       margin: auto;
+      padding: 18px 14px 28px;
     }
 
     .category {
-      margin-bottom: 32px;
+      margin-bottom: 36px;
     }
 
     .category h2 {
       font-size: 18px;
+      font-weight: 600;
       margin-bottom: 14px;
-      border-left: 4px solid #22c55e;
-      padding-left: 10px;
-      color: #f9fafb;
+      padding-left: 12px;
+      border-left: 4px solid var(--accent);
+      color: #f8fafc;
     }
 
-    .item {
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
-      gap: 12px;
-      padding: 12px 14px;
-      background: #020617;
-      border-radius: 14px;
-      margin-bottom: 10px;
-      border: 1px solid #1e293b;
+      gap: 14px;
+      transition: transform 0.15s ease;
+    }
+
+    .card:active {
+      transform: scale(0.98);
+    }
+
+    .item-info {
+      flex: 1;
     }
 
     .item-name {
       font-size: 15px;
+      font-weight: 500;
       line-height: 1.3;
     }
 
     .item-desc {
       font-size: 12px;
-      color: #94a3b8;
-      margin-top: 2px;
+      color: var(--text-muted);
+      margin-top: 3px;
     }
 
-    .item-price {
+    .price {
       font-weight: 600;
-      color: #22c55e;
+      font-size: 15px;
+      color: var(--accent);
       white-space: nowrap;
     }
 
     .note {
-      font-size: 12px;
-      color: #94a3b8;
       text-align: center;
-      margin: 24px 0 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 28px 0 6px;
     }
 
     footer {
       text-align: center;
       font-size: 12px;
       color: #64748b;
-      padding: 16px 0 24px;
+      padding-bottom: 24px;
     }
   </style>
 </head>
@@ -109,9 +135,9 @@
 <body>
 
   <header>
-    <img src="logo.png" alt="MTC Cafe Logo" />
+    <img src="logo.png" alt="MTC Cafe Logo">
     <h1>MTC Cafe</h1>
-    <p>Scan • Order • Enjoy</p>
+    <span>Fresh • Fast • Hygienic</span>
   </header>
 
   <div class="container">
@@ -120,36 +146,36 @@
     <div class="category">
       <h2>☕ Hot Coffee</h2>
 
-      <div class="item">
-        <div>
+      <div class="card">
+        <div class="item-info">
           <div class="item-name">Espresso</div>
-          <div class="item-desc">Strong & classic</div>
+          <div class="item-desc">Strong & classic shot</div>
         </div>
-        <div class="item-price">₹80</div>
+        <div class="price">₹80</div>
       </div>
 
-      <div class="item">
-        <div>
+      <div class="card">
+        <div class="item-info">
           <div class="item-name">Americano</div>
           <div class="item-desc">Espresso with hot water</div>
         </div>
-        <div class="item-price">₹90</div>
+        <div class="price">₹90</div>
       </div>
 
-      <div class="item">
-        <div>
+      <div class="card">
+        <div class="item-info">
           <div class="item-name">Cappuccino</div>
-          <div class="item-desc">Coffee with milk foam</div>
+          <div class="item-desc">Milk, foam & coffee</div>
         </div>
-        <div class="item-price">₹120</div>
+        <div class="price">₹120</div>
       </div>
 
-      <div class="item">
-        <div>
+      <div class="card">
+        <div class="item-info">
           <div class="item-name">Cafe Latte</div>
-          <div class="item-desc">Smooth & milky</div>
+          <div class="item-desc">Smooth & creamy</div>
         </div>
-        <div class="item-price">₹130</div>
+        <div class="price">₹130</div>
       </div>
     </div>
 
@@ -157,35 +183,20 @@
     <div class="category">
       <h2>🧊 Cold Coffee</h2>
 
-      <div class="item">
-        <div>
+      <div class="card">
+        <div class="item-info">
           <div class="item-name">Classic Cold Coffee</div>
           <div class="item-desc">Chilled & creamy</div>
         </div>
-        <div class="item-price">₹140</div>
+        <div class="price">₹140</div>
       </div>
 
-      <div class="item">
-        <div>
+      <div class="card">
+        <div class="item-info">
           <div class="item-name">Chocolate Cold Coffee</div>
-          <div class="item-desc">With chocolate syrup</div>
+          <div class="item-desc">Rich chocolate flavour</div>
         </div>
-        <div class="item-price">₹160</div>
-      </div>
-    </div>
-
-    <!-- TEA -->
-    <div class="category">
-      <h2>🍵 Tea</h2>
-
-      <div class="item">
-        <div class="item-name">Masala Tea</div>
-        <div class="item-price">₹40</div>
-      </div>
-
-      <div class="item">
-        <div class="item-name">Green Tea</div>
-        <div class="item-price">₹50</div>
+        <div class="price">₹160</div>
       </div>
     </div>
 
@@ -193,43 +204,28 @@
     <div class="category">
       <h2>🥪 Snacks</h2>
 
-      <div class="item">
-        <div>
+      <div class="card">
+        <div class="item-info">
           <div class="item-name">Veg Sandwich</div>
           <div class="item-desc">Fresh veggies & butter</div>
         </div>
-        <div class="item-price">₹90</div>
+        <div class="price">₹90</div>
       </div>
 
-      <div class="item">
-        <div>
+      <div class="card">
+        <div class="item-info">
           <div class="item-name">Grilled Cheese Sandwich</div>
           <div class="item-desc">Cheese loaded</div>
         </div>
-        <div class="item-price">₹110</div>
+        <div class="price">₹110</div>
       </div>
 
-      <div class="item">
-        <div>
+      <div class="card">
+        <div class="item-info">
           <div class="item-name">French Fries</div>
           <div class="item-desc">Crispy & salted</div>
         </div>
-        <div class="item-price">₹100</div>
-      </div>
-    </div>
-
-    <!-- COMBOS -->
-    <div class="category">
-      <h2>🔥 Combos</h2>
-
-      <div class="item">
-        <div class="item-name">Coffee + Sandwich</div>
-        <div class="item-price">₹180</div>
-      </div>
-
-      <div class="item">
-        <div class="item-name">Cold Coffee + Fries</div>
-        <div class="item-price">₹220</div>
+        <div class="price">₹100</div>
       </div>
     </div>
 
@@ -240,7 +236,7 @@
   </div>
 
   <footer>
-    © MTC Cafe • All items are vegetarian
+    © MTC Cafe • 100% Vegetarian
   </footer>
 
 </body>
