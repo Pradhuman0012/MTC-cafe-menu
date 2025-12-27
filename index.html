@@ -1,11 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>MTC Cafe Menu</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    header {
+      background: #020617;
+      padding: 16px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      color: #22c55e;
+    }
+
+    .container {
+      padding: 16px;
+      max-width: 520px;
+      margin: auto;
+    }
+
+    .category {
+      margin-bottom: 28px;
+    }
+
+    .category h2 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      border-left: 4px solid #22c55e;
+      padding-left: 8px;
+      color: #f9fafb;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      background: #020617;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #1e293b;
+    }
+
+    .item-name {
+      font-size: 15px;
+    }
+
+    .item-price {
+      font-weight: bold;
+      color: #22c55e;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #94a3b8;
+      padding: 20px 0;
+    }
+  </style>
 </head>
-<body style="font-family: Arial; padding: 20px;">
-  <h1>☕ MTC Cafe Menu</h1>
-  <p>QR scan working successfully.</p>
+
+<body>
+
+  <header>
+    <h1>☕ MTC Cafe</h1>
+    <div style="font-size: 12px; color: #94a3b8;">
+      Scan • Order • Enjoy
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- COFFEE -->
+    <div class="category">
+      <h2>Coffee</h2>
+
+      <div class="item">
+        <div class="item-name">Espresso</div>
+        <div class="item-price">₹80</div>
+      </div>
+
+      <div class="item">
+        <div class="item-name">Cappuccino</div>
+        <div class="item-price">₹120</div>
+      </div>
+
+      <div class="item">
+        <div class="item-name">Latte</div>
+        <div class="item-price">₹130</div>
+      </div>
+    </div>
+
+    <!-- SNACKS -->
+    <div class="category">
+      <h2>Snacks</h2>
+
+      <div class="item">
+        <div class="item-name">Veg Sandwich</div>
+        <div class="item-price">₹90</div>
+      </div>
+
+      <div class="item">
+        <div class="item-name">French Fries</div>
+        <div class="item-price">₹100</div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    © MTC Cafe
+  </footer>
+
 </body>
 </html>
