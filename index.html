@@ -4,28 +4,28 @@
 <meta charset="UTF-8">
 <title>Mahakaal Themes Cafe | Boutique Menu</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Outfit:wght@300;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
   --bg: #05070a;
-  --surface: rgba(255, 255, 255, 0.05);
-  --border: rgba(255, 255, 255, 0.1);
+  --surface: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.08);
   --text: #f8f9fa;
   --muted: #8e95a2;
-  --accent: #d4af37; /* Gold Metallic */
-  --accent-glow: rgba(212, 175, 55, 0.3);
+  --accent: #d4af37; 
+  --accent-glow: rgba(212, 175, 55, 0.2);
   --veg: #00ff88;
 }
 
 body.light {
-  --bg: #fdfdfd;
-  --surface: rgba(0, 0, 0, 0.03);
-  --border: rgba(0, 0, 0, 0.08);
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --border: rgba(0, 0, 0, 0.06);
   --text: #1a1c20;
   --muted: #64748b;
-  --accent: #8b5e34;
-  --accent-glow: rgba(139, 94, 52, 0.1);
+  --accent: #a67c00;
+  --accent-glow: rgba(166, 124, 0, 0.1);
 }
 
 * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -38,132 +38,91 @@ body {
   transition: background 0.4s ease;
 }
 
-/* Abstract Background Glows */
 .glow {
-  position: fixed; width: 300px; height: 300px; 
+  position: fixed; width: 400px; height: 400px; 
   background: var(--accent-glow); border-radius: 50%; 
-  filter: blur(80px); z-index: -1; top: -100px; right: -100px;
+  filter: blur(100px); z-index: -1; top: -150px; left: -100px;
 }
 
 /* ===== HEADER ===== */
-header {
-  padding: 60px 24px 30px;
-  text-align: center;
-}
+header { padding: 40px 24px 20px; text-align: center; }
 
-.logo-container {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 20px;
-}
-
-header img {
-  width: 90px; height: 90px;
-  border-radius: 30px; /* Modern squircle */
-  transform: rotate(-5deg);
-  border: 2px solid var(--border);
+.logo-container { margin-bottom: 15px; }
+.logo-container img {
+  width: 80px; height: 80px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  object-fit: cover;
   background: var(--surface);
   backdrop-filter: blur(10px);
 }
 
-header h1 {
-  font-size: 28px; font-weight: 800; margin: 0;
-  letter-spacing: -1px; color: var(--text);
-}
-
-header p {
-  margin: 5px 0 0; font-size: 13px; color: var(--muted);
-  font-family: 'Outfit', sans-serif; letter-spacing: 2px;
-}
+header h1 { font-size: 26px; font-weight: 800; margin: 0; letter-spacing: 1px; }
+header p { margin: 5px 0 0; font-size: 11px; color: var(--muted); letter-spacing: 4px; font-weight: 600; text-transform: uppercase; }
 
 #themeToggle {
   position: absolute; top: 25px; right: 25px;
   background: var(--surface); border: 1px solid var(--border);
-  color: var(--text); padding: 10px; border-radius: 12px;
-  cursor: pointer; backdrop-filter: blur(5px);
+  color: var(--text); padding: 10px; border-radius: 50%;
+  cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
 }
 
-/* ===== GRID & CARDS ===== */
-.screen { display: none; max-width: 600px; margin: auto; padding: 0 20px 50px; }
-.screen.active { display: block; animation: slideUp 0.5s ease; }
+/* ===== SCREENS ===== */
+.screen { display: none; max-width: 600px; margin: auto; padding: 0 16px 80px; }
+.screen.active { display: block; animation: fadeIn 0.5s ease-out; }
 
-@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
+/* ===== CATEGORY GRID ===== */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .category-card {
-  background: var(--surface);
+  position: relative; height: 200px; border-radius: 28px; overflow: hidden; cursor: pointer;
   border: 1px solid var(--border);
-  border-radius: 32px;
-  padding: 10px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
 }
-
-.category-card:hover { transform: translateY(-5px); }
-
-.category-card img {
-  width: 100%; height: 140px; border-radius: 24px;
-  object-fit: cover; margin-bottom: 12px;
+.category-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.category-card:hover img { transform: scale(1.1); }
+.category-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 70%);
+  display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px;
 }
+.category-name { color: #fff; font-weight: 700; font-size: 16px; }
 
-.category-name {
-  text-align: center; font-weight: 700; font-size: 14px;
-  padding-bottom: 8px;
-}
-
-/* ===== INNER MENU DESIGN (PRO) ===== */
-.back-btn {
-  margin: 0 0 25px; font-size: 14px; font-weight: 600;
-  color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 8px;
-}
+/* ===== INNER PAGE ===== */
+.back-btn { margin: 20px 0; font-size: 13px; font-weight: 600; color: var(--accent); cursor: pointer; display: flex; align-items: center; gap: 6px; }
 
 .inner-item {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 32px;
-  padding: 16px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 14px;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 16px;
 }
 
-.item-visual {
-  width: 90px; height: 90px; border-radius: 24px;
-  object-fit: cover; box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-
+.item-visual { width: 90px; height: 90px; border-radius: 18px; object-fit: cover; }
 .item-detail { flex: 1; }
+.v-tag { color: var(--veg); font-size: 9px; font-weight: 800; margin-bottom: 4px; display: block; }
+.item-name { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
 
-.v-tag {
-  color: var(--veg); font-size: 10px; font-weight: 800;
-  text-transform: uppercase; margin-bottom: 4px; display: block;
-}
-
-.item-name {
-  font-size: 19px; font-weight: 700; margin-bottom: 12px;
-}
-
-.p-container {
-  display: flex; gap: 10px; flex-wrap: wrap;
-}
+/* UPDATED PILLS FOR FULL NAMES */
+.p-container { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .p-pill {
   background: var(--bg);
   border: 1px solid var(--border);
-  padding: 6px 12px;
-  border-radius: 14px;
-  font-size: 11px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  display: flex; align-items: center; gap: 8px;
 }
 
-.p-pill b { color: var(--accent); margin-left: 4px; }
+.p-pill .size-label { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+.p-pill .price-val { font-size: 14px; font-weight: 700; color: var(--accent); font-family: 'Outfit', sans-serif; }
 
 /* ===== FOOTER ===== */
-footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size: 12px; }
-.pradhuman { margin-top: 10px; }
-.pradhuman a { color: var(--accent); text-decoration: none; font-weight: 600; }
+footer { text-align: center; padding: 50px 24px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+.footer-brand { font-weight: 700; color: var(--text); letter-spacing: 1px; margin-bottom: 4px; }
+.pradhuman a { color: var(--accent); text-decoration: none; font-weight: 700; }
 </style>
 </head>
 
@@ -173,40 +132,40 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 <header>
   <button id="themeToggle">🌙</button>
   <div class="logo-container">
-    <img src="logo.png" alt="Logo">
+    <img src="logo.png" alt="MTC Logo">
   </div>
   <h1>MTC Menu</h1>
-  <p>PREMIUM VEG CAFE</p>
+  <p>Premium Veg Experience</p>
 </header>
 
 <div id="categoryScreen" class="screen active">
   <div class="grid">
     <div class="category-card" onclick="openCategory('hot')">
-      <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500">
-      <div class="category-name">Hot Brews</div>
+      <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800">
+      <div class="category-overlay"><div class="category-name">Hot Brews</div></div>
     </div>
     <div class="category-card" onclick="openCategory('cold')">
-      <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500">
-      <div class="category-name">Cold Brews</div>
+      <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=800">
+      <div class="category-overlay"><div class="category-name">Cold Brews</div></div>
     </div>
     <div class="category-card" onclick="openCategory('snacks')">
-      <img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=500">
-      <div class="category-name">Gourmet</div>
+      <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=800">
+      <div class="category-overlay"><div class="category-name">Gourmet</div></div>
     </div>
     <div class="category-card" onclick="openCategory('dessert')">
-      <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500">
-      <div class="category-name">Desserts</div>
+      <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=800">
+      <div class="category-overlay"><div class="category-name">Desserts</div></div>
     </div>
   </div>
 </div>
 
 <div id="itemsScreen" class="screen">
-  <div class="back-btn" onclick="goBack()">← Back to Selection</div>
+  <div class="back-btn" onclick="goBack()">← BACK TO SELECTION</div>
   <div id="itemsContainer"></div>
 </div>
 
 <footer>
-  MAHAKAAL THEMES CAFE • EST. 2025
+  <div class="footer-brand">MAHAKAAL THEMES CAFE • 2025</div>
   <div class="pradhuman">
     Designed by <a href="https://www.linkedin.com/in/pradhuman-tamboli/" target="_blank">Pradhuman Tamboli</a>
   </div>
@@ -215,19 +174,19 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 <script>
 const menu = {
   hot: [
-    { name:"Espresso Macchiato", img:"https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=200", sizes:{ Tall:70, Grande:80, Venti:90 }},
-    { name:"Velvet Cappuccino", img:"https://images.unsplash.com/photo-1534778101976-62847782c213?w=200", sizes:{ Tall:100, Grande:120, Venti:140 }}
+    { name:"Espresso Macchiato", img:"https://images.unsplash.com/photo-1485808191679-5f86510681a2?q=80&w=400", sizes:{ Regular:80, Large:110 }},
+    { name:"Velvet Cappuccino", img:"https://images.unsplash.com/photo-1572442388796-11668a67e53d?q=80&w=400", sizes:{ Regular:120, Large:160 }}
   ],
   cold: [
-    { name:"Caramel Cold Brew", img:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=200", sizes:{ Tall:120, Grande:140, Venti:160 }},
-    { name:"Iced Mocha", img:"https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=200", sizes:{ Tall:140, Grande:160, Venti:180 }}
+    { name:"Caramel Cold Brew", img:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=400", sizes:{ Regular:140, Large:190 }},
+    { name:"Signature Iced Latte", img:"https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?q=80&w=400", sizes:{ Regular:150, Large:200 }}
   ],
   snacks: [
-    { name:"Avocado Club Toast", img:"https://images.unsplash.com/photo-1525351484163-7529414344d8?w=200", sizes:{ Small:160, Full:240 }},
-    { name:"Peri Peri Fries", img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=200", sizes:{ Large:120 }}
+    { name:"Truffle Avocado Toast", img:"https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=400", sizes:{ Standard:220, Premium:340 }},
+    { name:"Handcut Peri Fries", img:"https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?q=80&w=400", sizes:{ Regular:140, Large:210 }}
   ],
   dessert: [
-    { name:"Fudge Brownie", img:"https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=200", sizes:{ S:110, L:180 }}
+    { name:"Dark Melt Brownie", img:"https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=400", sizes:{ Single:150, Sharing:260 }}
   ]
 };
 
@@ -242,14 +201,18 @@ function openCategory(key) {
   menu[key].forEach(item => {
     let pillsHTML = "";
     for (const size in item.sizes) {
-      pillsHTML += `<div class="p-pill">${size} <b>₹${item.sizes[size]}</b></div>`;
+      pillsHTML += `
+        <div class="p-pill">
+            <span class="size-label">${size}</span>
+            <span class="price-val">₹${item.sizes[size]}</span>
+        </div>`;
     }
 
     container.innerHTML += `
       <div class="inner-item">
         <img src="${item.img}" class="item-visual">
         <div class="item-detail">
-          <span class="v-tag">Veg ●</span>
+          <span class="v-tag">VEG ●</span>
           <div class="item-name">${item.name}</div>
           <div class="p-container">${pillsHTML}</div>
         </div>
@@ -266,10 +229,8 @@ function goBack() {
 const toggle = document.getElementById("themeToggle");
 toggle.onclick = () => {
   document.body.classList.toggle("light");
-  const isLight = document.body.classList.contains("light");
-  toggle.textContent = isLight ? "☀️" : "🌙";
+  toggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
 };
 </script>
-
 </body>
 </html>
