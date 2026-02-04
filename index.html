@@ -256,6 +256,59 @@ footer {
 
 <script>
 const menuData = {
+    hot_coffee: {
+    title: "HOT COFFEE",
+    img: "https://i.dailymail.co.uk/1s/2018/11/01/18/5668494-0-image-a-4_1541098633929.jpg",
+    items: [
+      { name: "Espresso", prices: { Price: 79 }, img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?q=80&w=400" },
+      { name: "Americano", prices: { Price: 89 }, img: "https://www.shutterstock.com/image-photo/black-drip-coffee-glass-cup-600nw-2285616609.jpg" },
+      { name: "Cappuccino", prices: { Reg: 99, "+ Add-on": 129 }, img: "https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=400" },
+      { name: "Latte", prices: { Price: 109 }, img: "https://images.unsplash.com/photo-1593476143411-5349e29b1652?q=80&w=400" },
+      { name: "Mocha", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=400" },
+      { name: "Special Flavors (Iris/Caramel/Hazelnut)", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400" },
+      { name: "Nutella Hot Coffee", prices: { Price: 159 }, img: "https://artofpalate.com/wp-content/uploads/2015/03/nutella-coffee-recipe.jpg" }
+    ]
+  },
+  cold_coffee: {
+    title: "COLD COFFEE",
+    img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=400",
+    items: [
+      { name: "Iced Americano", prices: { Price: 99 }, img: "https://www.cleaneatingkitchen.com/wp-content/uploads/2022/07/espresso-americano-over-ice-with-straw.jpg" },
+      { name: "Regular Cold Coffee", prices: { Price: 69 }, img: "https://varshasnacks.com/assets/product/15ZnqCntk9.jpg" },
+      { name: "Medium Cold Coffee", prices: { Price: 109 }, img: "https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?q=80&w=400" }
+    ]
+  },
+  frappe: {
+    title: "FRAPPÉ",
+    img: "https://www.gourmetkava.cz/modules/ph_simpleblog/featured/72.jpg",
+    items: [
+      { name: "Hazelnut Frappe", prices: { Mini: 130, Bold: 160 }, img: "https://www.nestleprofessional.in/sites/default/files/2021-08/Cookie-Frappe-Thumbnail.jpg" },
+      { name: "Caramel Frappe", prices: { Mini: 130, Bold: 170 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-cL_Bl1FJhIqpRjBx92rKiZqUjQLS_fCA0A&s" },
+      { name: "Java Chip Frappe", prices: { Mini: 140, Bold: 180 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReiF5_rMsa6lDKZ47l9QiQwMTaLiDgk2usrA&s" },
+      { name: "Oreo Frappe", prices: { Mini: 140, Bold: 180 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2iwSNLaidLMd8FEVSxj8lM7pSjcB2UiL0AA&s" },
+      { name: "Brownie Frappe", prices: { Mini: 160, Bold: 200 }, img: "https://www.espressodrive.in/wp-content/uploads/2022/10/Brownie-Frappe-n.jpg" },
+      { name: "Biscoff Frappe", prices: { Mini: 180, Bold: 220 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrhy3Q2UzhIdga-EQTdtNJoFjRvUTmPmk7Qg&s" }
+    ]
+  },
+  shakes: {
+    title: "THICK SHAKES",
+    img: "https://cookilicious.com/wp-content/uploads/2025/01/Brownie-Milkshake-Recipe-20-scaled.jpg",
+    items: [
+      { name: "Strawberry Shake", prices: { Bold: 150 }, img: "https://www.thehungrybites.com/wp-content/uploads/2023/06/Strawberry-milkshake-frappuccino-featured.jpg" },
+      { name: "Oreo Shake", prices: { Price: 170 }, img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=400" },
+      { name: "Kitkat Shake", prices: { Price: 190 }, img: "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=400" },
+      { name: "Nutella Shake", prices: { Price: 190 }, img: "https://saltandbaker.com/wp-content/uploads/2022/05/Nutella-milkshake-recipe.jpg" },
+      { name: "Biscoff Shake", prices: { Price: 200 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvXrbNVWsdfT9s0MOsHgTUvorAX0kcUr1lvA&s" },
+      { name: "Brownie Shake", prices: { Price: 200 }, img: "https://cookilicious.com/wp-content/uploads/2025/01/Brownie-Milkshake-Recipe-20-scaled.jpg" }
+    ]
+  },
+  tea: {
+    title: "TEA",
+    img: "https://www.teacupsfull.com/cdn/shop/articles/Screenshot_2023-09-05_at_7.00.35_PM.png?v=1693987070",
+    items: [
+      { name: "Masala Tea", prices: { Price: 60 }, img: "https://images.unsplash.com/photo-1544787210-2211d24715ec?q=80&w=400" }
+    ]
+  },
   maggi: {
     title: "MAGGI",
     img: "https://t3.ftcdn.net/jpg/10/00/01/18/360_F_1000011817_yeB5UJAODGoG5n69InCdWA7oFSTxnTak.jpg",
@@ -270,7 +323,26 @@ const menuData = {
     title: "BURGERS",
     img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=400",
     items: [
-      { name: "Aloo Tikki Burger", prices: { Reg: 89, "+ Cheese": 109 }, img: "https://aemporterindia.com/wp-content/uploads/2025/08/aloo-tikki-wrap.webp" },
+      { name: "Aloo Tikki Burger", prices: { Reg: 89, "+ Cheese": 109 }, img: "https://www.masalakorb.com/wp-content/uploads/2020/08/Aloo-Tikki-Burger-Recipe-Mcaloo-Tikki-V3-500x500.jpg" },
+      { name: "Mexican Burger", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=400" },
+      { name: "Paneer Tikka Burger", prices: { Price: 159 }, img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=400" }
+    ]
+  },
+  maggi: {
+    title: "MAGGI",
+    img: "https://t3.ftcdn.net/jpg/10/00/01/18/360_F_1000011817_yeB5UJAODGoG5n69InCdWA7oFSTxnTak.jpg",
+    items: [
+      { name: "Masala Maggi", prices: { Price: 79 }, img: "https://www.naaginsauce.com/cdn/shop/articles/22-Naagin-Masala-Maggi.jpg?v=1704435639" },
+      { name: "Veg Cheese Maggi", prices: { Price: 99 }, img: "https://cdn.dotpe.in/longtail/item_thumbnails/8635073/PSJ8skxY-800-800.webp" },
+      { name: "Schezwan Maggi", prices: { Price: 119 }, img: "https://nfcihospitality.com/wp-content/uploads/2024/09/Indian-Schezwan-Maggi-1.jpg" },
+      { name: "Tandoori Maggi", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=400" }
+    ]
+  },
+  burgers: {
+    title: "BURGERS",
+    img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=400",
+    items: [
+      { name: "Aloo Tikki Burger", prices: { Reg: 89, "+ Cheese": 109 }, img: "https://www.masalakorb.com/wp-content/uploads/2020/08/Aloo-Tikki-Burger-Recipe-Mcaloo-Tikki-V3-500x500.jpg" },
       { name: "Mexican Burger", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=400" },
       { name: "Paneer Tikka Burger", prices: { Price: 159 }, img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=400" }
     ]
@@ -317,7 +389,7 @@ const menuData = {
   },
   pizza: {
     title: "PIZZA",
-    img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=400",
+    img: "https://img.freepik.com/premium-photo/tandoori-paneer-pizza-side-view_1170794-93971.jpg",
     items: [
       { name: "Margherita", prices: { S: 149, M: 189 }, img: "https://media.istockphoto.com/id/1364262284/photo/italian-pizza-margherita-with-cheese-tomato-sauce-and-basil-on-grey-concrete-table-top-view.jpg?s=612x612&w=0&k=20&c=H_rwxtwmGQduyg_syYxVsd0VYFRI2ZbggeMsDzaGArI=" },
       { name: "Veg Paradise", prices: { S: 159, M: 199 }, img: "https://storage.googleapis.com/shy-pub/99675/1635592532017_SKU-0050_0.webp" },
@@ -375,7 +447,7 @@ function openCategory(key) {
 }
 
 function goBack() {
-  document.getElementById("pageTitle").textContent = "MAHAKAAL THEMES CAFE";
+  document.getElementById("pageTitle").textContent = "MTC Menu";
   document.getElementById("itemsScreen").classList.remove("active");
   document.getElementById("categoryScreen").classList.add("active");
 }
