@@ -4,224 +4,103 @@
 <meta charset="UTF-8">
 <title>Mahakaal Themes Cafe | Boutique Menu</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
   --bg: #05070a;
-  --surface: rgba(255, 255, 255, 0.04);
-  --border: rgba(255, 255, 255, 0.08);
+  --surface: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.1);
   --text: #f8f9fa;
-  --muted: #8e95a2;
+  --muted: #94a3b8;
   --accent: #d4af37;
-  --accent-glow: rgba(212, 175, 55, 0.2);
-  --veg: #00ff88;
+  --accent-glow: rgba(212, 175, 55, 0.15);
+  --pill-bg: rgba(212, 175, 55, 0.1);
 }
 
 body.light {
-  --bg: #fafafa;
+  --bg: #f8fafc;
   --surface: #ffffff;
-  --border: rgba(0, 0, 0, 0.06);
-  --text: #1a1c20;
+  --border: rgba(0, 0, 0, 0.08);
+  --text: #0f172a;
   --muted: #64748b;
-  --accent: #a67c00;
-  --accent-glow: rgba(166, 124, 0, 0.1);
+  --accent: #854d0e;
+  --accent-glow: rgba(133, 77, 14, 0.05);
+  --pill-bg: #f1f5f9;
 }
 
 * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s; overflow-x: hidden; }
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Plus Jakarta Sans', sans-serif;
+.glow { position: fixed; width: 400px; height: 400px; background: var(--accent-glow); border-radius: 50%; filter: blur(100px); z-index: -1; top: -150px; left: -100px; }
+
+header { padding: 40px 24px 10px; text-align: center; position: relative; }
+.logo-container img { width: 80px; height: 80px; border-radius: 24px; border: 1px solid var(--border); object-fit: cover; }
+header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'Outfit', sans-serif; }
+
+.filter-tabs { display: flex; justify-content: center; gap: 8px; margin: 25px 0; }
+.tab-btn {
+  background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+  padding: 12px 24px; border-radius: 100px; font-weight: 700; font-size: 12px; cursor: pointer; text-transform: uppercase;
+}
+.tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+#themeToggle { position: absolute; top: 25px; right: 25px; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 50%; width: 44px; height: 44px; border: 1px solid var(--border); cursor: pointer;}
+
+.screen { display: none; max-width: 600px; margin: auto; padding: 0 16px 140px; }
+.screen.active { display: block; animation: fadeIn 0.4s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.category-card { height: 180px; border-radius: 28px; overflow: hidden; cursor: pointer; border: 1px solid var(--border); position: relative; }
+.category-card img { width: 100%; height: 100%; object-fit: cover; }
+.category-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; }
+.category-name { color: #fff; font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+
+.back-btn { margin: 10px 0 20px; font-size: 14px; font-weight: 700; color: var(--accent); cursor: pointer; display: inline-block; }
+
+.inner-item { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; padding: 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 18px; }
+.item-visual { width: 90px; height: 90px; border-radius: 20px; object-fit: cover; }
+.item-info { flex: 1; }
+.item-name { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+
+.p-container { display: flex; gap: 10px; flex-wrap: wrap; }
+.p-pill { 
+  background: var(--pill-bg); border: 1px solid var(--border); padding: 8px 14px; border-radius: 14px; 
+  cursor: pointer; transition: 0.2s; min-width: 75px; text-align: center; position: relative;
+}
+.qty-badge {
+    background: var(--accent); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 5px;
+    position: absolute; top: -8px; right: -5px; font-weight: 800;
+}
+.size-label { font-size: 10px; color: var(--muted); font-weight: 800; text-transform: uppercase; display: block; }
+.price-val { font-size: 16px; font-weight: 800; color: var(--accent); font-family: 'Outfit', sans-serif; }
+
+#cartBar {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 40px); max-width: 500px; background: var(--accent);
+  padding: 18px 24px; border-radius: 22px; display: none; justify-content: space-between;
+  align-items: center; color: #fff; font-weight: 800; box-shadow: 0 15px 35px var(--accent-glow);
+  cursor: pointer; z-index: 1000;
 }
 
-.glow {
-  position: fixed;
-  width: 400px;
-  height: 400px;
-  background: var(--accent-glow);
-  border-radius: 50%;
-  filter: blur(100px);
-  z-index: -1;
-  top: -150px;
-  left: -100px;
-}
+/* Waiter List UI */
+.order-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 0; border-bottom: 1px solid var(--border); }
+.order-item-qty { font-size: 18px; font-weight: 800; color: var(--accent); margin-right: 15px; width: 35px; }
+.order-item-main { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.order-item-name { font-size: 17px; font-weight: 700; color: var(--text); }
+.order-item-meta { font-size: 11px; color: var(--muted); font-weight: 800; text-transform: uppercase; }
+.qty-btn-group { display: flex; gap: 10px; margin-top: 10px; }
+.qty-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 800; }
 
-header {
-  padding: 40px 24px 20px;
-  text-align: center;
-  position: relative;
-}
+.total-box { margin-top: 30px; padding: 25px; background: var(--surface); border: 2px solid var(--accent); border-radius: 24px; }
+.summary-line { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--muted); }
+.grand-total { border-top: 1px dashed var(--border); margin-top: 12px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; }
+.grand-total span:last-child { font-size: 28px; font-weight: 800; color: var(--accent); font-family: 'Outfit'; }
 
-.logo-container img {
-  width: 80px;
-  height: 80px;
-  border-radius: 24px;
-  border: 1px solid var(--border);
-  object-fit: cover;
-}
-
-header h1 {
-  font-size: 26px;
-  font-weight: 800;
-  margin: 10px 0 0;
-}
-
-header p {
-  margin: 5px 0 0;
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 4px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-#themeToggle {
-  position: absolute;
-  top: 25px;
-  right: 25px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 10px;
-  border-radius: 50%;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-}
-
-.screen {
-  display: none;
-  max-width: 600px;
-  margin: auto;
-  padding: 0 16px 80px;
-}
-
-.screen.active {
-  display: block;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.category-card {
-  height: 160px;
-  border-radius: 24px;
-  overflow: hidden;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  position: relative;
-}
-
-.category-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.category-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 15px;
-}
-
-.category-name {
-  color: #fff;
-  font-weight: 700;
-}
-
-.back-btn {
-  margin: 20px 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--accent);
-  cursor: pointer;
-}
-
-.inner-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 14px;
-  margin-bottom: 14px;
-  display: flex;
-  gap: 16px;
-}
-
-.item-visual {
-  width: 80px;
-  height: 80px;
-  border-radius: 18px;
-  object-fit: cover;
-}
-
-.item-name {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.p-container {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.p-pill {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  padding: 6px 12px;
-  border-radius: 100px;
-}
-
-.size-label {
-  font-size: 9px;
-  color: var(--muted);
-  font-weight: 700;
-}
-
-.price-val {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-footer {
-  text-align: center;
-  padding: 40px 24px; 
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 1px;
-  line-height: 1.8;  */
-  border-top: 1px solid var(--border); 
-  margin-top: 50px;
-}
-
-.pradhuman {
-  margin-top: 8px;
-}
-
-.pradhuman a {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 700;
-  transition: 0.3s;
-}
-
-.pradhuman a:hover {
-  text-decoration: underline;
-  opacity: 0.8;
-}
+.clear-btn { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.2); width: 100%; padding: 15px; border-radius: 15px; font-weight: 800; margin-top: 20px; cursor: pointer; }
+footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 50px; }
 </style>
 </head>
 
@@ -230,48 +109,68 @@ footer {
 
 <header>
   <button id="themeToggle">🌙</button>
-  <div class="logo-container">
-    <img src="logo.png" alt="MTC Logo">
-  </div>
+  <div class="logo-container"><img src="logo.png" alt="MTC Logo"></div>
   <h1 id="pageTitle">MTC Menu</h1>
-  <p>Taste That Awakens the Soul</p>
 </header>
 
 <div id="categoryScreen" class="screen active">
+  <div class="filter-tabs">
+    <button class="tab-btn active" onclick="filterMenu('all', this)">All</button>
+    <button class="tab-btn" onclick="filterMenu('drinks', this)">Drinks</button>
+    <button class="tab-btn" onclick="filterMenu('bites', this)">Food</button>
+  </div>
   <div class="grid" id="categoryGrid"></div>
 </div>
 
 <div id="itemsScreen" class="screen">
-  <div class="back-btn" onclick="goBack()">← BACK</div>
+  <div class="back-btn" onclick="goBack()">← BACK TO MENU</div>
   <div id="itemsContainer"></div>
 </div>
 
-<footer>
-  MAHAKAAL THEMES CAFE • 2026
-  <div class="pradhuman">
-    Designed by <a href="https://www.linkedin.com/in/pradhuman-tamboli/" target="_blank">Pradhuman Tamboli</a>
+<div id="orderScreen" class="screen">
+  <div class="back-btn" onclick="goBack()">← ADD MORE ITEMS</div>
+  <h2 style="font-family: 'Outfit'; margin-bottom: 5px;">Waiter's List</h2>
+  <p style="color: var(--muted); font-size: 13px; margin-bottom: 25px;">Please show this screen to the waiter</p>
+  
+  <div id="orderList"></div>
+  
+  <div class="total-box">
+    <div class="summary-line"><span>Subtotal</span> <span id="subTotal">₹0</span></div>
+    <div class="summary-line"><span>GST (5%)</span> <span id="gstTotal">₹0</span></div>
+    <div class="grand-total">
+      <span style="font-weight: 700;">Grand Total</span>
+      <span id="grandTotal">₹0</span>
+    </div>
   </div>
-</footer>
+  
+  <button class="clear-btn" onclick="clearCart()">RESET ALL SELECTIONS</button>
+</div>
 
+<div id="cartBar" onclick="showOrder()">
+  <span id="cartCount">0 Items Selected</span>
+  <span>VIEW LIST →</span>
+</div>
+
+<footer>MAHAKAAL THEMES CAFE • 2026</footer>
 
 <script>
+let cart = {};
+
 const menuData = {
-    hot_coffee: {
-    title: "HOT COFFEE",
-    img: "https://i.dailymail.co.uk/1s/2018/11/01/18/5668494-0-image-a-4_1541098633929.jpg",
+  hot_coffee: {
+    type: "drinks", title: "HOT COFFEE", img: "https://i.dailymail.co.uk/1s/2018/11/01/18/5668494-0-image-a-4_1541098633929.jpg",
     items: [
       { name: "Espresso", prices: { Price: 79 }, img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?q=80&w=400" },
       { name: "Americano", prices: { Price: 89 }, img: "https://www.shutterstock.com/image-photo/black-drip-coffee-glass-cup-600nw-2285616609.jpg" },
-      { name: "Cappuccino", prices: { Reg: 99, "+ Add-on": 129 }, img: "https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=400" },
-      { name: "Latte", prices: { Price: 109 }, img: "https://images.unsplash.com/photo-1593476143411-5349e29b1652?q=80&w=400" },
+      { name: "Cappuccino", prices: { Reg: 99, "+ Add": 129 }, img: "https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=400" },
+      { name: "Latte", prices: { Price: 109 }, img: "https://www.cuisinart.com/dw/image/v2/ABAF_PRD/on/demandware.static/-/Sites-us-cuisinart-sfra-Library/default/dw42dcae51/images/recipe-Images/cafe-latte1-recipe_resized.jpg?sw=1200&sh=1200&sm=fit" },
       { name: "Mocha", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=400" },
-      { name: "Special Flavors (Iris/Caramel/Hazelnut)", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400" },
+      { name: "Special Flavors", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400" },
       { name: "Nutella Hot Coffee", prices: { Price: 159 }, img: "https://artofpalate.com/wp-content/uploads/2015/03/nutella-coffee-recipe.jpg" }
     ]
   },
   cold_coffee: {
-    title: "COLD COFFEE",
-    img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=400",
+    type: "drinks", title: "COLD COFFEE", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=400",
     items: [
       { name: "Iced Americano", prices: { Price: 99 }, img: "https://www.cleaneatingkitchen.com/wp-content/uploads/2022/07/espresso-americano-over-ice-with-straw.jpg" },
       { name: "Regular Cold Coffee", prices: { Price: 69 }, img: "https://varshasnacks.com/assets/product/15ZnqCntk9.jpg" },
@@ -279,8 +178,7 @@ const menuData = {
     ]
   },
   frappe: {
-    title: "FRAPPÉ",
-    img: "https://www.gourmetkava.cz/modules/ph_simpleblog/featured/72.jpg",
+    type: "drinks", title: "FRAPPÉ", img: "https://www.gourmetkava.cz/modules/ph_simpleblog/featured/72.jpg",
     items: [
       { name: "Hazelnut Frappe", prices: { Mini: 130, Bold: 160 }, img: "https://www.nestleprofessional.in/sites/default/files/2021-08/Cookie-Frappe-Thumbnail.jpg" },
       { name: "Caramel Frappe", prices: { Mini: 130, Bold: 170 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-cL_Bl1FJhIqpRjBx92rKiZqUjQLS_fCA0A&s" },
@@ -291,10 +189,9 @@ const menuData = {
     ]
   },
   shakes: {
-    title: "THICK SHAKES",
-    img: "https://cookilicious.com/wp-content/uploads/2025/01/Brownie-Milkshake-Recipe-20-scaled.jpg",
+    type: "drinks", title: "THICK SHAKES", img: "https://cookilicious.com/wp-content/uploads/2025/01/Brownie-Milkshake-Recipe-20-scaled.jpg",
     items: [
-      { name: "Strawberry Shake", prices: { Bold: 150 }, img: "https://www.thehungrybites.com/wp-content/uploads/2023/06/Strawberry-milkshake-frappuccino-featured.jpg" },
+      { name: "Strawberry Shake", prices: { Price: 150 }, img: "https://www.thehungrybites.com/wp-content/uploads/2023/06/Strawberry-milkshake-frappuccino-featured.jpg" },
       { name: "Oreo Shake", prices: { Price: 170 }, img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=400" },
       { name: "Kitkat Shake", prices: { Price: 190 }, img: "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=400" },
       { name: "Nutella Shake", prices: { Price: 190 }, img: "https://saltandbaker.com/wp-content/uploads/2022/05/Nutella-milkshake-recipe.jpg" },
@@ -303,15 +200,11 @@ const menuData = {
     ]
   },
   tea: {
-    title: "TEA",
-    img: "https://www.teacupsfull.com/cdn/shop/articles/Screenshot_2023-09-05_at_7.00.35_PM.png?v=1693987070",
-    items: [
-      { name: "Masala Tea", prices: { Price: 60 }, img: "https://images.unsplash.com/photo-1544787210-2211d24715ec?q=80&w=400" }
-    ]
+    type: "drinks", title: "TEA", img: "https://www.teacupsfull.com/cdn/shop/articles/Screenshot_2023-09-05_at_7.00.35_PM.png?v=1693987070",
+    items: [{ name: "Masala Tea", prices: { Price: 60 }, img: "https://www.teacupsfull.com/cdn/shop/articles/Screenshot_2023-09-05_at_7.00.35_PM.png?v=1693987070" }]
   },
   maggi: {
-    title: "MAGGI",
-    img: "https://t3.ftcdn.net/jpg/10/00/01/18/360_F_1000011817_yeB5UJAODGoG5n69InCdWA7oFSTxnTak.jpg",
+    type: "bites", title: "MAGGI", img: "https://t3.ftcdn.net/jpg/10/00/01/18/360_F_1000011817_yeB5UJAODGoG5n69InCdWA7oFSTxnTak.jpg",
     items: [
       { name: "Masala Maggi", prices: { Price: 79 }, img: "https://www.naaginsauce.com/cdn/shop/articles/22-Naagin-Masala-Maggi.jpg?v=1704435639" },
       { name: "Veg Cheese Maggi", prices: { Price: 99 }, img: "https://cdn.dotpe.in/longtail/item_thumbnails/8635073/PSJ8skxY-800-800.webp" },
@@ -320,48 +213,25 @@ const menuData = {
     ]
   },
   burgers: {
-    title: "BURGERS",
-    img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=400",
+    type: "bites", title: "BURGERS", img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=400",
     items: [
-      { name: "Aloo Tikki Burger", prices: { Reg: 89, "+ Cheese": 109 }, img: "https://www.masalakorb.com/wp-content/uploads/2020/08/Aloo-Tikki-Burger-Recipe-Mcaloo-Tikki-V3-500x500.jpg" },
-      { name: "Mexican Burger", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=400" },
-      { name: "Paneer Tikka Burger", prices: { Price: 159 }, img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=400" }
-    ]
-  },
-  maggi: {
-    title: "MAGGI",
-    img: "https://t3.ftcdn.net/jpg/10/00/01/18/360_F_1000011817_yeB5UJAODGoG5n69InCdWA7oFSTxnTak.jpg",
-    items: [
-      { name: "Masala Maggi", prices: { Price: 79 }, img: "https://www.naaginsauce.com/cdn/shop/articles/22-Naagin-Masala-Maggi.jpg?v=1704435639" },
-      { name: "Veg Cheese Maggi", prices: { Price: 99 }, img: "https://cdn.dotpe.in/longtail/item_thumbnails/8635073/PSJ8skxY-800-800.webp" },
-      { name: "Schezwan Maggi", prices: { Price: 119 }, img: "https://nfcihospitality.com/wp-content/uploads/2024/09/Indian-Schezwan-Maggi-1.jpg" },
-      { name: "Tandoori Maggi", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=400" }
-    ]
-  },
-  burgers: {
-    title: "BURGERS",
-    img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=400",
-    items: [
-      { name: "Aloo Tikki Burger", prices: { Reg: 89, "+ Cheese": 109 }, img: "https://www.masalakorb.com/wp-content/uploads/2020/08/Aloo-Tikki-Burger-Recipe-Mcaloo-Tikki-V3-500x500.jpg" },
+      { name: "Aloo Tikki Burger", prices: { Reg: 89, "+ Chz": 109 }, img: "https://www.masalakorb.com/wp-content/uploads/2020/08/Aloo-Tikki-Burger-Recipe-Mcaloo-Tikki-V3-500x500.jpg" },
       { name: "Mexican Burger", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=400" },
       { name: "Paneer Tikka Burger", prices: { Price: 159 }, img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=400" }
     ]
   },
   pasta: {
-    title: "PASTA",
-    img: "https://i.pinimg.com/736x/5d/f9/aa/5df9aacdbce9d708a510836f9cea1f76.jpg",
+    type: "bites", title: "PASTA", img: "https://i.pinimg.com/736x/5d/f9/aa/5df9aacdbce9d708a510836f9cea1f76.jpg",
     items: [
       { name: "Arrabbiata (Red)", prices: { Price: 179 }, img: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=400" },
       { name: "Bechamel (White)", prices: { Price: 199 }, img: "https://images.unsplash.com/photo-1611270629569-8b357cb88da9?q=80&w=400" },
       { name: "Pink Pasta (Mix)", prices: { Price: 209 }, img: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=400" },
       { name: "Pesto Pasta", prices: { Price: 239 }, img: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?q=80&w=400" },
-      { name: "Mac N Cheese", prices: { Price: 239 }, img: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=400" },
-      { name: "Mac N Cheese Paneer Tikka", prices: { Price: 259 }, img: "https://images.unsplash.com/photo-1528751014936-863e6e7a319c?q=80&w=400" }
+      { name: "Mac N Cheese", prices: { Price: 239 }, img: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=400" }
     ]
   },
   fries: {
-    title: "FRIES",
-    img: "https://img.freepik.com/free-photo/delicious-fries-studio_23-2151846534.jpg?semt=ais_hybrid&w=740&q=80",
+    type: "bites", title: "FRIES", img: "https://img.freepik.com/free-photo/delicious-fries-studio_23-2151846534.jpg?semt=ais_hybrid&w=740&q=80",
     items: [
       { name: "Simply Salted", prices: { Price: 89 }, img: "https://media.istockphoto.com/id/628208496/photo/sea-salt-french-fries-with-ketchup.jpg?s=612x612&w=0&k=20&c=Zax0KTgE6LdmIHku5-tHDvcIXkxAD_qgf5tK2GLZMtM=" },
       { name: "Peri Peri", prices: { Price: 119 }, img: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?q=80&w=400" },
@@ -369,95 +239,142 @@ const menuData = {
     ]
   },
   wraps: {
-    title: "WRAPS",
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXE3qdMCBOPcFLgAOO6upQV39vpuCVY5ni3g&s",
+    type: "bites", title: "WRAPS", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXE3qdMCBOPcFLgAOO6upQV39vpuCVY5ni3g&s",
     items: [
       { name: "Aloo Tikki Wrap", prices: { Price: 129 }, img: "https://aemporterindia.com/wp-content/uploads/2025/08/aloo-tikki-wrap.webp" },
-      { name: "Paneer Tikka Wrap", prices: { Price: 179 }, img: "https://media.istockphoto.com/id/1352474720/photo/fresh-paneer-roll-with-fresh-tomatos-salad-cheese-and-onions-isolated-on-bright-blue.jpg?s=612x612&w=0&k=20&c=QK9_TYlJnJWTIV__nJ0oxik6Mc9q37gKtQCLPrBY514=" },
-      { name: "Hummus Falafel Wrap", prices: { Price: 199 }, img: "https://media.istockphoto.com/id/1139093193/photo/tortilla-wrap-with-falafel-and-fresh-salad-vegan-tacos-vegetarian-healthy-food.jpg?s=612x612&w=0&k=20&c=uUS2GP7JHvTMhqeuZbdfFcaV-zEDe3wEAHeKtZ4vKOw=" }
-    ]
-  },
-  sandwich: {
-    title: "SANDWICH",
-    img: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?q=80&w=400",
-    items: [
-      { name: "Veg Grilled Sandwich", prices: { Reg: 99, "+ Cheese": 119 }, img: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?q=80&w=400" },
-      { name: "Paneer Tikka Sandwich", prices: { Price: 159 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC4BKKT7BFTEx1ICZxlMLk0D8Cv78Y1jngvA&s" },
-      { name: "Cheese N Corn Sandwich", prices: { Price: 149 }, img: "https://www.bigbasket.com/media/uploads/recipe/w-l/3644_1_1.jpg" },
-      { name: "Bombay Masala Sandwich", prices: { Price: 139 }, img: "https://images.unsplash.com/photo-1539252554453-80ab65ce3586?q=80&w=400" }
+      { name: "Paneer Tikka Wrap", prices: { Price: 179 }, img: "https://media.istockphoto.com/id/1352474720/photo/fresh-paneer-roll-with-fresh-tomatos-salad-cheese-and-onions-isolated-on-bright-blue.jpg?s=612x612&w=0&k=20&c=QK9_TYlJnJWTIV__nJ0oxik6Mc9q37gKtQCLPrBY514=" }
     ]
   },
   pizza: {
-    title: "PIZZA",
-    img: "https://img.freepik.com/premium-photo/tandoori-paneer-pizza-side-view_1170794-93971.jpg",
+    type: "bites", title: "PIZZA", img: "https://img.freepik.com/premium-photo/tandoori-paneer-pizza-side-view_1170794-93971.jpg",
     items: [
       { name: "Margherita", prices: { S: 149, M: 189 }, img: "https://media.istockphoto.com/id/1364262284/photo/italian-pizza-margherita-with-cheese-tomato-sauce-and-basil-on-grey-concrete-table-top-view.jpg?s=612x612&w=0&k=20&c=H_rwxtwmGQduyg_syYxVsd0VYFRI2ZbggeMsDzaGArI=" },
-      { name: "Veg Paradise", prices: { S: 159, M: 199 }, img: "https://storage.googleapis.com/shy-pub/99675/1635592532017_SKU-0050_0.webp" },
-      { name: "Tandoori Paneer", prices: { S: 189, M: 249 }, img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400" },
-      { name: "Mix Green", prices: { S: 189, M: 239 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaNYwQvIth00gGpf5n4qEN-BQ9k04N57hmBtaOZs3lZQ&s" },
-      { name: "Farm House", prices: { S: 199, M: 249 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT47R3J8ptwBG7Cc-UBWcUbLJ4Qy9DdmcgFoA&s" },
-      { name: "Veg Supreme", prices: { S: 220, M: 289 }, img: "https://api.pizzahut.io/v1/content/en-in/in-1/images/pizza/veggie-supreme.4bbddf98eccea9929192db1494ba3678.1.jpg" }
+      { name: "Tandoori Paneer", prices: { S: 189, M: 249 }, img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400" }
     ]
   }
 };
 
-function initCategories() {
-  const grid = document.getElementById("categoryGrid");
-  grid.innerHTML = "";
-  for (const key in menuData) {
-    grid.innerHTML += `
-      <div class="category-card" onclick="openCategory('${key}')">
-        <img src="${menuData[key].img}">
-        <div class="category-overlay">
-          <div class="category-name">${menuData[key].title}</div>
-        </div>
-      </div>`;
-  }
+function filterMenu(type, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const grid = document.getElementById("categoryGrid");
+    grid.innerHTML = "";
+    for (const key in menuData) {
+        if (type === 'all' || menuData[key].type === type) {
+            grid.innerHTML += `<div class="category-card" onclick="openCategory('${key}')"><img src="${menuData[key].img}"><div class="category-overlay"><div class="category-name">${menuData[key].title}</div></div></div>`;
+        }
+    }
 }
 
 function openCategory(key) {
-  const category = menuData[key];
-  document.getElementById("pageTitle").textContent = category.title;
-  document.getElementById("categoryScreen").classList.remove("active");
-  document.getElementById("itemsScreen").classList.add("active");
-  window.scrollTo(0, 0);
+    const category = menuData[key];
+    document.getElementById("pageTitle").textContent = category.title;
+    document.getElementById("categoryScreen").classList.remove("active");
+    document.getElementById("itemsScreen").classList.add("active");
+    window.scrollTo(0, 0);
+    renderItems(category);
+}
 
-  const container = document.getElementById("itemsContainer");
-  container.innerHTML = "";
+function renderItems(category) {
+    const container = document.getElementById("itemsContainer");
+    container.innerHTML = "";
+    category.items.forEach(item => {
+        let pricesHTML = "";
+        for (const label in item.prices) {
+            const key = `${item.name}-${label}`;
+            const qty = cart[key] ? cart[key].qty : 0;
+            pricesHTML += `
+                <div class="p-pill" onclick="changeQty('${item.name}', '${label}', ${item.prices[label]}, 1)">
+                    ${qty > 0 ? `<span class="qty-badge">${qty}</span>` : ''}
+                    <span class="size-label">${label}</span>
+                    <span class="price-val">₹${item.prices[label]}</span>
+                </div>`;
+        }
+        container.innerHTML += `<div class="inner-item"><img src="${item.img}" class="item-visual"><div class="item-info"><div class="item-name">${item.name}</div><div class="p-container">${pricesHTML}</div></div></div>`;
+    });
+}
 
-  category.items.forEach(item => {
-    let pricesHTML = "";
-    for (const label in item.prices) {
-      pricesHTML += `
-        <div class="p-pill">
-          <span class="size-label">${label}</span>
-          <span class="price-val">₹${item.prices[label]}</span>
-        </div>`;
+function changeQty(name, size, price, delta) {
+    const key = `${name}-${size}`;
+    if (!cart[key]) {
+        if (delta > 0) cart[key] = { name, size, price, qty: delta };
+    } else {
+        cart[key].qty += delta;
+        if (cart[key].qty <= 0) delete cart[key];
     }
+    updateCartBar();
+    
+    // Auto refresh items if we are in item view
+    const currentTitle = document.getElementById("pageTitle").textContent;
+    for (let k in menuData) {
+        if (menuData[k].title === currentTitle) renderItems(menuData[k]);
+    }
+}
 
-    container.innerHTML += `
-      <div class="inner-item">
-        <img src="${item.img}" class="item-visual" onerror="this.src='${category.img}'">
-        <div>
-          <div class="item-name">${item.name}</div>
-          <div class="p-container">${pricesHTML}</div>
-        </div>
-      </div>`;
-  });
+function updateCartBar() {
+    const bar = document.getElementById("cartBar");
+    const count = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
+    if (count > 0) {
+        bar.style.display = "flex";
+        document.getElementById("cartCount").textContent = `${count} Items Selected`;
+    } else {
+        bar.style.display = "none";
+    }
+}
+
+function showOrder() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById("orderScreen").classList.add("active");
+    const list = document.getElementById("orderList");
+    list.innerHTML = "";
+    let subtotal = 0;
+    
+    Object.keys(cart).forEach(key => {
+        const item = cart[key];
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+        list.innerHTML += `
+            <div class="order-item">
+                <div class="order-item-qty">${item.qty}x</div>
+                <div class="order-item-main">
+                    <span class="order-item-name">${item.name}</span>
+                    <span class="order-item-meta">${item.size} • ₹${item.price} each</span>
+                    <div class="qty-btn-group">
+                        <button class="qty-btn" onclick="changeQty('${item.name}', '${item.size}', ${item.price}, -1); showOrder();">−</button>
+                        <button class="qty-btn" onclick="changeQty('${item.name}', '${item.size}', ${item.price}, 1); showOrder();">+</button>
+                    </div>
+                </div>
+                <div class="order-item-price">₹${itemTotal}</div>
+            </div>`;
+    });
+
+    const gst = Math.round(subtotal * 0.05);
+    const grand = subtotal + gst;
+    document.getElementById("subTotal").textContent = `₹${subtotal}`;
+    document.getElementById("gstTotal").textContent = `₹${gst}`;
+    document.getElementById("grandTotal").textContent = `₹${grand}`;
+}
+
+function clearCart() {
+    if(confirm("Clear all selections?")) {
+        cart = {};
+        updateCartBar();
+        goBack();
+    }
 }
 
 function goBack() {
-  document.getElementById("pageTitle").textContent = "MTC Menu";
-  document.getElementById("itemsScreen").classList.remove("active");
-  document.getElementById("categoryScreen").classList.add("active");
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById("categoryScreen").classList.add("active");
+    document.getElementById("pageTitle").textContent = "MTC Menu";
 }
 
 document.getElementById("themeToggle").onclick = () => {
-  document.body.classList.toggle("light");
-  document.getElementById("themeToggle").textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+    document.body.classList.toggle("light");
+    document.getElementById("themeToggle").textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
 };
 
-initCategories();
+filterMenu('all', document.querySelector('.tab-btn'));
 </script>
 </body>
 </html>
