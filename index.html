@@ -69,10 +69,11 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 .p-pill { 
   background: var(--pill-bg); border: 1px solid var(--border); padding: 8px 14px; border-radius: 14px; 
   cursor: pointer; transition: 0.2s; min-width: 75px; text-align: center; position: relative;
+  user-select: none;
 }
 .qty-badge {
     background: var(--accent); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 5px;
-    position: absolute; top: -8px; right: -5px; font-weight: 800;
+    position: absolute; top: -8px; right: -5px; font-weight: 800; box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 .size-label { font-size: 10px; color: var(--muted); font-weight: 800; text-transform: uppercase; display: block; }
 .price-val { font-size: 16px; font-weight: 800; color: var(--accent); font-family: 'Outfit', sans-serif; }
@@ -85,7 +86,19 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
   cursor: pointer; z-index: 1000;
 }
 
-/* Waiter List UI */
+.instruction-box {
+    background: var(--surface);
+    border: 1px dashed var(--accent);
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
 .order-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 0; border-bottom: 1px solid var(--border); }
 .order-item-qty { font-size: 18px; font-weight: 800; color: var(--accent); margin-right: 15px; width: 35px; }
 .order-item-main { flex: 1; display: flex; flex-direction: column; gap: 4px; }
@@ -93,6 +106,7 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 .order-item-meta { font-size: 11px; color: var(--muted); font-weight: 800; text-transform: uppercase; }
 .qty-btn-group { display: flex; gap: 10px; margin-top: 10px; }
 .qty-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 800; }
+.order-item-price { font-size: 18px; font-weight: 800; color: var(--text); font-family: 'Outfit', sans-serif; }
 
 .total-box { margin-top: 30px; padding: 25px; background: var(--surface); border: 2px solid var(--accent); border-radius: 24px; }
 .summary-line { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--muted); }
@@ -101,6 +115,8 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 
 .clear-btn { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.2); width: 100%; padding: 15px; border-radius: 15px; font-weight: 800; margin-top: 20px; cursor: pointer; }
 footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 50px; }
+.pradhuman { margin-top: 10px; }
+.pradhuman a { color: var(--accent); text-decoration: none; font-weight: 800; }
 </style>
 </head>
 
@@ -123,15 +139,17 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 </div>
 
 <div id="itemsScreen" class="screen">
-  <div class="back-btn" onclick="goBack()">← BACK TO MENU</div>
+  <div class="back-btn" onclick="goBack()">← BACK TO CATEGORIES</div>
   <div id="itemsContainer"></div>
 </div>
 
 <div id="orderScreen" class="screen">
   <div class="back-btn" onclick="goBack()">← ADD MORE ITEMS</div>
-  <h2 style="font-family: 'Outfit'; margin-bottom: 5px;">Waiter's List</h2>
-  <p style="color: var(--muted); font-size: 13px; margin-bottom: 25px;">Please show this screen to the waiter</p>
   
+  <div class="instruction-box">
+    Please show this screen to the Waiter<br>or tell your order from here.
+  </div>
+
   <div id="orderList"></div>
   
   <div class="total-box">
@@ -151,110 +169,85 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
   <span>VIEW LIST →</span>
 </div>
 
-<footer>MAHAKAAL THEMES CAFE • 2026</footer>
+<footer>MAHAKAAL THEMES CAFE • 2026
+<div class="pradhuman">Designed by <a href="https://www.linkedin.com/in/pradhuman-tamboli/" target="_blank">Pradhuman Tamboli</a></div></footer>
 
 <script>
 let cart = {};
 
 const menuData = {
-  hot_coffee: {
-    type: "drinks", title: "HOT COFFEE", img: "https://i.dailymail.co.uk/1s/2018/11/01/18/5668494-0-image-a-4_1541098633929.jpg",
-    items: [
-      { name: "Espresso", prices: { Price: 79 }, img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?q=80&w=400" },
-      { name: "Americano", prices: { Price: 89 }, img: "https://www.shutterstock.com/image-photo/black-drip-coffee-glass-cup-600nw-2285616609.jpg" },
-      { name: "Cappuccino", prices: { Reg: 99, "+ Add": 129 }, img: "https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=400" },
-      { name: "Latte", prices: { Price: 109 }, img: "https://www.cuisinart.com/dw/image/v2/ABAF_PRD/on/demandware.static/-/Sites-us-cuisinart-sfra-Library/default/dw42dcae51/images/recipe-Images/cafe-latte1-recipe_resized.jpg?sw=1200&sh=1200&sm=fit" },
-      { name: "Mocha", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=400" },
-      { name: "Special Flavors", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400" },
-      { name: "Nutella Hot Coffee", prices: { Price: 159 }, img: "https://artofpalate.com/wp-content/uploads/2015/03/nutella-coffee-recipe.jpg" }
-    ]
-  },
-  cold_coffee: {
-    type: "drinks", title: "COLD COFFEE", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=400",
-    items: [
-      { name: "Iced Americano", prices: { Price: 99 }, img: "https://www.cleaneatingkitchen.com/wp-content/uploads/2022/07/espresso-americano-over-ice-with-straw.jpg" },
-      { name: "Regular Cold Coffee", prices: { Price: 69 }, img: "https://varshasnacks.com/assets/product/15ZnqCntk9.jpg" },
-      { name: "Medium Cold Coffee", prices: { Price: 109 }, img: "https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?q=80&w=400" }
-    ]
-  },
-  frappe: {
-    type: "drinks", title: "FRAPPÉ", img: "https://www.gourmetkava.cz/modules/ph_simpleblog/featured/72.jpg",
-    items: [
-      { name: "Hazelnut Frappe", prices: { Mini: 130, Bold: 160 }, img: "https://www.nestleprofessional.in/sites/default/files/2021-08/Cookie-Frappe-Thumbnail.jpg" },
-      { name: "Caramel Frappe", prices: { Mini: 130, Bold: 170 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-cL_Bl1FJhIqpRjBx92rKiZqUjQLS_fCA0A&s" },
-      { name: "Java Chip Frappe", prices: { Mini: 140, Bold: 180 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReiF5_rMsa6lDKZ47l9QiQwMTaLiDgk2usrA&s" },
-      { name: "Oreo Frappe", prices: { Mini: 140, Bold: 180 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2iwSNLaidLMd8FEVSxj8lM7pSjcB2UiL0AA&s" },
-      { name: "Brownie Frappe", prices: { Mini: 160, Bold: 200 }, img: "https://www.espressodrive.in/wp-content/uploads/2022/10/Brownie-Frappe-n.jpg" },
-      { name: "Biscoff Frappe", prices: { Mini: 180, Bold: 220 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrhy3Q2UzhIdga-EQTdtNJoFjRvUTmPmk7Qg&s" }
-    ]
-  },
-  shakes: {
-    type: "drinks", title: "THICK SHAKES", img: "https://cookilicious.com/wp-content/uploads/2025/01/Brownie-Milkshake-Recipe-20-scaled.jpg",
-    items: [
-      { name: "Strawberry Shake", prices: { Price: 150 }, img: "https://www.thehungrybites.com/wp-content/uploads/2023/06/Strawberry-milkshake-frappuccino-featured.jpg" },
-      { name: "Oreo Shake", prices: { Price: 170 }, img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=400" },
-      { name: "Kitkat Shake", prices: { Price: 190 }, img: "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=400" },
-      { name: "Nutella Shake", prices: { Price: 190 }, img: "https://saltandbaker.com/wp-content/uploads/2022/05/Nutella-milkshake-recipe.jpg" },
-      { name: "Biscoff Shake", prices: { Price: 200 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvXrbNVWsdfT9s0MOsHgTUvorAX0kcUr1lvA&s" },
-      { name: "Brownie Shake", prices: { Price: 200 }, img: "https://cookilicious.com/wp-content/uploads/2025/01/Brownie-Milkshake-Recipe-20-scaled.jpg" }
-    ]
-  },
-  tea: {
-    type: "drinks", title: "TEA", img: "https://www.teacupsfull.com/cdn/shop/articles/Screenshot_2023-09-05_at_7.00.35_PM.png?v=1693987070",
-    items: [{ name: "Masala Tea", prices: { Price: 60 }, img: "https://www.teacupsfull.com/cdn/shop/articles/Screenshot_2023-09-05_at_7.00.35_PM.png?v=1693987070" }]
-  },
-  maggi: {
-    type: "bites", title: "MAGGI", img: "https://t3.ftcdn.net/jpg/10/00/01/18/360_F_1000011817_yeB5UJAODGoG5n69InCdWA7oFSTxnTak.jpg",
-    items: [
-      { name: "Masala Maggi", prices: { Price: 79 }, img: "https://www.naaginsauce.com/cdn/shop/articles/22-Naagin-Masala-Maggi.jpg?v=1704435639" },
-      { name: "Veg Cheese Maggi", prices: { Price: 99 }, img: "https://cdn.dotpe.in/longtail/item_thumbnails/8635073/PSJ8skxY-800-800.webp" },
-      { name: "Schezwan Maggi", prices: { Price: 119 }, img: "https://nfcihospitality.com/wp-content/uploads/2024/09/Indian-Schezwan-Maggi-1.jpg" },
-      { name: "Tandoori Maggi", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=400" }
-    ]
-  },
-  burgers: {
-    type: "bites", title: "BURGERS", img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=400",
-    items: [
-      { name: "Aloo Tikki Burger", prices: { Reg: 89, "+ Chz": 109 }, img: "https://www.masalakorb.com/wp-content/uploads/2020/08/Aloo-Tikki-Burger-Recipe-Mcaloo-Tikki-V3-500x500.jpg" },
-      { name: "Mexican Burger", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=400" },
-      { name: "Paneer Tikka Burger", prices: { Price: 159 }, img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=400" }
-    ]
-  },
-  pasta: {
-    type: "bites", title: "PASTA", img: "https://i.pinimg.com/736x/5d/f9/aa/5df9aacdbce9d708a510836f9cea1f76.jpg",
-    items: [
-      { name: "Arrabbiata (Red)", prices: { Price: 179 }, img: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=400" },
-      { name: "Bechamel (White)", prices: { Price: 199 }, img: "https://images.unsplash.com/photo-1611270629569-8b357cb88da9?q=80&w=400" },
-      { name: "Pink Pasta (Mix)", prices: { Price: 209 }, img: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=400" },
-      { name: "Pesto Pasta", prices: { Price: 239 }, img: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?q=80&w=400" },
-      { name: "Mac N Cheese", prices: { Price: 239 }, img: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=400" }
-    ]
-  },
-  fries: {
-    type: "bites", title: "FRIES", img: "https://img.freepik.com/free-photo/delicious-fries-studio_23-2151846534.jpg?semt=ais_hybrid&w=740&q=80",
-    items: [
-      { name: "Simply Salted", prices: { Price: 89 }, img: "https://media.istockphoto.com/id/628208496/photo/sea-salt-french-fries-with-ketchup.jpg?s=612x612&w=0&k=20&c=Zax0KTgE6LdmIHku5-tHDvcIXkxAD_qgf5tK2GLZMtM=" },
-      { name: "Peri Peri", prices: { Price: 119 }, img: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?q=80&w=400" },
-      { name: "Cheese Fries", prices: { Price: 129 }, img: "https://media.istockphoto.com/id/865939256/photo/spicy-chili-cheese-fries.jpg?s=612x612&w=0&k=20&c=vpUh1eDtuHV2Fl-dvasc_gvzIWlXgfFYZSKqm7br7MY=" }
-    ]
-  },
-  wraps: {
-    type: "bites", title: "WRAPS", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXE3qdMCBOPcFLgAOO6upQV39vpuCVY5ni3g&s",
-    items: [
-      { name: "Aloo Tikki Wrap", prices: { Price: 129 }, img: "https://aemporterindia.com/wp-content/uploads/2025/08/aloo-tikki-wrap.webp" },
-      { name: "Paneer Tikka Wrap", prices: { Price: 179 }, img: "https://media.istockphoto.com/id/1352474720/photo/fresh-paneer-roll-with-fresh-tomatos-salad-cheese-and-onions-isolated-on-bright-blue.jpg?s=612x612&w=0&k=20&c=QK9_TYlJnJWTIV__nJ0oxik6Mc9q37gKtQCLPrBY514=" }
-    ]
-  },
-  pizza: {
-    type: "bites", title: "PIZZA", img: "https://img.freepik.com/premium-photo/tandoori-paneer-pizza-side-view_1170794-93971.jpg",
-    items: [
-      { name: "Margherita", prices: { S: 149, M: 189 }, img: "https://media.istockphoto.com/id/1364262284/photo/italian-pizza-margherita-with-cheese-tomato-sauce-and-basil-on-grey-concrete-table-top-view.jpg?s=612x612&w=0&k=20&c=H_rwxtwmGQduyg_syYxVsd0VYFRI2ZbggeMsDzaGArI=" },
-      { name: "Tandoori Paneer", prices: { S: 189, M: 249 }, img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400" }
-    ]
-  }
+  hot_coffee: { type: "drinks", title: "HOT COFFEE", img: "https://i.dailymail.co.uk/1s/2018/11/01/18/5668494-0-image-a-4_1541098633929.jpg", items: [
+    { name: "Espresso", prices: { Price: 79 }, img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?q=80&w=400" },
+    { name: "Americano", prices: { Price: 89 }, img: "https://www.shutterstock.com/image-photo/black-drip-coffee-glass-cup-600nw-2285616609.jpg" },
+    { name: "Cappuccino", prices: { Reg: 99, "+ Add": 129 }, img: "https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=400" },
+    { name: "Latte", prices: { Price: 109 }, img: "https://www.cuisinart.com/dw/image/v2/ABAF_PRD/on/demandware.static/-/Sites-us-cuisinart-sfra-Library/default/dw42dcae51/images/recipe-Images/cafe-latte1-recipe_resized.jpg?sw=1200&sh=1200&sm=fit" },
+    { name: "Mocha", prices: { Price: 129 }, img: "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/the_perfect_mocha_coffee_29100_16x9.jpg" },
+    { name: "Special Flavors", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400" },
+    { name: "Nutella Hot Coffee", prices: { Price: 159 }, img: "https://artofpalate.com/wp-content/uploads/2015/03/nutella-coffee-recipe.jpg" }
+  ]},
+  cold_coffee: { type: "drinks", title: "COLD COFFEE", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=400", items: [
+    { name: "Iced Americano", prices: { Price: 99 }, img: "https://www.cleaneatingkitchen.com/wp-content/uploads/2022/07/espresso-americano-over-ice-with-straw.jpg" },
+    { name: "Regular Cold Coffee", prices: { Price: 69 }, img: "https://varshasnacks.com/assets/product/15ZnqCntk9.jpg" },
+    { name: "Medium Cold Coffee", prices: { Price: 109 }, img: "https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?q=80&w=400" }
+  ]},
+  frappe: { type: "drinks", title: "FRAPPÉ", img: "https://www.gourmetkava.cz/modules/ph_simpleblog/featured/72.jpg", items: [
+    { name: "Hazelnut Frappe", prices: { Mini: 130, Bold: 160 }, img: "https://www.nestleprofessional.in/sites/default/files/2021-08/Cookie-Frappe-Thumbnail.jpg" },
+    { name: "Caramel Frappe", prices: { Mini: 130, Bold: 170 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-cL_Bl1FJhIqpRjBx92rKiZqUjQLS_fCA0A&s" },
+    { name: "Java Chip Frappe", prices: { Mini: 140, Bold: 180 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReiF5_rMsa6lDKZ47l9QiQwMTaLiDgk2usrA&s" },
+    { name: "Oreo Frappe", prices: { Mini: 140, Bold: 180 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2iwSNLaidLMd8FEVSxj8lM7pSjcB2UiL0AA&s" },
+    { name: "Brownie Frappe", prices: { Mini: 160, Bold: 200 }, img: "https://www.espressodrive.in/wp-content/uploads/2022/10/Brownie-Frappe-n.jpg" },
+    { name: "Biscoff Frappe", prices: { Mini: 180, Bold: 220 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrhy3Q2UzhIdga-EQTdtNJoFjRvUTmPmk7Qg&s" }
+  ]},
+  shakes: { type: "drinks", title: "THICK SHAKES", img: "https://cookilicious.com/wp-content/uploads/2025/01/Brownie-Milkshake-Recipe-20-scaled.jpg", items: [
+    { name: "Strawberry Shake", prices: { Price: 150 }, img: "https://www.thehungrybites.com/wp-content/uploads/2023/06/Strawberry-milkshake-frappuccino-featured.jpg" },
+    { name: "Oreo Shake", prices: { Price: 170 }, img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=400" },
+    { name: "Kitkat Shake", prices: { Price: 190 }, img: "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=400" },
+    { name: "Nutella Shake", prices: { Price: 190 }, img: "https://saltandbaker.com/wp-content/uploads/2022/05/Nutella-milkshake-recipe.jpg" },
+    { name: "Biscoff Shake", prices: { Price: 200 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvXrbNVWsdfT9s0MOsHgTUvorAX0kcUr1lvA&s" },
+    { name: "Brownie Shake", prices: { Price: 200 }, img: "https://cookilicious.com/wp-content/uploads/2025/01/Brownie-Milkshake-Recipe-20-scaled.jpg" }
+  ]},
+  tea: { type: "drinks", title: "TEA", img: "https://www.teacupsfull.com/cdn/shop/articles/Screenshot_2023-09-05_at_7.00.35_PM.png?v=1693987070", items: [
+    { name: "Masala Tea", prices: { Price: 60 }, img: "https://www.teacupsfull.com/cdn/shop/articles/Screenshot_2023-09-05_at_7.00.35_PM.png?v=1693987070" }
+  ]},
+  maggi: { type: "bites", title: "MAGGI", img: "https://t3.ftcdn.net/jpg/10/00/01/18/360_F_1000011817_yeB5UJAODGoG5n69InCdWA7oFSTxnTak.jpg", items: [
+    { name: "Masala Maggi", prices: { Price: 79 }, img: "https://www.naaginsauce.com/cdn/shop/articles/22-Naagin-Masala-Maggi.jpg?v=1704435639" },
+    { name: "Veg Cheese Maggi", prices: { Price: 99 }, img: "https://cdn.dotpe.in/longtail/item_thumbnails/8635073/PSJ8skxY-800-800.webp" },
+    { name: "Schezwan Maggi", prices: { Price: 119 }, img: "https://nfcihospitality.com/wp-content/uploads/2024/09/Indian-Schezwan-Maggi-1.jpg" },
+    { name: "Tandoori Maggi", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=400" }
+  ]},
+  burgers: { type: "bites", title: "BURGERS", img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=400", items: [
+    { name: "Aloo Tikki Burger", prices: { Reg: 89, "+ Chz": 109 }, img: "https://www.masalakorb.com/wp-content/uploads/2020/08/Aloo-Tikki-Burger-Recipe-Mcaloo-Tikki-V3-500x500.jpg" },
+    { name: "Mexican Burger", prices: { Price: 129 }, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=400" },
+    { name: "Paneer Tikka Burger", prices: { Price: 159 }, img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=400" }
+  ]},
+  pasta: { type: "bites", title: "PASTA", img: "https://i.pinimg.com/736x/5d/f9/aa/5df9aacdbce9d708a510836f9cea1f76.jpg", items: [
+    { name: "Arrabbiata (Red)", prices: { Price: 179 }, img: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=400" },
+    { name: "Bechamel (White)", prices: { Price: 199 }, img: "https://images.unsplash.com/photo-1611270629569-8b357cb88da9?q=80&w=400" },
+    { name: "Pink Pasta (Mix)", prices: { Price: 209 }, img: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=400" },
+    { name: "Pesto Pasta", prices: { Price: 239 }, img: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?q=80&w=400" },
+    { name: "Mac N Cheese", prices: { Price: 239 }, img: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=400" }
+  ]},
+  fries: { type: "bites", title: "FRIES", img: "https://img.freepik.com/free-photo/delicious-fries-studio_23-2151846534.jpg?semt=ais_hybrid&w=740&q=80", items: [
+    { name: "Simply Salted", prices: { Price: 89 }, img: "https://media.istockphoto.com/id/628208496/photo/sea-salt-french-fries-with-ketchup.jpg?s=612x612&w=0&k=20&c=Zax0KTgE6LdmIHku5-tHDvcIXkxAD_qgf5tK2GLZMtM=" },
+    { name: "Peri Peri", prices: { Price: 119 }, img: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?q=80&w=400" },
+    { name: "Cheese Fries", prices: { Price: 129 }, img: "https://media.istockphoto.com/id/865939256/photo/spicy-chili-cheese-fries.jpg?s=612x612&w=0&k=20&c=vpUh1eDtuHV2Fl-dvasc_gvzIWlXgfFYZSKqm7br7MY=" }
+  ]},
+  wraps: { type: "bites", title: "WRAPS", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXE3qdMCBOPcFLgAOO6upQV39vpuCVY5ni3g&s", items: [
+    { name: "Aloo Tikki Wrap", prices: { Price: 129 }, img: "https://aemporterindia.com/wp-content/uploads/2025/08/aloo-tikki-wrap.webp" },
+    { name: "Paneer Tikka Wrap", prices: { Price: 179 }, img: "https://media.istockphoto.com/id/1352474720/photo/fresh-paneer-roll-with-fresh-tomatos-salad-cheese-and-onions-isolated-on-bright-blue.jpg?s=612x612&w=0&k=20&c=QK9_TYlJnJWTIV__nJ0oxik6Mc9q37gKtQCLPrBY514=" }
+  ]},
+  pizza: { type: "bites", title: "PIZZA", img: "https://img.freepik.com/premium-photo/tandoori-paneer-pizza-side-view_1170794-93971.jpg", items: [
+    { name: "Margherita", prices: { S: 149, M: 189 }, img: "https://media.istockphoto.com/id/1364262284/photo/italian-pizza-margherita-with-cheese-tomato-sauce-and-basil-on-grey-concrete-table-top-view.jpg?s=612x612&w=0&k=20&c=H_rwxtwmGQduyg_syYxVsd0VYFRI2ZbggeMsDzaGArI=" },
+      { name: "Veg Paradise", prices: { S: 159, M: 199 }, img: "https://storage.googleapis.com/shy-pub/99675/1635592532017_SKU-0050_0.webp" },
+      { name: "Tandoori Paneer", prices: { S: 189, M: 249 }, img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400" },
+      { name: "Mix Green", prices: { S: 189, M: 239 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaNYwQvIth00gGpf5n4qEN-BQ9k04N57hmBtaOZs3lZQ&s" },
+      { name: "Farm House", prices: { S: 199, M: 249 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT47R3J8ptwBG7Cc-UBWcUbLJ4Qy9DdmcgFoA&s" },
+      { name: "Veg Supreme", prices: { S: 220, M: 289 }, img: "https://api.pizzahut.io/v1/content/en-in/in-1/images/pizza/veggie-supreme.4bbddf98eccea9929192db1494ba3678.1.jpg" }
+  ]}
 };
 
 function filterMenu(type, btn) {
+    document.getElementById("pageTitle").textContent = "MTC Menu";
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     const grid = document.getElementById("categoryGrid");
@@ -284,7 +277,9 @@ function renderItems(category) {
             const key = `${item.name}-${label}`;
             const qty = cart[key] ? cart[key].qty : 0;
             pricesHTML += `
-                <div class="p-pill" onclick="changeQty('${item.name}', '${label}', ${item.prices[label]}, 1)">
+                <div class="p-pill" 
+                     onclick="changeQty('${item.name}', '${label}', ${item.prices[label]}, 1)"
+                     oncontextmenu="event.preventDefault(); changeQty('${item.name}', '${label}', ${item.prices[label]}, -1)">
                     ${qty > 0 ? `<span class="qty-badge">${qty}</span>` : ''}
                     <span class="size-label">${label}</span>
                     <span class="price-val">₹${item.prices[label]}</span>
@@ -303,8 +298,6 @@ function changeQty(name, size, price, delta) {
         if (cart[key].qty <= 0) delete cart[key];
     }
     updateCartBar();
-    
-    // Auto refresh items if we are in item view
     const currentTitle = document.getElementById("pageTitle").textContent;
     for (let k in menuData) {
         if (menuData[k].title === currentTitle) renderItems(menuData[k]);
@@ -323,8 +316,10 @@ function updateCartBar() {
 }
 
 function showOrder() {
+    document.getElementById("pageTitle").textContent = "Your Selection";
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById("orderScreen").classList.add("active");
+    window.scrollTo(0, 0);
     const list = document.getElementById("orderList");
     list.innerHTML = "";
     let subtotal = 0;
@@ -356,7 +351,7 @@ function showOrder() {
 }
 
 function clearCart() {
-    if(confirm("Clear all selections?")) {
+    if(confirm("Are you sure you want to clear your selections?")) {
         cart = {};
         updateCartBar();
         goBack();
@@ -364,9 +359,9 @@ function clearCart() {
 }
 
 function goBack() {
+    document.getElementById("pageTitle").textContent = "MTC Menu";
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById("categoryScreen").classList.add("active");
-    document.getElementById("pageTitle").textContent = "MTC Menu";
 }
 
 document.getElementById("themeToggle").onclick = () => {
