@@ -154,7 +154,9 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
   
   <div class="total-box">
     <div class="summary-line"><span>Subtotal</span> <span id="subTotal">₹0</span></div>
-    <div class="summary-line"><span>GST (5%)</span> <span id="gstTotal">₹0</span></div>
+    <div class="summary-line"><span>CGST (2.5%)</span> <span id="cgstTotal">₹0</span></div>
+    <div class="summary-line"><span>SGST (2.5%)</span> <span id="sgstTotal">₹0</span></div>
+    
     <div class="grand-total">
       <span style="font-weight: 700;">Grand Total</span>
       <span id="grandTotal">₹0</span>
@@ -344,10 +346,13 @@ function showOrder() {
             </div>`;
     });
 
-    const gst = Math.round(subtotal * 0.05);
-    const grand = subtotal + gst;
+    const cgst = Math.round(subtotal * 0.025);
+    const sgst = Math.round(subtotal * 0.025);
+    const grand = subtotal + cgst + sgst;
+
     document.getElementById("subTotal").textContent = `₹${subtotal}`;
-    document.getElementById("gstTotal").textContent = `₹${gst}`;
+    document.getElementById("cgstTotal").textContent = `₹${cgst}`;
+    document.getElementById("sgstTotal").textContent = `₹${sgst}`;
     document.getElementById("grandTotal").textContent = `₹${grand}`;
 }
 
