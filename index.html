@@ -114,7 +114,51 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 .grand-total span:last-child { font-size: 28px; font-weight: 800; color: var(--accent); font-family: 'Outfit'; }
 
 .clear-btn { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.2); width: 100%; padding: 15px; border-radius: 15px; font-weight: 800; margin-top: 20px; cursor: pointer; }
-footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 50px; }
+
+.search-container {
+  padding: 0 24px;
+  max-width: 600px;
+  margin: 10px auto 20px;
+}
+
+#menuSearch {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 14px 20px;
+  border-radius: 18px;
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans';
+  font-weight: 600;
+  outline: none;
+  transition: 0.3s;
+}
+
+#menuSearch:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+/* For empty states */
+.no-results {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+
+
+footer { 
+  text-align: center; 
+  padding: 40px 24px; 
+  color: var(--muted); 
+  font-size: 12px; 
+  border-top: 1px solid var(--border); 
+  margin-top: 50px; 
+  transition: margin-bottom 0.3s; /* Smooth move */
+}
+
 .pradhuman { margin-top: 10px; }
 .pradhuman a { color: var(--accent); text-decoration: none; font-weight: 800; }
 </style>
@@ -128,6 +172,10 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
   <div class="logo-container"><img src="logo.png" alt="MTC Logo"></div>
   <h1 id="pageTitle">MTC Menu</h1>
 </header>
+
+<div class="search-container">
+  <input type="text" id="menuSearch" placeholder="Search for coffee, pizza, maggi..." onkeyup="handleSearch()">
+</div>
 
 <div id="categoryScreen" class="screen active">
   <div class="filter-tabs">
@@ -274,7 +322,7 @@ const menuData = {
       { name: "Arrabbiata Pasta (Red)", prices: { REGULAR: 179 }, img: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=400" }, // Old Item Image
       { name: "Bechamel Pasta (White)", prices: { REGULAR: 199 }, img: "https://images.unsplash.com/photo-1611270629569-8b357cb88da9?q=80&w=400" }, // Old Item Image
       { name: "Pink Pasta (Mix)", prices: { REGULAR: 209 }, img: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=400" }, // Old Item Image
-      { name: "Pesto Pasta", prices: { REGULAR: 239 }, img: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?q=80&w=400" }, // Old Item Image
+      { name: "Pesto Pasta", prices: { REGULAR: 239 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJoE1Dny7t7cLJyE61JkweNoKlN9nIf0ANNw&s" }, // Old Item Image
       { name: "Mac N Cheese", prices: { REGULAR: 239 }, img: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=400" }, // Old Item Image
       { name: "Mac N Cheese Paneer Tikka", prices: { REGULAR: 259 }, img: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=400" }
     ]
@@ -299,6 +347,20 @@ const menuData = {
       { name: "Aloo Tikki Wrap", prices: { REGULAR: 129 }, img: "https://aemporterindia.com/wp-content/uploads/2025/08/aloo-tikki-wrap.webp" }, // Old Item Image
       { name: "Paneer Tikka Wrap", prices: { REGULAR: 179 }, img: "https://media.istockphoto.com/id/1352474720/photo/fresh-paneer-roll-with-fresh-tomatos-salad-cheese-and-onions-isolated-on-bright-blue.jpg?s=612x612&w=0&k=20&c=QK9_TYlJnJWTIV__nJ0oxik6Mc9q37gKtQCLPrBY514=" }, // Old Item Image
       { name: "Hummus Falafel Wrap", prices: { REGULAR: 199 }, img: "https://media.istockphoto.com/id/1139093193/photo/tortilla-wrap-with-falafel-and-fresh-salad-vegan-tacos-vegetarian-healthy-food.jpg?s=612x612&w=0&k=20&c=uUS2GP7JHvTMhqeuZbdfFcaV-zEDe3wEAHeKtZ4vKOw=" } // Old Item Image
+    ]
+  },
+  
+  mocktails: {
+    type: "drinks",
+    title: "MOCKTAILS",
+    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_uJ8hiQYklrdRwyO_gJMK537-UVVK8zhGXg&s", // Placeholder for header image
+    items: [
+      { name: "Black Currant Mojito", prices: { REGULAR: 159 }, img: "https://cdn.dotpe.in/longtail/store-items/7501886/17tqffG3.webp" },
+      { name: "Orange Mojito", prices: { REGULAR: 159 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTl67NCwHfcrXGkQVV4DFHAEVKiMW8d8DM9lA&s" },
+      { name: "Watermelon", prices: { REGULAR: 159 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYGczrRQ_MAdz37Gu-2ghksABpabchQyvz7A&s" },
+      { name: "Blue Lagoon", prices: { REGULAR: 159 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTui0utmj0Wj28CKtJXeEt0YvoNBQNEZIIYtg&s" },
+      { name: "Mint Mojito", prices: { REGULAR: 159 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_x3sVx5EiYB8wrJbaWVkgooSz1NMdoNScBg&s" },
+      { name: "Bubblegum", prices: { REGULAR: 159 }, img: "https://www.moninathome.in/wp-content/uploads/2022/10/Bubble-Gum-Lemonade.png" }
     ]
   },
 
@@ -391,46 +453,94 @@ const menuData = {
   }
 };
 
-function filterMenu(type, btn) {
+
+function handleSearch() {
+    const query = document.getElementById("menuSearch").value.toLowerCase();
+    const isCategoryScreen = document.getElementById("categoryScreen").classList.contains("active");
+
+    if (isCategoryScreen) {
+        filterMenu('all', document.querySelector('.tab-btn'), query);
+    } else if (currentCategoryKey) {
+        renderItems(menuData[currentCategoryKey], query);
+    }
+}
+function filterMenu(type, btn, query = "") {
     document.getElementById("pageTitle").textContent = "MTC Menu";
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+    if (btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
     const grid = document.getElementById("categoryGrid");
     grid.innerHTML = "";
+    
+    let hasResults = false;
     for (const key in menuData) {
-        if (type === 'all' || menuData[key].type === type) {
-            grid.innerHTML += `<div class="category-card" onclick="openCategory('${key}')"><img src="${menuData[key].img}"><div class="category-overlay"><div class="category-name">${menuData[key].title}</div></div></div>`;
+        const itemMatch = menuData[key].items.some(i => i.name.toLowerCase().includes(query));
+        const categoryMatch = menuData[key].title.toLowerCase().includes(query);
+
+        if ((type === 'all' || menuData[key].type === type) && (categoryMatch || itemMatch)) {
+            grid.innerHTML += `
+                <div class="category-card" onclick="openCategory('${key}')">
+                    <img src="${menuData[key].img}">
+                    <div class="category-overlay">
+                        <div class="category-name">${menuData[key].title}</div>
+                    </div>
+                </div>`;
+            hasResults = true;
         }
+    }
+    
+    if (!hasResults) {
+        grid.innerHTML = `<div class="no-results">No categories found for "${query}"</div>`;
     }
 }
 
 function openCategory(key) {
+    currentCategoryKey = key;
     const category = menuData[key];
     document.getElementById("pageTitle").textContent = category.title;
     document.getElementById("categoryScreen").classList.remove("active");
     document.getElementById("itemsScreen").classList.add("active");
+    document.getElementById("menuSearch").value = ""; // Clear search when entering category
     window.scrollTo(0, 0);
     renderItems(category);
 }
 
-function renderItems(category) {
+function renderItems(category, query = "") {
     const container = document.getElementById("itemsContainer");
     container.innerHTML = "";
-    category.items.forEach(item => {
+    
+    const filteredItems = category.items.filter(item => 
+        item.name.toLowerCase().includes(query)
+    );
+
+    if (filteredItems.length === 0) {
+        container.innerHTML = `<div class="no-results">No items found matching "${query}"</div>`;
+        return;
+    }
+
+    filteredItems.forEach(item => {
         let pricesHTML = "";
         for (const label in item.prices) {
             const key = `${item.name}-${label}`;
             const qty = cart[key] ? cart[key].qty : 0;
             pricesHTML += `
-                <div class="p-pill" 
-                     onclick="changeQty('${item.name}', '${label}', ${item.prices[label]}, 1)"
+                <div class="p-pill" onclick="changeQty('${item.name}', '${label}', ${item.prices[label]}, 1)"
                      oncontextmenu="event.preventDefault(); changeQty('${item.name}', '${label}', ${item.prices[label]}, -1)">
                     ${qty > 0 ? `<span class="qty-badge">${qty}</span>` : ''}
                     <span class="size-label">${label}</span>
                     <span class="price-val">₹${item.prices[label]}</span>
                 </div>`;
         }
-        container.innerHTML += `<div class="inner-item"><img src="${item.img}" class="item-visual"><div class="item-info"><div class="item-name">${item.name}</div><div class="p-container">${pricesHTML}</div></div></div>`;
+        container.innerHTML += `
+            <div class="inner-item">
+                <img src="${item.img}" class="item-visual">
+                <div class="item-info">
+                    <div class="item-name">${item.name}</div>
+                    <div class="p-container">${pricesHTML}</div>
+                </div>
+            </div>`;
     });
 }
 
@@ -451,12 +561,16 @@ function changeQty(name, size, price, delta) {
 
 function updateCartBar() {
     const bar = document.getElementById("cartBar");
+    const footer = document.querySelector("footer"); // Get the footer
     const count = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
+    
     if (count > 0) {
         bar.style.display = "flex";
         document.getElementById("cartCount").textContent = `${count} Items Selected`;
+        footer.style.marginBottom = "90px"; // Pushes "Designed by" text up
     } else {
         bar.style.display = "none";
+        footer.style.marginBottom = "0px"; // Resets when cart is empty
     }
 }
 
@@ -507,9 +621,12 @@ function clearCart() {
 }
 
 function goBack() {
+    currentCategoryKey = null;
+    document.getElementById("menuSearch").value = "";
     document.getElementById("pageTitle").textContent = "MTC Menu";
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById("categoryScreen").classList.add("active");
+    filterMenu('all', document.querySelector('.tab-btn'));
 }
 
 document.getElementById("themeToggle").onclick = () => {
