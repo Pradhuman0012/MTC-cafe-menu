@@ -58,7 +58,46 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 .category-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; }
 .category-name { color: #fff; font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
 
-.back-btn { margin: 10px 0 20px; font-size: 14px; font-weight: 700; color: var(--accent); cursor: pointer; display: inline-block; }
+/* Back Button Upgrade */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--accent);
+    cursor: pointer;
+    margin: 10px 0 25px;
+    transition: 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.back-btn:active {
+    transform: scale(0.95);
+}
+
+/* Category Page Improvements */
+.category-card {
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.category-card:active {
+    transform: scale(0.97);
+    border-color: var(--accent);
+}
+
+/* Sticky Category Title (Optional but helpful) */
+#itemsScreen .back-btn {
+    position: sticky;
+    top: 10px;
+    z-index: 10;
+    background: var(--bg); /* Screen background to hide items behind it while scrolling */
+    border-color: var(--accent);
+}
 
 .inner-item { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; padding: 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 18px; }
 .item-visual { width: 90px; height: 90px; border-radius: 20px; object-fit: cover; }
@@ -215,12 +254,18 @@ footer {
 </div>
 
 <div id="itemsScreen" class="screen">
-  <div class="back-btn" onclick="goBack()">← BACK TO CATEGORIES</div>
+  <div class="back-btn" onclick="goBack()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    CATEGORIES
+  </div>
   <div id="itemsContainer"></div>
 </div>
 
 <div id="orderScreen" class="screen">
-  <div class="back-btn" onclick="goBack()">← ADD MORE ITEMS</div>
+  <div class="back-btn" onclick="goBack()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    ADD MORE ITEMS
+  </div>
   
   <div class="instruction-box">
     Please show this screen to the Waiter<br>or tell your order from here.
