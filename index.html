@@ -147,7 +147,35 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
   font-weight: 600;
 }
 
+/* New styles for +/- buttons inside pills */
+.p-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px 10px; /* Adjusted padding */
+}
 
+.qty-control {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.qty-number {
+    font-size: 14px;
+    font-weight: 800;
+    min-width: 15px;
+    text-align: center;
+}
 
 footer { 
   text-align: center; 
@@ -525,14 +553,29 @@ function renderItems(category, query = "") {
         for (const label in item.prices) {
             const key = `${item.name}-${label}`;
             const qty = cart[key] ? cart[key].qty : 0;
-            pricesHTML += `
-                <div class="p-pill" onclick="changeQty('${item.name}', '${label}', ${item.prices[label]}, 1)"
-                     oncontextmenu="event.preventDefault(); changeQty('${item.name}', '${label}', ${item.prices[label]}, -1)">
-                    ${qty > 0 ? `<span class="qty-badge">${qty}</span>` : ''}
-                    <span class="size-label">${label}</span>
-                    <span class="price-val">₹${item.prices[label]}</span>
-                </div>`;
+            
+            // Logic: Agar qty > 0 hai toh +/- buttons dikhao, warna sirf price
+            let controlHTML = "";
+            if (qty > 0) {
+                controlHTML = `
+                    <div class="p-pill">
+                        <button class="qty-control" onclick="event.stopPropagation(); changeQty('${item.name}', '${label}', ${item.prices[label]}, -1)">-</button>
+                        <span class="qty-number">${qty}</span>
+                        <button class="qty-control" onclick="event.stopPropagation(); changeQty('${item.name}', '${label}', ${item.prices[label]}, 1)">+</button>
+                    </div>
+                `;
+            } else {
+                controlHTML = `
+                    <div class="p-pill" onclick="changeQty('${item.name}', '${label}', ${item.prices[label]}, 1)">
+                        <span class="size-label">${label}</span>
+                        <span class="price-val">₹${item.prices[label]}</span>
+                    </div>
+                `;
+            }
+
+            pricesHTML += controlHTML;
         }
+        
         container.innerHTML += `
             <div class="inner-item">
                 <img src="${item.img}" class="item-visual">
