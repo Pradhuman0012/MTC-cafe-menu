@@ -252,6 +252,59 @@ footer {
   transition: margin-bottom 0.3s; /* Smooth move */
 }
 
+.mini-offer-banner {
+    max-width: 600px;
+    height: 110px;
+    margin: 15px auto 20px;
+    border-radius: 22px;
+    overflow: hidden;
+    position: relative;
+    background: url("https://imgmediagumlet.lbb.in/media/2025/05/681b11ed727a257b0a0697ae_1746604525255.jpg") center/cover no-repeat;
+}
+
+.mini-offer-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(0,0,0,0.85),
+        rgba(0,0,0,0.4)
+    );
+    display: flex;
+    align-items: center;
+    padding: 18px 22px;
+}
+
+.mini-offer-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #fff;
+}
+
+.mini-chip {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(6px);
+    width: fit-content;
+}
+
+.mini-main {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+}
+
+.mini-main strong {
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffd700;
+}
+
 .pradhuman { margin-top: 10px; }
 .pradhuman a { color: var(--accent); text-decoration: none; font-weight: 800; }
 </style>
@@ -265,6 +318,16 @@ footer {
   <div class="logo-container"><img src="logo.png" alt="MTC Logo"></div>
   <h1 id="pageTitle">MTC Menu</h1>
 </header>
+<div class="mini-offer-banner">
+    <div class="mini-offer-overlay">
+        <div class="mini-offer-text">
+            <span class="mini-chip">Limited Time Offer</span>
+            <span class="mini-main">
+               Enjoy any premium Beverages at <strong>₹99/-</strong>
+            </span>
+        </div>
+    </div>
+</div>
 
 <div class="search-container">
   <input type="text" id="menuSearch" placeholder="Search for coffee, pizza, maggi..." onkeyup="handleSearch()">
@@ -357,9 +420,9 @@ const menuData = {
   cold_coffee: {
     type: "drinks",
     title: "COLD COFFEE",
-    img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=400", // Old Category Image
+    img: "https://jalojog.com/wp-content/uploads/2024/04/Cold_Coffee.jpg", // Old Category Image
     items: [
-      { name: "Cold Coffee", prices: { SMALL: 99, MEDIUM: 129 }, img: "https://varshasnacks.com/assets/product/15ZnqCntk9.jpg" } // Old Regular Cold Coffee Image
+      { name: "Cold Coffee", prices: { SMALL: 99, MEDIUM: 129 }, img: "https://jalojog.com/wp-content/uploads/2024/04/Cold_Coffee.jpg" } // Old Regular Cold Coffee Image
     ]
   },
 
