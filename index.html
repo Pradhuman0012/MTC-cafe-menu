@@ -259,7 +259,7 @@ footer {
     border-radius: 22px;
     overflow: hidden;
     position: relative;
-    background: url("https://imgmediagumlet.lbb.in/media/2025/05/681b11ed727a257b0a0697ae_1746604525255.jpg") center/cover no-repeat;
+    background: url("https://png.pngtree.com/thumb_back/fh260/background/20250329/pngtree-pub-perfection-a-set-of-cooler-beverages-on-the-bar-image_17155394.jpg") center/cover no-repeat;
 }
 
 .mini-offer-overlay {
@@ -398,6 +398,7 @@ footer {
 
 <script>
 let cart = {};
+const DRINK_OFFER_PRICE = 99;
 
 const menuData = {
   hot_coffee: {
@@ -720,6 +721,7 @@ function handleSearch() {
         renderItems(menuData[currentCategoryKey], query);
     }
 }
+
 function filterMenu(type, btn, query = "") {
     document.getElementById("pageTitle").textContent = "MTC Menu";
     if (btn) {
@@ -779,6 +781,10 @@ function renderItems(category, query = "") {
     filteredItems.forEach(item => {
         let pricesHTML = "";
         for (const label in item.prices) {
+            const isDrink = category.type === "drinks";
+            const originalPrice = item.prices[label];
+            const finalPrice = isDrink ? DRINK_OFFER_PRICE : originalPrice;
+            
             const key = `${item.name}-${label}`;
             const qty = cart[key] ? cart[key].qty : 0;
             
@@ -789,14 +795,25 @@ function renderItems(category, query = "") {
                     <div class="p-pill">
                         <button class="qty-control" onclick="event.stopPropagation(); changeQty('${item.name}', '${label}', ${item.prices[label]}, -1)">-</button>
                         <span class="qty-number">${qty}</span>
-                        <button class="qty-control" onclick="event.stopPropagation(); changeQty('${item.name}', '${label}', ${item.prices[label]}, 1)">+</button>
+                        <button class="qty-control" onclick="event.stopPropagation(); changeQty('${item.name}', '${label}', ${finalPrice}, 1)">+</button>
                     </div>
                 `;
             } else {
                 controlHTML = `
-                    <div class="p-pill" onclick="changeQty('${item.name}', '${label}', ${item.prices[label]}, 1)">
+                    <div class="p-pill" onclick="changeQty('${item.name}', '${label}', ${finalPrice}, 1)">
                         <span class="size-label">${label}</span>
-                        <span class="price-val">₹${item.prices[label]}</span>
+                        ${
+                          isDrink
+                            ? `
+                              <div style="display:flex;flex-direction:column;">
+                                <span style="font-size:11px;text-decoration:line-through;color:var(--muted);">
+                                  ₹${originalPrice}
+                                </span>
+                                <span class="price-val">₹${DRINK_OFFER_PRICE}</span>
+                              </div>
+                              `
+                            : `<span class="price-val">₹${originalPrice}</span>`
+                        }
                     </div>
                 `;
             }
