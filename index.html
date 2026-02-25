@@ -783,27 +783,31 @@ function renderItems(category, query = "") {
         for (const label in item.prices) {
             const isDrink = category.type === "drinks";
             const originalPrice = item.prices[label];
-            const finalPrice = isDrink ? DRINK_OFFER_PRICE : originalPrice;
+            
+            // Check: Only apply offer if it's a drink AND the original price is > 99
+            const hasOffer = isDrink && originalPrice > DRINK_OFFER_PRICE;
+            const finalPrice = hasOffer ? DRINK_OFFER_PRICE : originalPrice;
             
             const key = `${item.name}-${label}`;
             const qty = cart[key] ? cart[key].qty : 0;
             
-            // Logic: Agar qty > 0 hai toh +/- buttons dikhao, warna sirf price
             let controlHTML = "";
             if (qty > 0) {
+                // If item is already in cart, show the +/- controls
                 controlHTML = `
                     <div class="p-pill">
-                        <button class="qty-control" onclick="event.stopPropagation(); changeQty('${item.name}', '${label}', ${item.prices[label]}, -1)">-</button>
+                        <button class="qty-control" onclick="event.stopPropagation(); changeQty('${item.name}', '${label}', ${finalPrice}, -1)">-</button>
                         <span class="qty-number">${qty}</span>
                         <button class="qty-control" onclick="event.stopPropagation(); changeQty('${item.name}', '${label}', ${finalPrice}, 1)">+</button>
                     </div>
                 `;
             } else {
+                // Default state: Show price (with strike-through only if applicable)
                 controlHTML = `
                     <div class="p-pill" onclick="changeQty('${item.name}', '${label}', ${finalPrice}, 1)">
                         <span class="size-label">${label}</span>
                         ${
-                          isDrink
+                          hasOffer
                             ? `
                               <div style="display:flex;flex-direction:column;">
                                 <span style="font-size:11px;text-decoration:line-through;color:var(--muted);">
