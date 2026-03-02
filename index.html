@@ -5,7 +5,6 @@
 <title>Mahakaal Themes Cafe | Boutique Menu</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <style>
@@ -95,7 +94,6 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 
 #cartBar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 500px; background: var(--accent); padding: 18px 24px; border-radius: 22px; display: none; justify-content: space-between; align-items: center; color: #fff; font-weight: 800; box-shadow: 0 15px 35px var(--accent-glow); cursor: pointer; z-index: 1000; }
 
-/* REVIEW SCREEN SPECIFIC */
 .instruction-top { text-align: center; background: var(--pill-bg); padding: 15px; border-radius: 15px; margin-bottom: 25px; border: 1px dashed var(--accent); color: var(--accent); font-weight: 800; font-size: 13px; letter-spacing: 0.5px; }
 .total-box { margin-top: 20px; padding: 25px; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; }
 .tax-row { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; margin-bottom: 8px; font-weight: 600; }
@@ -120,23 +118,23 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 <div id="sliderContainer" class="mini-offer-banner swiper">
     <div class="swiper-wrapper">
         <div class="swiper-slide">
-            <div class="slide-content" style="background: url('https://png.pngtree.com/thumb_back/fh260/background/20250329/pngtree-pub-perfection-a-set-of-cooler-beverages-on-the-bar-image_17155394.jpg');">
-                <div class="mini-offer-overlay"></div>
-                <div class="mini-offer-text">
-                    <span class="mini-chip">Limited Time Offer</span>
-                    <span class="mini-main">Enjoy any premium Beverages at <strong>₹99/-</strong></span>
-                </div>
-            </div>
-        </div>
-        <div class="swiper-slide">
             <div class="slide-content" style="background: url('https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=600');">
                 <div class="mini-offer-overlay"></div>
                 <div class="mini-offer-text">
-                    <span class="mini-chip" style="background: var(--accent); color: #000;">New Flavor</span>
+                    <span class="mini-chip" style="background: var(--accent); color: #000;">House Special</span>
                     <span class="mini-main">Try our new <strong>Cinnamon Flavor</strong> in Frappe & coffee! ✨</span>
                 </div>
             </div>
         </div>
+        <div class="swiper-slide">
+    <div class="slide-content" style="background: url('https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=600');">
+        <div class="mini-offer-overlay"></div>
+        <div class="mini-offer-text">
+            <span class="mini-chip" style="background: #ff8fab; color: #fff;">Chef's Special</span>
+            <span class="mini-main">Try our creamy <strong>Pink Pasta (Mix)</strong> at just <strong>₹179/-</strong></span>
+        </div>
+    </div>
+</div>
     </div>
     <div class="swiper-pagination"></div>
 </div>
@@ -168,18 +166,14 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     Modify Order
   </div>
-  
   <div class="instruction-top">YOUR BUCKET LIST IS READY! ORDER THESE AT THE COUNTER</div>
-  
   <div id="orderList"></div>
-
   <div class="total-box">
     <div class="tax-row"><span>Subtotal</span><span id="subTotal">₹0</span></div>
     <div class="tax-row"><span>CGST (2.5%)</span><span id="cgst">₹0</span></div>
     <div class="tax-row"><span>SGST (2.5%)</span><span id="sgst">₹0</span></div>
     <div class="grand-total"><span>Grand Total</span><span id="grandTotal">₹0</span></div>
   </div>
-  
   <button class="clear-btn" onclick="clearCart()">Clear Order</button>
 </div>
 
@@ -195,7 +189,6 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 
 <script>
 let cart = {};
-const DRINK_OFFER_PRICE = 99;
 let currentCategoryKey = null;
 
 const menuData = {
@@ -510,6 +503,7 @@ const menuData = {
 
 
 
+
 const swiper = new Swiper('.swiper', {
     loop: true, autoplay: { delay: 3500, disableOnInteraction: false },
     pagination: { el: '.swiper-pagination', clickable: true },
@@ -549,9 +543,7 @@ function renderItems(category, query = "") {
     category.items.filter(i => i.name.toLowerCase().includes(query)).forEach(item => {
         let pricesHTML = "";
         for (const label in item.prices) {
-            const originalPrice = item.prices[label];
-            const hasOffer = category.type === "drinks" && originalPrice > DRINK_OFFER_PRICE;
-            const finalPrice = hasOffer ? DRINK_OFFER_PRICE : originalPrice;
+            const finalPrice = item.prices[label];
             const key = `${item.name}-${label}`;
             const qty = cart[key] ? cart[key].qty : 0;
             
@@ -564,10 +556,7 @@ function renderItems(category, query = "") {
             } else {
                 pricesHTML += `<div class="p-pill" onclick="changeQty('${item.name}', '${label}', ${finalPrice}, 1)">
                     <span class="size-label">${label}</span>
-                    <div style="display:flex; flex-direction:column; align-items:center;">
-                        ${hasOffer ? `<span style="font-size:10px; text-decoration:line-through; color:var(--muted); margin-bottom:-2px;">₹${originalPrice}</span>` : ''}
-                        <span class="price-val">₹${finalPrice}</span>
-                    </div>
+                    <span class="price-val">₹${finalPrice}</span>
                 </div>`;
             }
         }
@@ -592,11 +581,8 @@ function updateCartBar() {
 
 function showOrder() {
     document.getElementById("pageTitle").textContent = "Review Order";
-    
-    // Hide Slider and Search
     document.getElementById("sliderContainer").style.display = "none";
     document.getElementById("searchWrapper").style.display = "none";
-    
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById("orderScreen").classList.add("active");
     
@@ -616,11 +602,8 @@ function showOrder() {
 function goBack() {
     currentCategoryKey = null; 
     document.getElementById("pageTitle").textContent = "MTC Menu";
-    
-    // Show Slider and Search again
     document.getElementById("sliderContainer").style.display = "block";
     document.getElementById("searchWrapper").style.display = "block";
-    
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById("categoryScreen").classList.add("active");
 }
