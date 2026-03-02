@@ -4,325 +4,410 @@
 <meta charset="UTF-8">
 <title>Mahakaal Themes Cafe | Boutique Menu</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <style>
-:root { --bg: #05070a; --surface: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); --text: #f8f9fa; --muted: #94a3b8; --accent: #d4af37; --accent-glow: rgba(212, 175, 55, 0.15); --pill-bg: rgba(212, 175, 55, 0.1); }
-body.light { --bg: #f8fafc; --surface: #ffffff; --border: rgba(0, 0, 0, 0.08); --text: #0f172a; --muted: #64748b; --accent: #854d0e; --accent-glow: rgba(133, 77, 14, 0.05); --pill-bg: #f1f5f9; }
-* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s; overflow-x: hidden; }
-.glow { position: fixed; width: 400px; height: 400px; background: var(--accent-glow); border-radius: 50%; filter: blur(100px); z-index: -1; top: -150px; left: -100px; }
-header { padding: 40px 24px 10px; text-align: center; position: relative; }
-.logo-container img { width: 80px; height: 80px; border-radius: 24px; border: 1px solid var(--border); object-fit: cover; }
-header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'Outfit', sans-serif; }
-#themeToggle { position: absolute; top: 25px; right: 25px; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 50%; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-#sliderContainer { max-width: 600px; height: 130px; margin: 15px 24px 20px; border-radius: 22px; overflow: hidden; position: relative; }
-.swiper-slide { width: 100%; height: 100%; }
-.slide-content { width: 100%; height: 100%; display: flex; align-items: center; padding: 18px 22px; background-size: cover !important; background-position: center !important; }
-.mini-offer-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.85), rgba(0,0,0,0.3)); z-index: 1; }
-.mini-offer-text { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 6px; color: #fff; }
-.mini-chip { font-size: 10px; font-weight: 800; letter-spacing: 1.2px; padding: 4px 10px; border-radius: 100px; background: rgba(255,255,255,0.15); backdrop-filter: blur(6px); width: fit-content; text-transform: uppercase; }
-.mini-main { font-size: 16px; font-weight: 600; font-family: 'Outfit', sans-serif; }
-.mini-main strong { font-size: 20px; font-weight: 800; color: #ffd700; }
-#searchWrapper { padding: 0 24px; max-width: 600px; margin: 10px auto 20px; }
-#menuSearch { width: 100%; background: var(--surface); border: 1px solid var(--border); padding: 14px 20px; border-radius: 18px; color: var(--text); font-family: 'Plus Jakarta Sans'; font-weight: 600; outline: none; transition: 0.3s; }
-.filter-tabs { display: flex; justify-content: center; gap: 8px; margin: 25px 0; flex-wrap: wrap; }
-.tab-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 10px 20px; border-radius: 100px; font-weight: 700; font-size: 12px; cursor: pointer; text-transform: uppercase; }
-.tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-.screen { display: none; max-width: 600px; margin: auto; padding: 0 16px 140px; }
-.screen.active { display: block; animation: fadeIn 0.4s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.category-card { height: 180px; border-radius: 28px; overflow: hidden; border: 1px solid var(--border); position: relative; transition: 0.2s; cursor: pointer; }
-.category-card img { width: 100%; height: 100%; object-fit: cover; }
-.category-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; }
-.category-name { color: #fff; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
-.back-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 800; color: var(--accent); cursor: pointer; margin: 10px 0 25px; }
-.inner-item { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; padding: 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 18px; }
-.item-visual { width: 90px; height: 90px; border-radius: 20px; object-fit: cover; }
-.item-info { flex: 1; }
-.item-name { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
-.p-container { display: flex; gap: 10px; flex-wrap: wrap; }
-.p-pill { background: var(--pill-bg); border: 1px solid var(--border); padding: 6px 10px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
-.qty-control { background: var(--accent); color: white; border: none; border-radius: 6px; width: 24px; height: 24px; font-weight: 800; cursor: pointer; }
-.size-label { font-size: 10px; color: var(--muted); font-weight: 800; text-transform: uppercase; }
-.price-val { font-size: 16px; font-weight: 800; color: var(--accent); font-family: 'Outfit'; }
-#cartBar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 500px; background: var(--accent); padding: 18px 24px; border-radius: 22px; display: none; justify-content: space-between; align-items: center; color: #fff; font-weight: 800; box-shadow: 0 15px 35px var(--accent-glow); cursor: pointer; z-index: 1000; }
-.total-box { margin-top: 20px; padding: 25px; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; }
-.tax-row { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; margin-bottom: 8px; font-weight: 600; }
-.grand-total { border-top: 1px dashed var(--border); margin-top: 12px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; }
-.grand-total span:last-child { font-size: 28px; font-weight: 800; color: var(--accent); font-family: 'Outfit'; }
-.clear-btn { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.2); width: 100%; padding: 15px; border-radius: 15px; font-weight: 800; margin-top: 20px; cursor: pointer; }
-footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 50px; }
+:root {
+  --bg:#05070a;
+  --surface:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.1);
+  --text:#f8f9fa;
+  --muted:#94a3b8;
+  --accent:#d4af37;
+  --accent-glow:rgba(212,175,55,0.15);
+  --pill-bg:rgba(212,175,55,0.1);
+}
+body.light{
+  --bg:#f8fafc;
+  --surface:#ffffff;
+  --border:rgba(0,0,0,0.08);
+  --text:#0f172a;
+  --muted:#64748b;
+  --accent:#854d0e;
+  --accent-glow:rgba(133,77,14,0.05);
+  --pill-bg:#f1f5f9;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  overflow-x:hidden;
+}
+
+/* ===== HEADER ===== */
+header{
+  padding:40px 24px 10px;
+  text-align:center;
+  position:relative;
+}
+.logo-container img{
+  width:80px;
+  height:80px;
+  border-radius:24px;
+  border:1px solid var(--border);
+  object-fit:cover;
+}
+header h1{
+  font-size:28px;
+  font-weight:800;
+  margin:15px 0 0;
+  font-family:'Outfit',sans-serif;
+}
+#themeToggle{
+  position:absolute;
+  right:20px;
+  top:20px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:var(--surface);
+  border:1px solid var(--border);
+  cursor:pointer;
+}
+
+/* ===== YOUR ORIGINAL SLIDER DESIGN (CENTER FIXED) ===== */
+#sliderContainer{
+  max-width:600px;
+  height:130px;
+  margin:20px auto;
+  padding:0 16px;
+  border-radius:22px;
+}
+.swiper{
+  border-radius:22px;
+  overflow:hidden;
+}
+.swiper-slide{
+  width:100%;
+  height:130px;
+  position:relative;
+}
+.slide-content{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  padding:18px 22px;
+  background-size:cover!important;
+  background-position:center!important;
+}
+.mini-offer-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,rgba(0,0,0,0.85),rgba(0,0,0,0.3));
+  z-index:1;
+}
+.mini-offer-text{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  color:#fff;
+}
+.mini-chip{
+  font-size:10px;
+  font-weight:800;
+  padding:4px 10px;
+  border-radius:100px;
+  backdrop-filter:blur(6px);
+  width:fit-content;
+  text-transform:uppercase;
+}
+.mini-main{
+  font-size:16px;
+  font-weight:600;
+  font-family:'Outfit',sans-serif;
+}
+.mini-main strong{
+  font-size:20px;
+  font-weight:800;
+  color:#ffd700;
+}
+
+/* ===== SCREENS ===== */
+.screen{
+  display:none;
+  max-width:600px;
+  margin:auto;
+  padding:0 16px 140px;
+}
+.screen.active{display:block}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+.category-card{
+  height:180px;
+  border-radius:28px;
+  overflow:hidden;
+  position:relative;
+  cursor:pointer;
+}
+.category-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.category-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding-bottom:20px;
+}
+.category-name{
+  color:#fff;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.inner-item{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:16px;
+  margin-bottom:18px;
+  display:flex;
+  gap:18px;
+}
+.item-visual{
+  width:90px;
+  height:90px;
+  border-radius:20px;
+  object-fit:cover;
+}
+.item-name{
+  font-weight:800;
+  margin-bottom:8px;
+}
+.p-pill{
+  background:var(--pill-bg);
+  border:1px solid var(--border);
+  padding:6px 10px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:700;
+}
+.qty-control{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  width:24px;
+  height:24px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+#cartBar{
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  width:calc(100% - 40px);
+  max-width:500px;
+  background:var(--accent);
+  padding:18px 24px;
+  border-radius:22px;
+  display:none;
+  justify-content:space-between;
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+
+/* ===== ORDER SCREEN ===== */
+.order-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+.order-actions{
+  display:flex;
+  gap:6px;
+}
+.remove-btn{
+  background:#ff4d4d;
+  border:none;
+  color:#fff;
+  padding:5px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:12px;
+}
+.total-box{
+  margin-top:20px;
+  padding:25px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:24px;
+}
+.tax-row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+.grand-total{
+  border-top:1px dashed var(--border);
+  margin-top:12px;
+  padding-top:12px;
+  display:flex;
+  justify-content:space-between;
+  font-weight:800;
+}
 </style>
 </head>
 
 <body>
-<div class="glow"></div>
+
 <header>
-  <button id="themeToggle">🌙</button>
-  <div class="logo-container"><img src="logo.png" alt="MTC Logo"></div>
-  <h1 id="pageTitle">MTC Menu</h1>
+<button id="themeToggle">🌙</button>
+<div class="logo-container">
+<img src="logo.png">
+</div>
+<h1 id="pageTitle">MTC Menu</h1>
 </header>
 
-<div id="sliderContainer" class="mini-offer-banner swiper">
-    <div class="swiper-wrapper">
-        <div class="swiper-slide">
-            <div class="slide-content" style="background: url('https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=600');">
-                <div class="mini-offer-overlay"></div>
-                <div class="mini-offer-text">
-                    <span class="mini-chip" style="background: var(--accent); color: #000;">House Special</span>
-                    <span class="mini-main">Try our new <strong>Cinnamon Flavor</strong> in Frappe! ✨</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="swiper-pagination"></div>
+<!-- ===== ORIGINAL THEME SLIDER (NOW PERFECTLY CENTERED) ===== -->
+<div id="sliderContainer" class="swiper">
+<div class="swiper-wrapper">
+
+<div class="swiper-slide">
+<div class="slide-content" style="background:url('https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=1200');">
+<div class="mini-offer-overlay"></div>
+<div class="mini-offer-text">
+<span class="mini-chip" style="background:var(--accent);color:#000;">House Special</span>
+<span class="mini-main">Try our new <strong>Cinnamon Flavor</strong> in Frappe & Coffee</span>
+</div>
+</div>
 </div>
 
-<div id="searchWrapper"><input type="text" id="menuSearch" placeholder="Search for items..." onkeyup="handleSearch()"></div>
+<div class="swiper-slide">
+<div class="slide-content" style="background:url('https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=1200');">
+<div class="mini-offer-overlay"></div>
+<div class="mini-offer-text">
+<span class="mini-chip" style="background:#ff8fab;color:#fff;">Chef Special</span>
+<span class="mini-main">Creamy <strong>Pink Pasta</strong> at just <strong>₹209/-</strong></span>
+</div>
+</div>
+</div>
+
+<div class="swiper-slide">
+<div class="slide-content" style="background:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1200');">
+<div class="mini-offer-overlay"></div>
+<div class="mini-offer-text">
+<span class="mini-chip" style="background:#3ec1d3;color:#000;">Freshly Baked</span>
+<span class="mini-main">Try our <strong>Farm Fresh Pizza</strong></span>
+</div>
+</div>
+</div>
+
+</div>
+<div class="swiper-pagination"></div>
+</div>
 
 <div id="categoryScreen" class="screen active">
-  <div class="filter-tabs">
-    <button class="tab-btn active" data-type="all" onclick="filterMenu('all', this)">All</button>
-    <button class="tab-btn" data-type="drinks" onclick="filterMenu('drinks', this)">Drinks</button>
-    <button class="tab-btn" data-type="bites" onclick="filterMenu('bites', this)">Food</button>
-    <button class="tab-btn" data-type="game" onclick="filterMenu('game', this)">Games</button>
-  </div>
-  <div class="grid" id="categoryGrid">
-    <p style="text-align: center; width: 100%; grid-column: 1 / span 2;">Syncing menu...</p>
-  </div>
+<div class="grid" id="categoryGrid"></div>
 </div>
 
 <div id="itemsScreen" class="screen">
-  <div class="back-btn" onclick="goBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> CATEGORIES</div>
-  <div id="itemsContainer"></div>
+<button onclick="goBack()">← Back</button>
+<div id="itemsContainer"></div>
 </div>
 
 <div id="orderScreen" class="screen">
-  <div class="back-btn" onclick="goBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Modify Order</div>
-  <div id="orderList"></div>
-  <div class="total-box">
-    <div class="tax-row"><span>Subtotal</span><span id="subTotal">₹0</span></div>
-    <div class="tax-row"><span>GST (5%)</span><span id="gstTotal">₹0</span></div>
-    <div class="grand-total"><span>Grand Total</span><span id="grandTotal">₹0</span></div>
-  </div>
-  <button class="clear-btn" onclick="clearCart()">Clear Order</button>
+<button onclick="goBack()">← Modify Order</button>
+<div id="orderList"></div>
+
+<div class="total-box">
+<div class="tax-row"><span>Subtotal</span><span id="subTotal">₹0</span></div>
+<div class="tax-row"><span>CGST (2.5%)</span><span id="cgst">₹0</span></div>
+<div class="tax-row"><span>SGST (2.5%)</span><span id="sgst">₹0</span></div>
+<div class="grand-total"><span>Total</span><span id="grandTotal">₹0</span></div>
+</div>
 </div>
 
-<div id="cartBar" onclick="showOrder()"><span id="cartCount">0 Items Selected</span><span>REVIEW ORDER →</span></div>
-
-<footer>MAHAKAAL THEMES CAFE • 2026</footer>
+<div id="cartBar" onclick="showOrder()">
+<span id="cartCount">0 Items</span>
+<span>Review Order →</span>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-// --- Global State ---
-let cart = {};
-let currentCategoryKey = null;
-let menuData = {};
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQWGG0hgrRrDuRFn4729qiS-iTLG-CD4R6fC9HwfiTZxbmiBnVtyzPB_HyoW1jxuDO5_0orKp07j_27/pub?gid=0&single=true&output=csv';
-
-// --- Core Functions ---
-
-function filterMenu(type, btn, query = "") {
-    const grid = document.getElementById("categoryGrid");
-    if (!grid) return;
-    
-    document.getElementById("pageTitle").textContent = "MTC Menu";
-    if (btn) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-    
-    grid.innerHTML = "";
-    if (Object.keys(menuData).length === 0) {
-        grid.innerHTML = '<p style="text-align: center; width: 100%;">Connecting...</p>';
-        return;
-    }
-
-    for (const key in menuData) {
-        const itemMatch = menuData[key].items.some(i => i.name.toLowerCase().includes(query.toLowerCase()));
-        const categoryMatch = menuData[key].title.toLowerCase().includes(query.toLowerCase());
-        if ((type === 'all' || menuData[key].type === type) && (categoryMatch || itemMatch)) {
-            grid.innerHTML += `<div class="category-card" onclick="openCategory('${key}')">
-                <img src="${menuData[key].img}" loading="lazy">
-                <div class="category-overlay"><div class="category-name">${menuData[key].title}</div></div>
-            </div>`;
-        }
-    }
-}
-
-function openCategory(key) {
-    currentCategoryKey = key;
-    document.getElementById("pageTitle").textContent = menuData[key].title;
-    document.getElementById("categoryScreen").classList.remove("active");
-    document.getElementById("itemsScreen").classList.add("active");
-    window.scrollTo(0, 0);
-    renderItems(menuData[key]);
-}
-
-function renderItems(category, query = "") {
-    const container = document.getElementById("itemsContainer");
-    container.innerHTML = "";
-    category.items.filter(i => i.name.toLowerCase().includes(query.toLowerCase())).forEach(item => {
-        let pricesHTML = "";
-        for (const label in item.prices) {
-            const finalPrice = item.prices[label];
-            const oldPrice = item.originalPrices[label];
-            const key = `${item.name}-${label}`;
-            const qty = cart[key] ? cart[key].qty : 0;
-            
-            if (qty > 0) {
-                pricesHTML += `<div class="p-pill">
-                    <button class="qty-control" onclick="event.stopPropagation(); changeQty('${item.name}', '${label}', ${finalPrice}, -1)">-</button>
-                    <span class="qty-number">${qty}</span>
-                    <button class="qty-control" onclick="event.stopPropagation(); changeQty('${item.name}', '${label}', ${finalPrice}, 1)">+</button>
-                </div>`;
-            } else {
-                pricesHTML += `<div class="p-pill" onclick="changeQty('${item.name}', '${label}', ${finalPrice}, 1)">
-                    <span class="size-label">${label}</span>
-                    <div style="display:flex; flex-direction:column; align-items:flex-start;">
-                        <span style="text-decoration: line-through; font-size: 10px; color: var(--muted); margin-bottom:-4px;">₹${oldPrice}</span>
-                        <span class="price-val">₹${finalPrice}</span>
-                    </div>
-                </div>`;
-            }
-        }
-        container.innerHTML += `<div class="inner-item">
-            <img src="${item.img}" class="item-visual" loading="lazy">
-            <div class="item-info"><div class="item-name">${item.name}</div><div class="p-container">${pricesHTML}</div></div>
-        </div>`;
-    });
-}
-
-function changeQty(name, size, price, delta) {
-    const key = `${name}-${size}`;
-    if (!cart[key]) { if (delta > 0) cart[key] = { name, size, price, qty: delta }; }
-    else { cart[key].qty += delta; if (cart[key].qty <= 0) delete cart[key]; }
-    updateCartBar();
-    if (currentCategoryKey) renderItems(menuData[currentCategoryKey]);
-}
-
-function updateCartBar() {
-    const count = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
-    document.getElementById("cartBar").style.display = count > 0 ? "flex" : "none";
-    document.getElementById("cartCount").textContent = `${count} Items Selected`;
-}
-
-function showOrder() {
-    document.getElementById("pageTitle").textContent = "Review Order";
-    document.getElementById("sliderContainer").style.display = "none";
-    document.getElementById("searchWrapper").style.display = "none";
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById("orderScreen").classList.add("active");
-    const list = document.getElementById("orderList"); list.innerHTML = "";
-    let subtotal = 0;
-    Object.values(cart).forEach(item => {
-        subtotal += item.price * item.qty;
-        list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid var(--border)"><div><b>${item.qty}x</b> ${item.name}</div><div>₹${item.price * item.qty}</div></div>`;
-    });
-    let gst = Math.round(subtotal * 0.05);
-    document.getElementById("subTotal").textContent = `₹${subtotal}`;
-    document.getElementById("gstTotal").textContent = `₹${gst}`;
-    document.getElementById("grandTotal").textContent = `₹${subtotal + gst}`;
-}
-
-function goBack() {
-    currentCategoryKey = null; 
-    document.getElementById("pageTitle").textContent = "MTC Menu";
-    document.getElementById("sliderContainer").style.display = "block";
-    document.getElementById("searchWrapper").style.display = "block";
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById("categoryScreen").classList.add("active");
-}
-
-function clearCart() { if(confirm("Clear order?")) { cart = {}; updateCartBar(); goBack(); } }
-
-function handleSearch() {
-    const query = document.getElementById("menuSearch").value;
-    const isCategoryScreen = document.getElementById("categoryScreen").classList.contains("active");
-    if (isCategoryScreen) { 
-        const activeBtn = document.querySelector('.tab-btn.active');
-        filterMenu(activeBtn.getAttribute('data-type') || 'all', activeBtn, query); 
-    } 
-    else if (currentCategoryKey) { renderItems(menuData[currentCategoryKey], query); }
-}
-
-// --- App Initialization ---
-
-async function initMenu() {
-
-    // Load cached instantly
-    const cached = localStorage.getItem('mtc_fast_cache');
-    if (cached) {
-        menuData = JSON.parse(cached);
-        filterMenu('all', document.querySelector('.tab-btn.active'));
-    }
-
-    try {
-        const response = await fetch(CSV_URL, { cache: "no-store" });
-        const csvText = await response.text();
-
-        const parsed = Papa.parse(csvText, {
-            header: true,
-            skipEmptyLines: true
-        });
-
-        const formatted = {};
-
-        parsed.data.forEach(row => {
-            const catKey = row.Category;
-            if (!catKey) return;
-
-            if (!formatted[catKey]) {
-                formatted[catKey] = {
-                    type: row.Type,
-                    title: row.Title,
-                    img: row["Image URL"],
-                    items: []
-                };
-            }
-
-            let item = formatted[catKey].items.find(
-                i => i.name === row["Item Name"]
-            );
-
-            if (!item) {
-                item = {
-                    name: row["Item Name"],
-                    prices: {},
-                    originalPrices: {},
-                    img: row["Image URL"]
-                };
-                formatted[catKey].items.push(item);
-            }
-
-            item.prices[row["Price Label"]] = parseFloat(row["Current Price"]) || 0;
-            item.originalPrices[row["Price Label"]] =
-                parseFloat(row["Original Price (Strike)"]) || 0;
-        });
-
-        menuData = formatted;
-        localStorage.setItem('mtc_fast_cache', JSON.stringify(menuData));
-        filterMenu('all', document.querySelector('.tab-btn.active'));
-
-    } catch (err) {
-        console.error("CSV Load Error:", err);
-    }
-}
-
-// Global Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    initMenu();
-    new Swiper('.swiper', { loop: true, autoplay: { delay: 3500 }, pagination: { el: '.swiper-pagination', clickable: true } });
-    document.getElementById("themeToggle").onclick = () => {
-        document.body.classList.toggle("light");
-        document.getElementById("themeToggle").textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
-    };
+new Swiper('#sliderContainer',{
+loop:true,
+autoplay:{delay:3500,disableOnInteraction:false},
+pagination:{el:'.swiper-pagination',clickable:true}
 });
+
+let cart={};
+
+function changeQty(name,price,delta){
+if(!cart[name]&&delta>0){cart[name]={qty:delta,price};}
+else if(cart[name]){
+cart[name].qty+=delta;
+if(cart[name].qty<=0)delete cart[name];
+}
+updateCartBar();
+}
+
+function updateCartBar(){
+const count=Object.values(cart).reduce((s,i)=>s+i.qty,0);
+document.getElementById("cartBar").style.display=count>0?"flex":"none";
+document.getElementById("cartCount").innerText=count+" Items Selected";
+}
+
+function showOrder(){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById("orderScreen").classList.add("active");
+renderOrder();
+}
+
+function renderOrder(){
+const list=document.getElementById("orderList");
+list.innerHTML="";
+let subtotal=0;
+for(const key in cart){
+const item=cart[key];
+subtotal+=item.qty*item.price;
+list.innerHTML+=`
+<div class="order-item">
+<div>${item.qty}x ${key}</div>
+<div class="order-actions">
+<button class="qty-control" onclick="changeQty('${key}',${item.price},-1);renderOrder()">−</button>
+<button class="remove-btn" onclick="delete cart['${key}'];renderOrder()">Remove</button>
+</div>
+</div>`;
+}
+const tax=(subtotal*0.025);
+document.getElementById("subTotal").innerText="₹"+subtotal;
+document.getElementById("cgst").innerText="₹"+tax.toFixed(2);
+document.getElementById("sgst").innerText="₹"+tax.toFixed(2);
+document.getElementById("grandTotal").innerText="₹"+(subtotal+(tax*2)).toFixed(2);
+updateCartBar();
+}
+
+function goBack(){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById("categoryScreen").classList.add("active");
+}
+
+document.getElementById("themeToggle").onclick=()=>{
+document.body.classList.toggle("light");
+};
 </script>
+
 </body>
 </html>
