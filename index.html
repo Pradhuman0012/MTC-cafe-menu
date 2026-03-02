@@ -6,52 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <style>
-:root {
-  --bg: #05070a;
-  --surface: rgba(255, 255, 255, 0.05);
-  --border: rgba(255, 255, 255, 0.1);
-  --text: #f8f9fa;
-  --muted: #94a3b8;
-  --accent: #d4af37;
-  --accent-glow: rgba(212, 175, 55, 0.15);
-  --pill-bg: rgba(212, 175, 55, 0.1);
-}
-
-body.light {
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --border: rgba(0, 0, 0, 0.08);
-  --text: #0f172a;
-  --muted: #64748b;
-  --accent: #854d0e;
-  --accent-glow: rgba(133, 77, 14, 0.05);
-  --pill-bg: #f1f5f9;
-}
-
+:root { --bg: #05070a; --surface: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); --text: #f8f9fa; --muted: #94a3b8; --accent: #d4af37; --accent-glow: rgba(212, 175, 55, 0.15); --pill-bg: rgba(212, 175, 55, 0.1); }
+body.light { --bg: #f8fafc; --surface: #ffffff; --border: rgba(0, 0, 0, 0.08); --text: #0f172a; --muted: #64748b; --accent: #854d0e; --accent-glow: rgba(133, 77, 14, 0.05); --pill-bg: #f1f5f9; }
 * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s; overflow-x: hidden; }
-
 .glow { position: fixed; width: 400px; height: 400px; background: var(--accent-glow); border-radius: 50%; filter: blur(100px); z-index: -1; top: -150px; left: -100px; }
-
 header { padding: 40px 24px 10px; text-align: center; position: relative; }
 .logo-container img { width: 80px; height: 80px; border-radius: 24px; border: 1px solid var(--border); object-fit: cover; }
 header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'Outfit', sans-serif; }
-
 #themeToggle { position: absolute; top: 25px; right: 25px; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 50%; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-
-/* SLIDER */
-#sliderContainer {
-    max-width: 600px;
-    height: 130px;
-    margin: 15px 24px 20px;
-    border-radius: 22px;
-    overflow: hidden;
-    position: relative;
-}
-@media (min-width: 648px) { #sliderContainer { margin-left: auto; margin-right: auto; } }
-
+#sliderContainer { max-width: 600px; height: 130px; margin: 15px 24px 20px; border-radius: 22px; overflow: hidden; position: relative; }
 .swiper-slide { width: 100%; height: 100%; }
 .slide-content { width: 100%; height: 100%; display: flex; align-items: center; padding: 18px 22px; background-size: cover !important; background-position: center !important; }
 .mini-offer-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.85), rgba(0,0,0,0.3)); z-index: 1; }
@@ -59,56 +26,41 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 .mini-chip { font-size: 10px; font-weight: 800; letter-spacing: 1.2px; padding: 4px 10px; border-radius: 100px; background: rgba(255,255,255,0.15); backdrop-filter: blur(6px); width: fit-content; text-transform: uppercase; }
 .mini-main { font-size: 16px; font-weight: 600; font-family: 'Outfit', sans-serif; }
 .mini-main strong { font-size: 20px; font-weight: 800; color: #ffd700; }
-
-/* SEARCH */
 #searchWrapper { padding: 0 24px; max-width: 600px; margin: 10px auto 20px; }
 #menuSearch { width: 100%; background: var(--surface); border: 1px solid var(--border); padding: 14px 20px; border-radius: 18px; color: var(--text); font-family: 'Plus Jakarta Sans'; font-weight: 600; outline: none; transition: 0.3s; }
-#menuSearch:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-
 .filter-tabs { display: flex; justify-content: center; gap: 8px; margin: 25px 0; flex-wrap: wrap; }
 .tab-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 10px 20px; border-radius: 100px; font-weight: 700; font-size: 12px; cursor: pointer; text-transform: uppercase; }
 .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
 .screen { display: none; max-width: 600px; margin: auto; padding: 0 16px 140px; }
 .screen.active { display: block; animation: fadeIn 0.4s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.category-card { height: 180px; border-radius: 28px; overflow: hidden; border: 1px solid var(--border); position: relative; transition: 0.2s; }
+.category-card { height: 180px; border-radius: 28px; overflow: hidden; border: 1px solid var(--border); position: relative; transition: 0.2s; cursor: pointer; }
 .category-card img { width: 100%; height: 100%; object-fit: cover; }
 .category-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; }
-.category-name { color: #fff; font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
-
+.category-name { color: #fff; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
 .back-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 800; color: var(--accent); cursor: pointer; margin: 10px 0 25px; }
-
 .inner-item { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; padding: 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 18px; }
 .item-visual { width: 90px; height: 90px; border-radius: 20px; object-fit: cover; }
 .item-info { flex: 1; }
 .item-name { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
-
 .p-container { display: flex; gap: 10px; flex-wrap: wrap; }
 .p-pill { background: var(--pill-bg); border: 1px solid var(--border); padding: 6px 10px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
 .qty-control { background: var(--accent); color: white; border: none; border-radius: 6px; width: 24px; height: 24px; font-weight: 800; cursor: pointer; }
 .size-label { font-size: 10px; color: var(--muted); font-weight: 800; text-transform: uppercase; }
 .price-val { font-size: 16px; font-weight: 800; color: var(--accent); font-family: 'Outfit'; }
-
 #cartBar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 500px; background: var(--accent); padding: 18px 24px; border-radius: 22px; display: none; justify-content: space-between; align-items: center; color: #fff; font-weight: 800; box-shadow: 0 15px 35px var(--accent-glow); cursor: pointer; z-index: 1000; }
-
-.instruction-top { text-align: center; background: var(--pill-bg); padding: 15px; border-radius: 15px; margin-bottom: 25px; border: 1px dashed var(--accent); color: var(--accent); font-weight: 800; font-size: 13px; letter-spacing: 0.5px; }
 .total-box { margin-top: 20px; padding: 25px; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; }
 .tax-row { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; margin-bottom: 8px; font-weight: 600; }
 .grand-total { border-top: 1px dashed var(--border); margin-top: 12px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; }
 .grand-total span:last-child { font-size: 28px; font-weight: 800; color: var(--accent); font-family: 'Outfit'; }
 .clear-btn { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.2); width: 100%; padding: 15px; border-radius: 15px; font-weight: 800; margin-top: 20px; cursor: pointer; }
-
 footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 50px; }
-.pradhuman a { color: var(--accent); text-decoration: none; font-weight: 800; }
 </style>
 </head>
 
 <body>
 <div class="glow"></div>
-
 <header>
   <button id="themeToggle">🌙</button>
   <div class="logo-container"><img src="logo.png" alt="MTC Logo"></div>
@@ -122,428 +74,104 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
                 <div class="mini-offer-overlay"></div>
                 <div class="mini-offer-text">
                     <span class="mini-chip" style="background: var(--accent); color: #000;">House Special</span>
-                    <span class="mini-main">Try our new <strong>Cinnamon Flavor</strong> in Frappe & coffee! ✨</span>
+                    <span class="mini-main">Try our new <strong>Cinnamon Flavor</strong> in Frappe! ✨</span>
                 </div>
             </div>
         </div>
-        <div class="swiper-slide">
-    <div class="slide-content" style="background: url('https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=600');">
-        <div class="mini-offer-overlay"></div>
-        <div class="mini-offer-text">
-            <span class="mini-chip" style="background: #ff8fab; color: #fff;">Chef's Special</span>
-            <span class="mini-main">Try our creamy <strong>Pink Pasta (Mix)</strong> at just <strong>₹209/-</strong></span>
-        </div>
-    </div>
-</div>
     </div>
     <div class="swiper-pagination"></div>
 </div>
 
-<div id="searchWrapper" class="search-container">
-  <input type="text" id="menuSearch" placeholder="Search for coffee, pizza, maggi..." onkeyup="handleSearch()">
-</div>
+<div id="searchWrapper"><input type="text" id="menuSearch" placeholder="Search for items..." onkeyup="handleSearch()"></div>
 
 <div id="categoryScreen" class="screen active">
   <div class="filter-tabs">
-    <button class="tab-btn active" onclick="filterMenu('all', this)">All</button>
-    <button class="tab-btn" onclick="filterMenu('drinks', this)">Drinks</button>
-    <button class="tab-btn" onclick="filterMenu('bites', this)">Food</button>
-    <button class="tab-btn" onclick="filterMenu('game', this)">Games</button>
+    <button class="tab-btn active" data-type="all" onclick="filterMenu('all', this)">All</button>
+    <button class="tab-btn" data-type="drinks" onclick="filterMenu('drinks', this)">Drinks</button>
+    <button class="tab-btn" data-type="bites" onclick="filterMenu('bites', this)">Food</button>
+    <button class="tab-btn" data-type="game" onclick="filterMenu('game', this)">Games</button>
   </div>
-  <div class="grid" id="categoryGrid"></div>
+  <div class="grid" id="categoryGrid">
+    <p style="text-align: center; width: 100%; grid-column: 1 / span 2;">Syncing menu...</p>
+  </div>
 </div>
 
 <div id="itemsScreen" class="screen">
-  <div class="back-btn" onclick="goBack()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    CATEGORIES
-  </div>
+  <div class="back-btn" onclick="goBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> CATEGORIES</div>
   <div id="itemsContainer"></div>
 </div>
 
 <div id="orderScreen" class="screen">
-  <div class="back-btn" onclick="goBack()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Modify Order
-  </div>
-  <div class="instruction-top">YOUR BUCKET LIST IS READY! ORDER THESE AT THE COUNTER</div>
+  <div class="back-btn" onclick="goBack()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Modify Order</div>
   <div id="orderList"></div>
   <div class="total-box">
     <div class="tax-row"><span>Subtotal</span><span id="subTotal">₹0</span></div>
-    <div class="tax-row"><span>CGST (2.5%)</span><span id="cgst">₹0</span></div>
-    <div class="tax-row"><span>SGST (2.5%)</span><span id="sgst">₹0</span></div>
+    <div class="tax-row"><span>GST (5%)</span><span id="gstTotal">₹0</span></div>
     <div class="grand-total"><span>Grand Total</span><span id="grandTotal">₹0</span></div>
   </div>
   <button class="clear-btn" onclick="clearCart()">Clear Order</button>
 </div>
 
-<div id="cartBar" onclick="showOrder()">
-  <span id="cartCount">0 Items Selected</span>
-  <span>REVIEW ORDER →</span>
-</div>
+<div id="cartBar" onclick="showOrder()"><span id="cartCount">0 Items Selected</span><span>REVIEW ORDER →</span></div>
 
-<footer>MAHAKAAL THEMES CAFE • 2026
-<div class="pradhuman">Designed by <a href="https://www.linkedin.com/in/pradhuman-tamboli/" target="_blank">Pradhuman Tamboli</a></div></footer>
+<footer>MAHAKAAL THEMES CAFE • 2026</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
+// --- Global State ---
 let cart = {};
 let currentCategoryKey = null;
+let menuData = {};
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQWGG0hgrRrDuRFn4729qiS-iTLG-CD4R6fC9HwfiTZxbmiBnVtyzPB_HyoW1jxuDO5_0orKp07j_27/pub?gid=0&single=true&output=csv';
 
-const menuData = {
-  hot_coffee: {
-    type: "drinks",
-    title: "HOT COFFEE",
-    img: "https://i.dailymail.co.uk/1s/2018/11/01/18/5668494-0-image-a-4_1541098633929.jpg", // Old Category Image
-    items: [
-      { name: "Cappuccino", prices: { REGULAR: 89 }, img: "https://images.unsplash.com/photo-1534778101976-62847782c213?q=80&w=400" }, // Old Item Image
-      { name: "Irish Cappuccino", prices: { REGULAR: 129 }, img: "https://cdn.uengage.io/uploads/53229/image-1487-1738663003.jpg" },
-      { name: "Hazelnut Cappuccino", prices: { REGULAR: 129 }, img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=400" },
-      { name: "Caramel Cappuccino", prices: { REGULAR: 129 }, img: "https://miriamscoffee.com/wp-content/uploads/2018/05/Caramel-Capuccino.jpg" },
-      { name: "Tiramisu Cappuccino", prices: { REGULAR: 129 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxznqhVAM5yWGLDAgWDsEUkISpvNT7E4L5aQ&s" },
-      { name: "Nutella Cappuccino", prices: { REGULAR: 149 }, img: "https://artofpalate.com/wp-content/uploads/2015/03/nutella-coffee-recipe.jpg" }, // Old Nutella Coffee Image
-      { name: "Cafe Latte", prices: { REGULAR: 109 }, img: "https://www.cuisinart.com/dw/image/v2/ABAF_PRD/on/demandware.static/-/Sites-us-cuisinart-sfra-Library/default/dw42dcae51/images/recipe-Images/cafe-latte1-recipe_resized.jpg?sw=1200&sh=1200&sm=fit" }, // Old Latte Image
-      { name: "Cafe Mocha", prices: { REGULAR: 119 }, img: "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/the_perfect_mocha_coffee_29100_16x9.jpg" }, // Old Mocha Image
-      { name: "Hot Chocolate", prices: { REGULAR: 129 }, img: "https://images.unsplash.com/photo-1517578239113-b03992dcdd25?w=400" }
-    ]
-  },
-
-  cold_coffee: {
-    type: "drinks",
-    title: "COLD COFFEE",
-    img: "https://jalojog.com/wp-content/uploads/2024/04/Cold_Coffee.jpg", // Old Category Image
-    items: [
-      { name: "Cold Coffee", prices: { SMALL: 99, MEDIUM: 129 }, img: "https://jalojog.com/wp-content/uploads/2024/04/Cold_Coffee.jpg" } // Old Regular Cold Coffee Image
-    ]
-  },
-
-  frappe: {
-    type: "drinks",
-    title: "FRAPPE",
-    img: "https://www.gourmetkava.cz/modules/ph_simpleblog/featured/72.jpg", // Old Category Image
-    items: [
-      { name: "Hazelnut Frappe", prices: { SMALL: 129, MEDIUM: 159 }, img: "https://www.nestleprofessional.in/sites/default/files/2021-08/Cookie-Frappe-Thumbnail.jpg" }, // Old Item Image
-      { name: "Caramel Frappe", prices: { SMALL: 139, MEDIUM: 169 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-cL_Bl1FJhIqpRjBx92rKiZqUjQLS_fCA0A&s" }, // Old Item Image
-      { name: "Tiramisu Frappe", prices: { SMALL: 139, MEDIUM: 169 }, img: "https://monin.in/cdn/shop/files/400x400_1.png?v=1762164312&width=480" },
-      { name: "Irish Frappe", prices: { SMALL: 149, MEDIUM: 179 }, img: "https://vegplatter.in/files/public/images/partner/catalog/48/Irish%20Frappe.jpg" },
-      { name: "Java Chip Frappe", prices: { SMALL: 149, MEDIUM: 179 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReiF5_rMsa6lDKZ47l9QiQwMTaLiDgk2usrA&s" }, // Old Item Image
-      
-    ]
-  },
-
-  shakes: {
-    type: "drinks",
-    title: "THICK SHAKES",
-    img: "https://cookilicious.com/wp-content/uploads/2025/01/Brownie-Milkshake-Recipe-20-scaled.jpg", // Old Category Image
-    items: [
-      { name: "Strawberry Shake", prices: { REGULAR: 149 }, img: "https://www.thehungrybites.com/wp-content/uploads/2023/06/Strawberry-milkshake-frappuccino-featured.jpg" }, // Old Item Image
-      { name: "Oreo Shake", prices: { REGULAR: 169 }, img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=400" }, // Old Item Image
-      { name: "KitKat Shake", prices: { REGULAR: 189 }, img: "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=400" }, // Old Item Image
-      { name: "Nutella Shake", prices: { REGULAR: 189 }, img: "https://saltandbaker.com/wp-content/uploads/2022/05/Nutella-milkshake-recipe.jpg" }, // Old Item Image
-      { name: "Biscoff Shake", prices: { REGULAR: 199 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvXrbNVWsdfT9s0MOsHgTUvorAX0kcUr1lvA&s" }, // Old Item Image
-      { name: "Brownie Shake", prices: { REGULAR: 199 }, img: "https://cookilicious.com/wp-content/uploads/2025/01/Brownie-Milkshake-Recipe-20-scaled.jpg" },
-      { "name": "Blueberry Shake", "prices": { "REGULAR": 159 }, "img": "https://static.toiimg.com/photo/84226147.cms" },
-      { "name": "Mix Berry Shake", "prices": { "REGULAR": 149 }, "img": "https://simplegraytshirt.com/wp-content/uploads/2024/10/mixed-berry-smoothie-08.jpg" }
-    ]
-  },
-  iced_coffees: {
-    type: "drinks",
-    title: "ICED COFFEES",
-    img: "https://www.bhg.com/thmb/UcTbMWKkDYip1DojqgSbfufQRpU=/4000x0/filters:no_upscale():strip_icc()/bhg-Affogatto-Style-Caramel-Iced-Coffee-0s0juRT-4PG97XVeJSnJ9_-3004cfb890654e3e8914a44b70fb35d4.jpg",
-    items: [
-      { 
-        name: "Iced Coffee", 
-        prices: { REGULAR: 99 }, 
-        img: "https://frostingandfettuccine.com/wp-content/uploads/2022/12/Caramel-Iced-Coffee-6.jpg" 
-      },
-      { 
-        name: "Iced Caramel", 
-        prices: { REGULAR: 129 }, 
-        img: "https://thegirlonbloor.com/wp-content/uploads/2025/05/Iced-caramel-latte-8.jpg" 
-      },
-      { 
-        name: "Iced Irish", 
-        prices: { REGULAR: 129 }, 
-        img: "https://assets.epicurious.com/photos/64ba853b9cee78f13e5d4b8b/1:1/w_2560%2Cc_limit/20230705-EPICURIOUS-28040.jpg" 
-      },
-      { 
-        name: "Iced Hazelnut", 
-        prices: { REGULAR: 129 }, 
-        img: "https://tyberrymuch.com/wp-content/uploads/2024/03/Homemade-Hazelnut-Iced-Coffee.jpg" 
-      },
-      { 
-        name: "Iced Tiramisu", 
-        prices: { REGULAR: 129 }, 
-        img: "https://lovelydelites.com/wp-content/uploads/2025/09/IMG_8465-1.jpg" 
-      }
-    ]
-},
-
-  tea: {
-    type: "drinks",
-    title: "TEA",
-    img: "https://www.teacupsfull.com/cdn/shop/articles/Screenshot_2023-09-05_at_7.00.35_PM.png?v=1693987070", // Old Category Image
-    items: [
-      { name: "Masala Tea", prices: { REGULAR: 59 }, img: "https://www.teacupsfull.com/cdn/shop/articles/Screenshot_2023-09-05_at_7.00.35_PM.png?v=1693987070" }, // Old Item Image
-      { name: "Lemon Tea", prices: { REGULAR: 58 }, img: "https://cdn.shopify.com/s/files/1/0241/1927/files/green_tea_with_lemon_-_kadambari_tea_-_lemon_tea_70eb8a53-0be5-4c45-9738-335796f34e7e.png?v=1584157434" },
-      { name: "Green Tea", prices: { REGULAR: 69 }, img: "https://www.vahdam.com/cdn/shop/articles/Green_Tea_Header_copy.jpg?v=1714738610&width=2048" }
-    ]
-  },
-
-  maggi: {
-    type: "bites",
-    title: "MAGGI",
-    img: "https://t3.ftcdn.net/jpg/10/00/01/18/360_F_1000011817_yeB5UJAODGoG5n69InCdWA7oFSTxnTak.jpg", // Old Category Image
-    items: [
-      { name: "Masala Maggi", prices: { REGULAR: 79 }, img: "https://www.naaginsauce.com/cdn/shop/articles/22-Naagin-Masala-Maggi.jpg?v=1704435639" }, // Old Item Image
-      { name: "Veg Cheese Maggi", prices: { REGULAR: 99 }, img: "https://cdn.dotpe.in/longtail/item_thumbnails/8635073/PSJ8skxY-800-800.webp" }, // Old Item Image
-      { name: "Schezwan Maggi", prices: { REGULAR: 119 }, img: "https://nfcihospitality.com/wp-content/uploads/2024/09/Indian-Schezwan-Maggi-1.jpg" }, // Old Item Image
-      { name: "Tandoori Maggi", prices: { REGULAR: 129 }, img: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=400" } // Old Item Image
-    ]
-  },
-
-  burgers: {
-    type: "bites",
-    title: "BURGERS",
-    img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=400", // Old Category Image
-    items: [
-      { name: "Aloo Tikki Burger", prices: { REGULAR: 89 }, img: "https://www.masalakorb.com/wp-content/uploads/2020/08/Aloo-Tikki-Burger-Recipe-Mcaloo-Tikki-V3-500x500.jpg" }, // Old Item Image
-      { name: "Herb Chilly Burger", prices: { REGULAR: 129 }, img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=400" }, // Used Old Mexican Burger link as it fits Herb Chilly
-      { name: "Spicy Paneer Burger", prices: { REGULAR: 159 }, img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=400" }, // Old Paneer Tikka Burger Image
-    ]
-  },
-
-  pasta: {
-    type: "bites",
-    title: "PASTA",
-    img: "https://i.pinimg.com/736x/5d/f9/aa/5df9aacdbce9d708a510836f9cea1f76.jpg", // Old Category Image
-    items: [
-      { name: "Arrabbiata Pasta (Red)", prices: { REGULAR: 179 }, img: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=400" }, // Old Item Image
-      { name: "Bechamel Pasta (White)", prices: { REGULAR: 199 }, img: "https://images.unsplash.com/photo-1611270629569-8b357cb88da9?q=80&w=400" }, // Old Item Image
-      { name: "Pink Pasta (Mix)", prices: { REGULAR: 209 }, img: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=400" }, // Old Item Image
-      { name: "Pesto Pasta", prices: { REGULAR: 239 }, img: "https://richanddelish.com/wp-content/uploads/2023/02/creamy-pesto-pasta-1.jpg" }, // Old Item Image
-      { name: "Mac N Cheese", prices: { REGULAR: 239 }, img: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=400" }, // Old Item Image
-      { name: "Mac N Cheese Paneer Tikka", prices: { REGULAR: 259 }, img: "https://i.redd.it/v79rrin8ybh21.jpg" }
-    ]
-  },
-
-  fries: {
-    type: "bites",
-    title: "FRIES",
-    img: "https://img.freepik.com/free-photo/delicious-fries-studio_23-2151846534.jpg?semt=ais_hybrid&w=740&q=80", // Old Category Image
-    items: [
-      { name: "Simply Salted Fries", prices: { REGULAR: 89 }, img: "https://media.istockphoto.com/id/628208496/photo/sea-salt-french-fries-with-ketchup.jpg?s=612x612&w=0&k=20&c=Zax0KTgE6LdmIHku5-tHDvcIXkxAD_qgf5tK2GLZMtM=" }, // Old Item Image
-      { name: "Peri Peri Fries", prices: { REGULAR: 119 }, img: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?q=80&w=400" }, // Old Item Image
-      { name: "Cheese Fries", prices: { REGULAR: 129 }, img: "https://media.istockphoto.com/id/865939256/photo/spicy-chili-cheese-fries.jpg?s=612x612&w=0&k=20&c=vpUh1eDtuHV2Fl-dvasc_gvzIWlXgfFYZSKqm7br7MY=" } // Old Item Image
-    ]
-  },
-
-  wraps: {
-    type: "bites",
-    title: "WRAPS",
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXE3qdMCBOPcFLgAOO6upQV39vpuCVY5ni3g&s", // Old Category Image
-    items: [
-      { name: "Aloo Tikki Wrap", prices: { REGULAR: 129 }, img: "https://aemporterindia.com/wp-content/uploads/2025/08/aloo-tikki-wrap.webp" }, // Old Item Image
-      { name: "Paneer Tikka Wrap", prices: { REGULAR: 179 }, img: "https://media.istockphoto.com/id/1352474720/photo/fresh-paneer-roll-with-fresh-tomatos-salad-cheese-and-onions-isolated-on-bright-blue.jpg?s=612x612&w=0&k=20&c=QK9_TYlJnJWTIV__nJ0oxik6Mc9q37gKtQCLPrBY514=" }, // Old Item Image
-      { name: "Hummus Falafel Wrap", prices: { REGULAR: 199 }, img: "https://media.istockphoto.com/id/1139093193/photo/tortilla-wrap-with-falafel-and-fresh-salad-vegan-tacos-vegetarian-healthy-food.jpg?s=612x612&w=0&k=20&c=uUS2GP7JHvTMhqeuZbdfFcaV-zEDe3wEAHeKtZ4vKOw=" } // Old Item Image
-    ]
-  },
-  
-  "mexican_and_mediterranean": {
-    "type": "bites",
-    "title": "MEXICAN",
-    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhZd-JWDhi6jN9xG2BIZ6imbztVfIokH2ttw&s",
-    "items": [
-      { "name": "Hummus Falafel Wrap", "prices": { "REGULAR": 179 }, "img": "https://www.bigbasket.com/media/uploads/recipe/w-l/600_1.jpg" },
-      { "name": "Hummus Falafel Pita Pocket", "prices": { "REGULAR": 249 }, "img": "https://vjcooks.com/wp-content/uploads/2020/11/Vjcooks_FalafelPitas5-720x720.jpg" },
-      { "name": "Hummus with Lavash", "prices": { "REGULAR": 159 }, "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhZd-JWDhi6jN9xG2BIZ6imbztVfIokH2ttw&s" },
-      { "name": "Hummus with Pita Bread", "prices": { "REGULAR": 199 }, "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvx9wqUI_S7NKw8iiGN8goVxboFT9UcJMUbQ&s" },
-      { "name": "Mexican Hot Pot", "prices": { "REGULAR": 299 }, "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_iLOC1ODhPhiSsod-HnBbypbHQpftDjEGnA&s" },
-      { "name": "La Lebanese Platter", "prices": { "REGULAR": 299 }, "img": "https://maureenabood.com/wp-content/uploads/2022/12/Maza-platter-top-down-Maureen-Abood.jpg" }
-    ]
-  },
-  
-  mocktails: {
-    type: "drinks",
-    title: "MOCKTAILS",
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_uJ8hiQYklrdRwyO_gJMK537-UVVK8zhGXg&s", // Placeholder for header image
-    items: [
-      { name: "Black Currant Mojito", prices: { REGULAR: 159 }, img: "https://cdn.dotpe.in/longtail/store-items/7501886/17tqffG3.webp" },
-      { name: "Orange Mojito", prices: { REGULAR: 159 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTl67NCwHfcrXGkQVV4DFHAEVKiMW8d8DM9lA&s" },
-      
-      { "name": "Green Mint Mojito", "prices": { "REGULAR": 159 }, "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHTVnaayMGIYbmdl7A1itW4sDQa7uzpvEgIw&s" },
-      { "name": "Green Apple Mojito", "prices": { "REGULAR": 159 }, "img": "https://www.amulcafe.in/wp-content/uploads/2024/03/Green-Apple-Mojito.webp" },
-      { "name": "Mix Berry Mojito", "prices": { "REGULAR": 159 }, "img": "https://www.nutmegnanny.com/wp-content/uploads/2015/03/mixed-berry-mojito-pic.jpg" },
-      { name: "Watermelon", prices: { REGULAR: 159 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYGczrRQ_MAdz37Gu-2ghksABpabchQyvz7A&s" },
-      { name: "Blue Lagoon", prices: { REGULAR: 159 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTui0utmj0Wj28CKtJXeEt0YvoNBQNEZIIYtg&s" },
-      { name: "Mint Mojito", prices: { REGULAR: 159 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_x3sVx5EiYB8wrJbaWVkgooSz1NMdoNScBg&s" },
-      { name: "Bubblegum", prices: { REGULAR: 159 }, img: "https://www.moninathome.in/wp-content/uploads/2022/10/Bubble-Gum-Lemonade.png" }
-    ]
-  },
-  
-  "brownies": {
-    "type": "bites",
-    "title": "GOURMET BROWNIES",
-    "img": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800",
-    "items": [
-      { "name": "Brownie with Ice Cream", "prices": { "REGULAR": 109 }, "img": "https://uptownasia.in/wp-content/uploads/2024/09/Brownie-with-Icecream-2-01.jpg" },
-      { "name": "Nutella Brownie", "prices": { "REGULAR": 119 }, "img": "https://jusbaked.in/cdn/shop/files/NutellaBrownie_1Piece.jpg?v=1725015167&width=1946" },
-      { "name": "Biscoff Brownie", "prices": { "REGULAR": 119 }, "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPTSIomWX1hZx25bhAVtDdn2kest-zFZ1RXA&s" }
-    ]
-  },
-
-  pizza: {
-    type: "bites",
-    title: "PIZZA",
-    img: "https://img.freepik.com/premium-photo/tandoori-paneer-pizza-side-view_1170794-93971.jpg", // Old Category Image
-    items: [
-      { name: "Margherita Pizza", prices: { SMALL: 149, MEDIUM: 189 }, img: "https://media.istockphoto.com/id/1364262284/photo/italian-pizza-margherita-with-cheese-tomato-sauce-and-basil-on-grey-concrete-table-top-view.jpg?s=612x612&w=0&k=20&c=H_rwxtwmGQduyg_syYxVsd0VYFRI2ZbggeMsDzaGArI=" }, // Old Item Image
-      { name: "Veg Paradise Pizza", prices: { SMALL: 159, MEDIUM: 199 }, img: "https://storage.googleapis.com/shy-pub/99675/1635592532017_SKU-0050_0.webp" }, // Old Item Image
-      { name: "Tandoori Paneer Pizza", prices: { SMALL: 189, MEDIUM: 249 }, img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400" }, // Old Item Image
-      { name: "Max Green Pizza", prices: { SMALL: 189, MEDIUM: 239 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaNYwQvIth00gGpf5n4qEN-BQ9k04N57hmBtaOZs3lZQ&s" }, // Old Mix Green Image
-      { name: "Farm House Pizza", prices: { SMALL: 199, MEDIUM: 249 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT47R3J8ptwBG7Cc-UBWcUbLJ4Qy9DdmcgFoA&s" }, // Old Item Image
-      { name: "Veg Supreme Pizza", prices: { SMALL: 220, MEDIUM: 289 }, img: "https://api.pizzahut.io/v1/content/en-in/in-1/images/pizza/veggie-supreme.4bbddf98eccea9929192db1494ba3678.1.jpg" }, // Old Item Image
-      { name: "Pesto Pizza", prices: { SMALL: 240, MEDIUM: 299 }, img: "https://images.unsplash.com/photo-1601924579440-ccde7f4c8b0d?w=400" }
-    ]
-  },
-
-  // These sections did not exist in the old list provided, so I kept the new high-quality links.
-  sandwich: {
-    type: "bites",
-    title: "SANDWICH",
-    img: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=1200",
-    items: [
-      { name: "Veg Grilled Sandwich", prices: { REGULAR: 99 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyiZhu81hbbSZuNVz3NcOVTwSjFiuN-76llQ&s" },
-      { name: "Paneer Tikka Sandwich", prices: { REGULAR: 159 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC4BKKT7BFTEx1ICZxlMLk0D8Cv78Y1jngvA&s" },
-      { name: "Cheese N Corn Sandwich", prices: { REGULAR: 149 }, img: "https://aartimadan.com/wp-content/uploads/2023/06/Cheesy-Corn-Sandwich.jpg" },
-      { name: "Bombay Masala Sandwich", prices: { REGULAR: 139 }, img: "https://i.ytimg.com/vi/ZLii7Awd-I0/maxresdefault.jpg" },
-      
-    ]
-  },
-
-  toast: {
-    type: "bites",
-    title: "TOAST",
-    img: "https://www.vegrecipesofindia.com/wp-content/uploads/2015/07/cheese-garlic-bread-recipe-1.jpg",
-    items: [
-      { name: "Cheese Chilli Toast", prices: { REGULAR: 150 }, img: "https://www.vegrecipesofindia.com/wp-content/uploads/2013/11/cheese-chilli-toast-recipe-21.jpg" },
-      { name: "Cheese Garlic Toast", prices: { REGULAR: 150 }, img: "https://www.vegrecipesofindia.com/wp-content/uploads/2015/07/cheese-garlic-bread-recipe-1.jpg" },
-      { name: "Pesto Toast", prices: { REGULAR: 169 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9P-sFuBf7vvn6ByCoc3bfC4iXmL_Dr_d9gQ&s" }
-    ]
-  },
-
-  chinese: {
-    type: "bites",
-    title: "CHINESE",
-    img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=1200",
-    items: [
-      { name: "Chilli Garlic Noodles", prices: { REGULAR: 179 }, img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400" },
-      { name: "Hakka Noodles", prices: { REGULAR: 159 }, img: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400" },
-      { name: "Schezwan Noodles", prices: { REGULAR: 169 }, img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400" },
-      { name: "Chilli Paneer", prices: { REGULAR: 189 }, img: "https://images.unsplash.com/photo-1628294896516-344152572ee8?w=400" },
-      { name: "Paneer Peri Peri", prices: { REGULAR: 179 }, img: "https://images.unsplash.com/photo-1628294896516-344152572ee8?w=400" },
-      { name: "Crispy Corn", prices: { REGULAR: 140 }, img: "https://www.indianhealthyrecipes.com/wp-content/uploads/2023/09/crispy-corn.jpg" },
-      { name: "Manchurian Dry", prices: { REGULAR: 140 }, img: "https://www.awesomecuisine.com/wp-content/uploads/2018/07/cabbage_manchurian_dry.jpg" },
-      { name: "Manchurian Gravy", prices: { REGULAR: 160 }, img: "https://www.carveyourcraving.com/wp-content/uploads/2016/02/manchurian6.jpg" },
-      { name: "Fried Rice", prices: { REGULAR: 160 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPB0SshjQzi37NckUqup-HIv1ULwgFFmJExg&s" },
-      { name: "Honey Chilli Potato", prices: { REGULAR: 150 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxf_AfGl3ca1FkzNvkLgQplvYkPH7VupVEpQ&s" },
-    ]
-  },
-
-  sizzler: {
-    type: "bites",
-    title: "SIZZLER",
-    img: "https://www.yummytummyaarthi.com/wp-content/uploads/2016/02/sizzler.jpg",
-    items: [
-      { name: "Chinese Sizzler", prices: { REGULAR: 399 }, img: "https://www.shutterstock.com/image-photo/paneer-sizzler-indian-version-cottage-600nw-2216735423.jpg" },
-      { name: "Italian Sizzler", prices: { REGULAR: 489 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDNseOZxiPGYZ2Nh-NXT8dmspPViqAOW75Tw&s" }
-    ]
-  },
-
-  iced_tea: {
-    type: "drinks",
-    title: "ICED TEA",
-    img: "https://www.nestleprofessional.in/sites/default/files/2021-08/Soothing-Mist-Banner.jpg",
-    items: [
-      { name: "Peach Iced Tea", prices: { REGULAR: 139 }, img: "https://www.vegetarianventures.com/wp-content/uploads/2019/07/PeachLemonadeBlog-16-of-18.jpg" },
-      { name: "Lemon Iced Tea", prices: { REGULAR: 118 }, img: "https://www.nestleprofessional.in/sites/default/files/2021-08/Soothing-Mist-Banner.jpg" }
-    ]
-  },
-
-  garlic_bread: {
-    type: "bites",
-    title: "GARLIC BREAD",
-    img: "https://i1.wp.com/thetwincookingproject.net/wp-content/uploads/2020/05/Homemade-Dominos-Garlic-Bread_-scaled.jpg?fit=1707%2C2560&ssl=1",
-    items: [
-      { name: "Corn N Cheese Stuffed Garlic Bread", prices: { REGULAR: 140 }, img: "https://i.pinimg.com/736x/26/49/62/264962ac317060a3566991352d2674be.jpg" },
-      { name: "Paneer Tikka Stuffed Garlic Bread", prices: { REGULAR: 160 }, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH1xk3XX24ZhrxQ9n-kgvd8E8xv55y_mxcLg&s" }
-    ]
-  },
-  Pool: {
-    type: "game",
-    title: "POOL",
-    img: "https://media.istockphoto.com/id/149409557/photo/composition-of-billiard.jpg?s=612x612&w=0&k=20&c=Wn6B7acze4xG4TX1S3vusu8nC88nYJBy2_xYhdRNpKU=",
-    items: [
-      { 
-        name: "2 People (1 Hour)", 
-        prices: { REGULAR: 120 }, 
-        img: "https://media.istockphoto.com/id/1318776337/photo/young-woman-office-workers-playing-pool-in-the-office.jpg?s=612x612&w=0&k=20&c=5CW8T0IPvKU4wHijKKfbbT33UrrwedDDGQ7myUXWMjo=" 
-      },
-      { 
-        name: "4 People (1 Hour)", 
-        prices: { REGULAR: 150 }, 
-        img: "https://img.freepik.com/free-photo/friends-cheering-while-their-friend-aiming-billiards-ball_329181-1913.jpg?semt=ais_user_personalization&w=740&q=80" 
-      }
-    ]
-}
-  
-};
-
-
-
-
-
-const swiper = new Swiper('.swiper', {
-    loop: true, autoplay: { delay: 3500, disableOnInteraction: false },
-    pagination: { el: '.swiper-pagination', clickable: true },
-});
-
-function handleSearch() {
-    const query = document.getElementById("menuSearch").value.toLowerCase();
-    const isCategoryScreen = document.getElementById("categoryScreen").classList.contains("active");
-    if (isCategoryScreen) { filterMenu('all', document.querySelector('.tab-btn'), query); } 
-    else if (currentCategoryKey) { renderItems(menuData[currentCategoryKey], query); }
-}
+// --- Core Functions ---
 
 function filterMenu(type, btn, query = "") {
-    document.getElementById("pageTitle").textContent = "MTC Menu";
-    if (btn) { document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
     const grid = document.getElementById("categoryGrid");
+    if (!grid) return;
+    
+    document.getElementById("pageTitle").textContent = "MTC Menu";
+    if (btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+    
     grid.innerHTML = "";
+    if (Object.keys(menuData).length === 0) {
+        grid.innerHTML = '<p style="text-align: center; width: 100%;">Connecting...</p>';
+        return;
+    }
+
     for (const key in menuData) {
-        const itemMatch = menuData[key].items.some(i => i.name.toLowerCase().includes(query));
-        const categoryMatch = menuData[key].title.toLowerCase().includes(query);
+        const itemMatch = menuData[key].items.some(i => i.name.toLowerCase().includes(query.toLowerCase()));
+        const categoryMatch = menuData[key].title.toLowerCase().includes(query.toLowerCase());
         if ((type === 'all' || menuData[key].type === type) && (categoryMatch || itemMatch)) {
-            grid.innerHTML += `<div class="category-card" onclick="openCategory('${key}')"><img src="${menuData[key].img}"><div class="category-overlay"><div class="category-name">${menuData[key].title}</div></div></div>`;
+            grid.innerHTML += `<div class="category-card" onclick="openCategory('${key}')">
+                <img src="${menuData[key].img}" loading="lazy">
+                <div class="category-overlay"><div class="category-name">${menuData[key].title}</div></div>
+            </div>`;
         }
     }
 }
 
 function openCategory(key) {
-    currentCategoryKey = key; document.getElementById("pageTitle").textContent = menuData[key].title;
-    document.getElementById("categoryScreen").classList.remove("active"); 
+    currentCategoryKey = key;
+    document.getElementById("pageTitle").textContent = menuData[key].title;
+    document.getElementById("categoryScreen").classList.remove("active");
     document.getElementById("itemsScreen").classList.add("active");
-    window.scrollTo(0, 0); renderItems(menuData[key]);
+    window.scrollTo(0, 0);
+    renderItems(menuData[key]);
 }
 
 function renderItems(category, query = "") {
     const container = document.getElementById("itemsContainer");
     container.innerHTML = "";
-    category.items.filter(i => i.name.toLowerCase().includes(query)).forEach(item => {
+    category.items.filter(i => i.name.toLowerCase().includes(query.toLowerCase())).forEach(item => {
         let pricesHTML = "";
         for (const label in item.prices) {
             const finalPrice = item.prices[label];
+            const oldPrice = item.originalPrices[label];
             const key = `${item.name}-${label}`;
             const qty = cart[key] ? cart[key].qty : 0;
             
@@ -556,11 +184,17 @@ function renderItems(category, query = "") {
             } else {
                 pricesHTML += `<div class="p-pill" onclick="changeQty('${item.name}', '${label}', ${finalPrice}, 1)">
                     <span class="size-label">${label}</span>
-                    <span class="price-val">₹${finalPrice}</span>
+                    <div style="display:flex; flex-direction:column; align-items:flex-start;">
+                        <span style="text-decoration: line-through; font-size: 10px; color: var(--muted); margin-bottom:-4px;">₹${oldPrice}</span>
+                        <span class="price-val">₹${finalPrice}</span>
+                    </div>
                 </div>`;
             }
         }
-        container.innerHTML += `<div class="inner-item"><img src="${item.img}" class="item-visual"><div class="item-info"><div class="item-name">${item.name}</div><div class="p-container">${pricesHTML}</div></div></div>`;
+        container.innerHTML += `<div class="inner-item">
+            <img src="${item.img}" class="item-visual" loading="lazy">
+            <div class="item-info"><div class="item-name">${item.name}</div><div class="p-container">${pricesHTML}</div></div>
+        </div>`;
     });
 }
 
@@ -573,9 +207,8 @@ function changeQty(name, size, price, delta) {
 }
 
 function updateCartBar() {
-    const bar = document.getElementById("cartBar");
     const count = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
-    bar.style.display = count > 0 ? "flex" : "none";
+    document.getElementById("cartBar").style.display = count > 0 ? "flex" : "none";
     document.getElementById("cartCount").textContent = `${count} Items Selected`;
 }
 
@@ -585,18 +218,16 @@ function showOrder() {
     document.getElementById("searchWrapper").style.display = "none";
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById("orderScreen").classList.add("active");
-    
     const list = document.getElementById("orderList"); list.innerHTML = "";
     let subtotal = 0;
     Object.values(cart).forEach(item => {
         subtotal += item.price * item.qty;
-        list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid var(--border)"><div><b>${item.qty}x</b> ${item.name} (${item.size})</div><div>₹${item.price * item.qty}</div></div>`;
+        list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid var(--border)"><div><b>${item.qty}x</b> ${item.name}</div><div>₹${item.price * item.qty}</div></div>`;
     });
-    const tax = Math.round(subtotal * 0.025 * 100) / 100;
+    let gst = Math.round(subtotal * 0.05);
     document.getElementById("subTotal").textContent = `₹${subtotal}`;
-    document.getElementById("cgst").textContent = `₹${tax}`;
-    document.getElementById("sgst").textContent = `₹${tax}`;
-    document.getElementById("grandTotal").textContent = `₹${subtotal + (tax * 2)}`;
+    document.getElementById("gstTotal").textContent = `₹${gst}`;
+    document.getElementById("grandTotal").textContent = `₹${subtotal + gst}`;
 }
 
 function goBack() {
@@ -610,12 +241,88 @@ function goBack() {
 
 function clearCart() { if(confirm("Clear order?")) { cart = {}; updateCartBar(); goBack(); } }
 
-document.getElementById("themeToggle").onclick = () => {
-    document.body.classList.toggle("light");
-    document.getElementById("themeToggle").textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
-};
+function handleSearch() {
+    const query = document.getElementById("menuSearch").value;
+    const isCategoryScreen = document.getElementById("categoryScreen").classList.contains("active");
+    if (isCategoryScreen) { 
+        const activeBtn = document.querySelector('.tab-btn.active');
+        filterMenu(activeBtn.getAttribute('data-type') || 'all', activeBtn, query); 
+    } 
+    else if (currentCategoryKey) { renderItems(menuData[currentCategoryKey], query); }
+}
 
-filterMenu('all', document.querySelector('.tab-btn'));
+// --- App Initialization ---
+
+async function initMenu() {
+
+    // Load cached instantly
+    const cached = localStorage.getItem('mtc_fast_cache');
+    if (cached) {
+        menuData = JSON.parse(cached);
+        filterMenu('all', document.querySelector('.tab-btn.active'));
+    }
+
+    try {
+        const response = await fetch(CSV_URL, { cache: "no-store" });
+        const csvText = await response.text();
+
+        const parsed = Papa.parse(csvText, {
+            header: true,
+            skipEmptyLines: true
+        });
+
+        const formatted = {};
+
+        parsed.data.forEach(row => {
+            const catKey = row.Category;
+            if (!catKey) return;
+
+            if (!formatted[catKey]) {
+                formatted[catKey] = {
+                    type: row.Type,
+                    title: row.Title,
+                    img: row["Image URL"],
+                    items: []
+                };
+            }
+
+            let item = formatted[catKey].items.find(
+                i => i.name === row["Item Name"]
+            );
+
+            if (!item) {
+                item = {
+                    name: row["Item Name"],
+                    prices: {},
+                    originalPrices: {},
+                    img: row["Image URL"]
+                };
+                formatted[catKey].items.push(item);
+            }
+
+            item.prices[row["Price Label"]] = parseFloat(row["Current Price"]) || 0;
+            item.originalPrices[row["Price Label"]] =
+                parseFloat(row["Original Price (Strike)"]) || 0;
+        });
+
+        menuData = formatted;
+        localStorage.setItem('mtc_fast_cache', JSON.stringify(menuData));
+        filterMenu('all', document.querySelector('.tab-btn.active'));
+
+    } catch (err) {
+        console.error("CSV Load Error:", err);
+    }
+}
+
+// Global Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    initMenu();
+    new Swiper('.swiper', { loop: true, autoplay: { delay: 3500 }, pagination: { el: '.swiper-pagination', clickable: true } });
+    document.getElementById("themeToggle").onclick = () => {
+        document.body.classList.toggle("light");
+        document.getElementById("themeToggle").textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+    };
+});
 </script>
 </body>
 </html>
