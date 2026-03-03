@@ -176,6 +176,7 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
     <div class="grand-total"><span>Grand Total</span><span id="grandTotal">₹0</span></div>
   </div>
   <button class="clear-btn" onclick="clearCart()">Clear Order</button>
+  <button class="clear-btn" style="background: var(--accent); color:#000; border:none;" onclick="sendToWhatsApp(this)">
 </div>
 
 <div id="cartBar" onclick="showOrder()">
@@ -227,6 +228,27 @@ function loadCart() {
 
 function clearStoredCart() {
     localStorage.removeItem(CART_KEY);
+}
+
+// --- ORDER SESSION + WHATSAPP CONFIG ---
+const ORDER_SESSION_KEY = "mtc_order_session";
+const WHATSAPP_NUMBER = "919530237601"; // replace with your number
+
+function generateOrderId() {
+    return "MTC-" + Date.now().toString().slice(-6);
+}
+
+function getOrCreateOrderSession() {
+    let session = localStorage.getItem(ORDER_SESSION_KEY);
+    if (!session) {
+        session = generateOrderId();
+        localStorage.setItem(ORDER_SESSION_KEY, session);
+    }
+    return session;
+}
+
+function resetOrderSession() {
+    localStorage.removeItem(ORDER_SESSION_KEY);
 }
 
 
@@ -285,6 +307,57 @@ function filterMenu(type, btn, query = "") {
             grid.innerHTML += `<div class="category-card" onclick="openCategory('${key}')"><img src="${menuData[key].img}"><div class="category-overlay"><div class="category-name">${menuData[key].title}</div></div></div>`;
         }
     }
+}
+
+
+function sendToWhatsApp(btn) {
+
+    if (Object.keys(cart).length === 0) {
+        alert("Cart is empty.");
+        return;
+    }
+
+    const orderId = getOrCreateOrderSession();
+
+    let message = `*Mahakaal Themes Cafe*\n`;
+    message += `Order ID: ${orderId}\n\n`;
+
+    let subtotal = 0;
+
+    Object.values(cart).forEach(item => {
+        const lineTotal = item.price * item.qty;
+        subtotal += lineTotal;
+        message += `${item.qty}x ${item.name} (${item.size}) - ₹${lineTotal}\n`;
+    });
+
+    const tax = Math.round(subtotal * 0.025 * 100) / 100;
+    const grandTotal = subtotal + (tax * 2);
+
+    message += `\nSubtotal: ₹${subtotal}`;
+    message += `\nCGST: ₹${tax}`;
+    message += `\nSGST: ₹${tax}`;
+    message += `\n*Grand Total: ₹${grandTotal}*`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+
+    // Prevent rapid duplicate clicking
+    btn.disabled = true;
+    btn.innerText = "Redirecting...";
+
+    window.open(url, "_blank");
+
+    // Clear cart after short delay
+    setTimeout(() => {
+        cart = {};
+        saveCart();
+        clearStoredCart();
+        resetOrderSession();
+        updateCartBar();
+        goBack();
+        btn.disabled = false;
+        btn.innerText = "Place Order on WhatsApp";
+    }, 1500);
 }
 
 function openCategory(key) {
