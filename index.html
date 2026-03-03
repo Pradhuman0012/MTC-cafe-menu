@@ -192,6 +192,44 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 let cart = {};
 let currentCategoryKey = null;
 let menuData = {};
+
+// --- CART PERSISTENCE (8 HOURS SMART EXPIRY) ---
+const CART_KEY = "mtc_cart_v1";
+const CART_EXPIRY_HOURS = 8;
+
+function saveCart() {
+    const payload = {
+        data: cart,
+        updatedAt: Date.now()
+    };
+    localStorage.setItem(CART_KEY, JSON.stringify(payload));
+}
+
+function loadCart() {
+    const stored = localStorage.getItem(CART_KEY);
+    if (!stored) return;
+
+    try {
+        const payload = JSON.parse(stored);
+        const hoursPassed = (Date.now() - payload.updatedAt) / (1000 * 60 * 60);
+
+        if (hoursPassed > CART_EXPIRY_HOURS) {
+            localStorage.removeItem(CART_KEY);
+            cart = {};
+        } else {
+            cart = payload.data || {};
+        }
+    } catch (e) {
+        cart = {};
+        localStorage.removeItem(CART_KEY);
+    }
+}
+
+function clearStoredCart() {
+    localStorage.removeItem(CART_KEY);
+}
+
+
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQWGG0hgrRrDuRFn4729qiS-iTLG-CD4R6fC9HwfiTZxbmiBnVtyzPB_HyoW1jxuDO5_0orKp07j_27/pub?gid=0&single=true&output=csv';
 
 // --- DATA LOGIC ---
@@ -291,8 +329,18 @@ function renderItems(category, query = "") {
 
 function changeQty(name, size, price, delta) {
     const key = `${name}-${size}`;
-    if (!cart[key]) { if (delta > 0) cart[key] = { name, size, price, qty: delta }; }
-    else { cart[key].qty += delta; if (cart[key].qty <= 0) delete cart[key]; }
+
+    if (!cart[key]) {
+        if (delta > 0) {
+            cart[key] = { name, size, price, qty: delta };
+        }
+    } else {
+        cart[key].qty += delta;
+        if (cart[key].qty <= 0) delete cart[key];
+    }
+
+    saveCart();   // Persist cart with timestamp
+
     updateCartBar();
     if (currentCategoryKey) renderItems(menuData[currentCategoryKey]);
     if (document.getElementById("orderScreen").classList.contains("active")) showOrder();
@@ -346,7 +394,14 @@ function goBack() {
     document.getElementById("categoryScreen").classList.add("active");
 }
 
-function clearCart() { if(confirm("Clear order?")) { cart = {}; updateCartBar(); goBack(); } }
+function clearCart() {
+    if (confirm("Clear order?")) {
+        cart = {};
+        clearStoredCart();
+        updateCartBar();
+        goBack();
+    }
+}
 
 function handleSearch() {
     const query = document.getElementById("menuSearch").value;
@@ -366,6 +421,9 @@ document.getElementById("themeToggle").onclick = () => {
 };
 
 // Start
+// Start
+loadCart();
+updateCartBar();
 initMenu();
 </script>
 </body>
