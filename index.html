@@ -163,6 +163,15 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 </div>
 
 <div id="orderScreen" class="screen">
+<div style="margin-bottom:20px;">
+  <label style="font-weight:800; font-size:14px;">Customer Name</label>
+  <input 
+    type="text" 
+    id="customerName"
+    placeholder="Enter your name"
+    style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-weight:600;"
+  >
+</div>
   <div class="back-btn" onclick="goBack()">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     Modify Order
@@ -232,7 +241,7 @@ function clearStoredCart() {
 
 // --- ORDER SESSION + WHATSAPP CONFIG ---
 const ORDER_SESSION_KEY = "mtc_order_session";
-const WHATSAPP_NUMBER = "919530237601"; // replace with your number
+const WHATSAPP_NUMBER = "919509437601"; // replace with your number
 
 function generateOrderId() {
     return "MTC-" + Date.now().toString().slice(-6);
@@ -317,43 +326,42 @@ function sendToWhatsApp(btn) {
         return;
     }
 
+    const nameInput = document.getElementById("customerName");
+    const customerName = nameInput ? nameInput.value.trim() : "";
+
+    if (!customerName) {
+        alert("Please enter your name.");
+        return;
+    }
+
     const orderId = getOrCreateOrderSession();
 
     let message = `*Mahakaal Themes Cafe*\n`;
-    message += `Order ID: ${orderId}\n\n`;
-
-    let subtotal = 0;
+    message += `Order ID: ${orderId}\n`;
+    message += `Customer: ${customerName}\n\n`;
+    message += `*Items Ordered:*\n`;
 
     Object.values(cart).forEach(item => {
-        const lineTotal = item.price * item.qty;
-        subtotal += lineTotal;
-        message += `${item.qty}x ${item.name} (${item.size}) - ₹${lineTotal}\n`;
+        message += `${item.qty}x ${item.name} (${item.size})\n`;
+        if (item.notes && item.notes.trim() !== "") {
+            message += `   Note: ${item.notes}\n`;
+        }
     });
-
-    const tax = Math.round(subtotal * 0.025 * 100) / 100;
-    const grandTotal = subtotal + (tax * 2);
-
-    message += `\nSubtotal: ₹${subtotal}`;
-    message += `\nCGST: ₹${tax}`;
-    message += `\nSGST: ₹${tax}`;
-    message += `\n*Grand Total: ₹${grandTotal}*`;
 
     const encodedMessage = encodeURIComponent(message);
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
 
-    // Prevent rapid duplicate clicking
     btn.disabled = true;
     btn.innerText = "Redirecting...";
 
     window.open(url, "_blank");
 
-    // Clear cart after short delay
     setTimeout(() => {
         cart = {};
-        saveCart();
         clearStoredCart();
         resetOrderSession();
         updateCartBar();
+        nameInput.value = "";
         goBack();
         btn.disabled = false;
         btn.innerText = "Place Order on WhatsApp";
@@ -405,15 +413,14 @@ function changeQty(name, size, price, delta) {
 
     if (!cart[key]) {
         if (delta > 0) {
-            cart[key] = { name, size, price, qty: delta };
+            cart[key] = { name, size, price, qty: delta, notes: "" };
         }
     } else {
         cart[key].qty += delta;
         if (cart[key].qty <= 0) delete cart[key];
     }
 
-    saveCart();   // Persist cart with timestamp
-
+    saveCart();
     updateCartBar();
     if (currentCategoryKey) renderItems(menuData[currentCategoryKey]);
     if (document.getElementById("orderScreen").classList.contains("active")) showOrder();
@@ -436,21 +443,34 @@ function showOrder() {
     const list = document.getElementById("orderList"); 
     list.innerHTML = "";
     let subtotal = 0;
-    Object.values(cart).forEach(item => {
-        subtotal += item.price * item.qty;
-        list.innerHTML += `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid var(--border)">
-                <div><b>${item.name}</b><br><small>${item.size}</small></div>
+    Object.entries(cart).forEach(([key, item]) => {
+    subtotal += item.price * item.qty;
+
+    list.innerHTML += `
+        <div style="padding:15px 0; border-bottom:1px solid var(--border)">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <b>${item.name}</b><br>
+                    <small>${item.size}</small>
+                </div>
+
                 <div style="display:flex; align-items:center; gap:10px;">
                     <div class="p-pill">
                         <button class="qty-control" onclick="changeQty('${item.name}', '${item.size}', ${item.price}, -1)">-</button>
                         <span>${item.qty}</span>
                         <button class="qty-control" onclick="changeQty('${item.name}', '${item.size}', ${item.price}, 1)">+</button>
                     </div>
-                    <div>₹${item.price * item.qty}</div>
                 </div>
-            </div>`;
-    });
+            </div>
+
+            <textarea 
+                placeholder="Add customization (e.g. less sugar, extra cheese)"
+                style="width:100%; margin-top:10px; padding:10px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-size:13px;"
+                oninput="updateItemNotes('${key}', this.value)"
+            >${item.notes || ""}</textarea>
+        </div>
+    `;
+});
     const tax = Math.round(subtotal * 0.025 * 100) / 100;
     document.getElementById("subTotal").textContent = `₹${subtotal}`;
     document.getElementById("cgst").textContent = `₹${tax}`;
@@ -473,6 +493,13 @@ function clearCart() {
         clearStoredCart();
         updateCartBar();
         goBack();
+    }
+}
+
+function updateItemNotes(key, value) {
+    if (cart[key]) {
+        cart[key].notes = value;
+        saveCart();
     }
 }
 
