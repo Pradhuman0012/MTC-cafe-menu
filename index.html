@@ -155,7 +155,7 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 </div>
 
 <div id="itemsScreen" class="screen">
-  <div class="back-btn" onclick="goBack()">
+  <div class="back-btn" onclick="triggerBack()">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     CATEGORIES
   </div>
@@ -163,7 +163,7 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 </div>
 
 <div id="orderScreen" class="screen">
-  <div class="back-btn" onclick="goBack()">
+  <div class="back-btn" onclick="triggerBack()">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     Modify Order
   </div>
@@ -193,26 +193,21 @@ let cart = {};
 let currentCategoryKey = null;
 let menuData = {};
 
-// --- CART PERSISTENCE (8 HOURS SMART EXPIRY) ---
+// --- CART PERSISTENCE ---
 const CART_KEY = "mtc_cart_v1";
 const CART_EXPIRY_HOURS = 8;
 
 function saveCart() {
-    const payload = {
-        data: cart,
-        updatedAt: Date.now()
-    };
+    const payload = { data: cart, updatedAt: Date.now() };
     localStorage.setItem(CART_KEY, JSON.stringify(payload));
 }
 
 function loadCart() {
     const stored = localStorage.getItem(CART_KEY);
     if (!stored) return;
-
     try {
         const payload = JSON.parse(stored);
         const hoursPassed = (Date.now() - payload.updatedAt) / (1000 * 60 * 60);
-
         if (hoursPassed > CART_EXPIRY_HOURS) {
             localStorage.removeItem(CART_KEY);
             cart = {};
@@ -221,18 +216,32 @@ function loadCart() {
         }
     } catch (e) {
         cart = {};
-        localStorage.removeItem(CART_KEY);
     }
 }
 
-function clearStoredCart() {
-    localStorage.removeItem(CART_KEY);
-}
-
+function clearStoredCart() { localStorage.removeItem(CART_KEY); }
 
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQWGG0hgrRrDuRFn4729qiS-iTLG-CD4R6fC9HwfiTZxbmiBnVtyzPB_HyoW1jxuDO5_0orKp07j_27/pub?gid=0&single=true&output=csv';
 
-// --- DATA LOGIC ---
+// --- MOBILE BACK BUTTON FIX (HISTORY API) ---
+// जब यूजर मोबाइल का बैक बटन दबाएगा तो यह ट्रिगर होगा
+window.onpopstate = function(event) {
+    const itemsScreen = document.getElementById("itemsScreen");
+    const orderScreen = document.getElementById("orderScreen");
+
+    if (itemsScreen.classList.contains("active") || orderScreen.classList.contains("active")) {
+        // अगर यूजर किसी सब-स्क्रीन पर है, तो उसे होम पर ले जाओ (बंद करने के बजाय)
+        goBackInternal();
+    }
+};
+
+// फिजिकल/जेस्चर बैक बटन और ऑन-स्क्रीन बैक बटन दोनों के लिए एक ही लॉजिक
+function triggerBack() {
+    // अगर ऑन-स्क्रीन बटन दबाया है, तो हम बस ब्राउज़र का बैक ट्रिगर करेंगे
+    // ताकि onpopstate उसे संभाल ले
+    window.history.back();
+}
+
 async function initMenu() {
     const cached = localStorage.getItem('mtc_fast_cache');
     if(cached) {
@@ -240,36 +249,33 @@ async function initMenu() {
         filterMenu('all', document.querySelector('.tab-btn'));
     }
 
-    if (typeof Papa !== 'undefined') {
-        Papa.parse(CSV_URL, {
-            download: true,
-            header: true,
-            skipEmptyLines: true,
-            complete: function(results) {
-                const formatted = {};
-                results.data.forEach(row => {
-                    const catKey = row.Category;
-                    if(!catKey) return;
-                    if(!formatted[catKey]) {
-                        formatted[catKey] = { type: row.Type, title: row.Title, img: row['Image URL'], items: [] };
-                    }
-                    let item = formatted[catKey].items.find(i => i.name === row['Item Name']);
-                    if(!item) {
-                        item = { name: row['Item Name'], prices: {}, originalPrices: {}, img: row['Image URL'] };
-                        formatted[catKey].items.push(item);
-                    }
-                    item.prices[row['Price Label']] = parseFloat(row['Current Price']) || 0;
-                    item.originalPrices[row['Price Label']] = parseFloat(row['Original Price (Strike)']) || 0;
-                });
-                menuData = formatted;
-                localStorage.setItem('mtc_fast_cache', JSON.stringify(menuData));
-                filterMenu('all', document.querySelector('.tab-btn.active'));
-            }
-        });
-    } else { setTimeout(initMenu, 300); }
+    Papa.parse(CSV_URL, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            const formatted = {};
+            results.data.forEach(row => {
+                const catKey = row.Category;
+                if(!catKey) return;
+                if(!formatted[catKey]) {
+                    formatted[catKey] = { type: row.Type, title: row.Title, img: row['Image URL'], items: [] };
+                }
+                let item = formatted[catKey].items.find(i => i.name === row['Item Name']);
+                if(!item) {
+                    item = { name: row['Item Name'], prices: {}, originalPrices: {}, img: row['Image URL'] };
+                    formatted[catKey].items.push(item);
+                }
+                item.prices[row['Price Label']] = parseFloat(row['Current Price']) || 0;
+                item.originalPrices[row['Price Label']] = parseFloat(row['Original Price (Strike)']) || 0;
+            });
+            menuData = formatted;
+            localStorage.setItem('mtc_fast_cache', JSON.stringify(menuData));
+            filterMenu('all', document.querySelector('.tab-btn.active'));
+        }
+    });
 }
 
-// --- CORE FUNCTIONS ---
 function filterMenu(type, btn, query = "") {
     document.getElementById("pageTitle").textContent = "MTC Menu";
     if (btn) {
@@ -294,6 +300,9 @@ function openCategory(key) {
     document.getElementById("itemsScreen").classList.add("active");
     window.scrollTo(0, 0); 
     renderItems(menuData[key]);
+    
+    // --- बैक बटन के लिए स्टेट पुश करें ---
+    history.pushState({ screen: 'items' }, "");
 }
 
 function renderItems(category, query = "") {
@@ -329,18 +338,13 @@ function renderItems(category, query = "") {
 
 function changeQty(name, size, price, delta) {
     const key = `${name}-${size}`;
-
     if (!cart[key]) {
-        if (delta > 0) {
-            cart[key] = { name, size, price, qty: delta };
-        }
+        if (delta > 0) cart[key] = { name, size, price, qty: delta };
     } else {
         cart[key].qty += delta;
         if (cart[key].qty <= 0) delete cart[key];
     }
-
-    saveCart();   // Persist cart with timestamp
-
+    saveCart();
     updateCartBar();
     if (currentCategoryKey) renderItems(menuData[currentCategoryKey]);
     if (document.getElementById("orderScreen").classList.contains("active")) showOrder();
@@ -383,9 +387,13 @@ function showOrder() {
     document.getElementById("cgst").textContent = `₹${tax}`;
     document.getElementById("sgst").textContent = `₹${tax}`;
     document.getElementById("grandTotal").textContent = `₹${subtotal + (tax * 2)}`;
+
+    // --- बैक बटन के लिए स्टेट पुश करें ---
+    history.pushState({ screen: 'order' }, "");
 }
 
-function goBack() {
+// यह फंक्शन सिर्फ UI को रीसेट करता है (हिस्ट्री को नहीं छेड़ता)
+function goBackInternal() {
     currentCategoryKey = null; 
     document.getElementById("pageTitle").textContent = "MTC Menu";
     document.getElementById("sliderContainer").style.display = "block";
@@ -399,7 +407,8 @@ function clearCart() {
         cart = {};
         clearStoredCart();
         updateCartBar();
-        goBack();
+        // कार्ट क्लियर होने पर होम स्क्रीन पर वापस जाएं
+        window.history.back(); 
     }
 }
 
@@ -420,8 +429,7 @@ document.getElementById("themeToggle").onclick = () => {
     document.getElementById("themeToggle").textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
 };
 
-// Start
-// Start
+// Initialization
 loadCart();
 updateCartBar();
 initMenu();
