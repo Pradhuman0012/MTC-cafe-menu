@@ -43,16 +43,8 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 #themeToggle { position: absolute; top: 25px; right: 25px; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 50%; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
 
 /* SLIDER */
-#sliderContainer {
-    max-width: 600px;
-    height: 130px;
-    margin: 15px 24px 20px;
-    border-radius: 22px;
-    overflow: hidden;
-    position: relative;
-}
+#sliderContainer { max-width: 600px; height: 130px; margin: 15px 24px 20px; border-radius: 22px; overflow: hidden; position: relative; }
 @media (min-width: 648px) { #sliderContainer { margin-left: auto; margin-right: auto; } }
-
 .swiper-slide { width: 100%; height: 100%; }
 .slide-content { width: 100%; height: 100%; display: flex; align-items: center; padding: 18px 22px; background-size: cover !important; background-position: center !important; }
 .mini-offer-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.85), rgba(0,0,0,0.3)); z-index: 1; }
@@ -64,7 +56,6 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 /* SEARCH */
 #searchWrapper { padding: 0 24px; max-width: 600px; margin: 10px auto 20px; }
 #menuSearch { width: 100%; background: var(--surface); border: 1px solid var(--border); padding: 14px 20px; border-radius: 18px; color: var(--text); font-family: 'Plus Jakarta Sans'; font-weight: 600; outline: none; transition: 0.3s; }
-#menuSearch:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
 
 .filter-tabs { display: flex; justify-content: center; gap: 8px; margin: 25px 0; flex-wrap: wrap; }
 .tab-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 10px 20px; border-radius: 100px; font-weight: 700; font-size: 12px; cursor: pointer; text-transform: uppercase; }
@@ -95,12 +86,8 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 
 #cartBar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 500px; background: var(--accent); padding: 18px 24px; border-radius: 22px; display: none; justify-content: space-between; align-items: center; color: #fff; font-weight: 800; box-shadow: 0 15px 35px var(--accent-glow); cursor: pointer; z-index: 1000; }
 
-.instruction-top { text-align: center; background: var(--pill-bg); padding: 15px; border-radius: 15px; margin-bottom: 25px; border: 1px dashed var(--accent); color: var(--accent); font-weight: 800; font-size: 13px; letter-spacing: 0.5px; }
-.total-box { margin-top: 20px; padding: 25px; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; }
-.tax-row { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; margin-bottom: 8px; font-weight: 600; }
-.grand-total { border-top: 1px dashed var(--border); margin-top: 12px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; }
-.grand-total span:last-child { font-size: 28px; font-weight: 800; color: var(--accent); font-family: 'Outfit'; }
-.clear-btn { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.2); width: 100%; padding: 15px; border-radius: 15px; font-weight: 800; margin-top: 20px; cursor: pointer; }
+/* EXIT TOAST */
+#exitToast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; font-weight: 600; z-index: 10000; display: none; animation: fadeIn 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
 
 footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 50px; }
 .pradhuman a { color: var(--accent); text-decoration: none; font-weight: 800; }
@@ -109,6 +96,7 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 
 <body>
 <div class="glow"></div>
+<div id="exitToast">Press back again to exit menu</div>
 
 <header>
   <button id="themeToggle">🌙</button>
@@ -192,6 +180,8 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 let cart = {};
 let currentCategoryKey = null;
 let menuData = {};
+let backPressCount = 0;
+let backPressTimer = null;
 
 // --- CART PERSISTENCE ---
 const CART_KEY = "mtc_cart_v1";
@@ -207,40 +197,65 @@ function loadCart() {
     if (!stored) return;
     try {
         const payload = JSON.parse(stored);
-        const hoursPassed = (Date.now() - payload.updatedAt) / (1000 * 60 * 60);
-        if (hoursPassed > CART_EXPIRY_HOURS) {
+        if ((Date.now() - payload.updatedAt) / (1000 * 60 * 60) > CART_EXPIRY_HOURS) {
             localStorage.removeItem(CART_KEY);
             cart = {};
         } else {
             cart = payload.data || {};
         }
-    } catch (e) {
-        cart = {};
-    }
+    } catch (e) { cart = {}; }
 }
 
 function clearStoredCart() { localStorage.removeItem(CART_KEY); }
 
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQWGG0hgrRrDuRFn4729qiS-iTLG-CD4R6fC9HwfiTZxbmiBnVtyzPB_HyoW1jxuDO5_0orKp07j_27/pub?gid=0&single=true&output=csv';
+// --- HISTORY & EXIT PREVENTION ---
+if (window.history.state === null) {
+    history.replaceState({ screen: 'home' }, "");
+}
 
-// --- MOBILE BACK BUTTON FIX (HISTORY API) ---
-// जब यूजर मोबाइल का बैक बटन दबाएगा तो यह ट्रिगर होगा
 window.onpopstate = function(event) {
-    const itemsScreen = document.getElementById("itemsScreen");
-    const orderScreen = document.getElementById("orderScreen");
+    const itemsActive = document.getElementById("itemsScreen").classList.contains("active");
+    const orderActive = document.getElementById("orderScreen").classList.contains("active");
 
-    if (itemsScreen.classList.contains("active") || orderScreen.classList.contains("active")) {
-        // अगर यूजर किसी सब-स्क्रीन पर है, तो उसे होम पर ले जाओ (बंद करने के बजाय)
+    if (itemsActive || orderActive) {
         goBackInternal();
+    } else {
+        handleHomeExit();
     }
 };
 
-// फिजिकल/जेस्चर बैक बटन और ऑन-स्क्रीन बैक बटन दोनों के लिए एक ही लॉजिक
-function triggerBack() {
-    // अगर ऑन-स्क्रीन बटन दबाया है, तो हम बस ब्राउज़र का बैक ट्रिगर करेंगे
-    // ताकि onpopstate उसे संभाल ले
-    window.history.back();
+function handleHomeExit() {
+    backPressCount++;
+    if (backPressCount === 1) {
+        showToast("Press back again to exit menu");
+        history.pushState({ screen: 'home' }, ""); // वापस एक स्टेट डाल दी
+        clearTimeout(backPressTimer);
+        backPressTimer = setTimeout(() => { backPressCount = 0; }, 2000);
+    } else {
+        window.history.go(-2); // असली एग्जिट
+    }
 }
+
+function showToast(msg) {
+    const toast = document.getElementById("exitToast");
+    toast.textContent = msg;
+    toast.style.display = "block";
+    setTimeout(() => { toast.style.display = "none"; }, 2000);
+}
+
+function triggerBack() { window.history.back(); }
+
+function goBackInternal() {
+    currentCategoryKey = null; 
+    document.getElementById("pageTitle").textContent = "MTC Menu";
+    document.getElementById("sliderContainer").style.display = "block";
+    document.getElementById("searchWrapper").style.display = "block";
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById("categoryScreen").classList.add("active");
+}
+
+// --- DATA LOGIC ---
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQWGG0hgrRrDuRFn4729qiS-iTLG-CD4R6fC9HwfiTZxbmiBnVtyzPB_HyoW1jxuDO5_0orKp07j_27/pub?gid=0&single=true&output=csv';
 
 async function initMenu() {
     const cached = localStorage.getItem('mtc_fast_cache');
@@ -248,19 +263,14 @@ async function initMenu() {
         menuData = JSON.parse(cached);
         filterMenu('all', document.querySelector('.tab-btn'));
     }
-
     Papa.parse(CSV_URL, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
+        download: true, header: true, skipEmptyLines: true,
         complete: function(results) {
             const formatted = {};
             results.data.forEach(row => {
                 const catKey = row.Category;
                 if(!catKey) return;
-                if(!formatted[catKey]) {
-                    formatted[catKey] = { type: row.Type, title: row.Title, img: row['Image URL'], items: [] };
-                }
+                if(!formatted[catKey]) formatted[catKey] = { type: row.Type, title: row.Title, img: row['Image URL'], items: [] };
                 let item = formatted[catKey].items.find(i => i.name === row['Item Name']);
                 if(!item) {
                     item = { name: row['Item Name'], prices: {}, originalPrices: {}, img: row['Image URL'] };
@@ -286,8 +296,8 @@ function filterMenu(type, btn, query = "") {
     grid.innerHTML = "";
     for (const key in menuData) {
         const itemMatch = menuData[key].items.some(i => i.name.toLowerCase().includes(query.toLowerCase()));
-        const categoryMatch = menuData[key].title.toLowerCase().includes(query.toLowerCase());
-        if ((type === 'all' || menuData[key].type === type) && (categoryMatch || itemMatch)) {
+        const catMatch = menuData[key].title.toLowerCase().includes(query.toLowerCase());
+        if ((type === 'all' || menuData[key].type === type) && (catMatch || itemMatch)) {
             grid.innerHTML += `<div class="category-card" onclick="openCategory('${key}')"><img src="${menuData[key].img}"><div class="category-overlay"><div class="category-name">${menuData[key].title}</div></div></div>`;
         }
     }
@@ -300,8 +310,6 @@ function openCategory(key) {
     document.getElementById("itemsScreen").classList.add("active");
     window.scrollTo(0, 0); 
     renderItems(menuData[key]);
-    
-    // --- बैक बटन के लिए स्टेट पुश करें ---
     history.pushState({ screen: 'items' }, "");
 }
 
@@ -315,7 +323,6 @@ function renderItems(category, query = "") {
             const oldPrice = item.originalPrices[label];
             const key = `${item.name}-${label}`;
             const qty = cart[key] ? cart[key].qty : 0;
-            
             if (qty > 0) {
                 pricesHTML += `<div class="p-pill">
                     <button class="qty-control" onclick="event.stopPropagation(); changeQty('${item.name}', '${label}', ${finalPrice}, -1)">-</button>
@@ -338,12 +345,8 @@ function renderItems(category, query = "") {
 
 function changeQty(name, size, price, delta) {
     const key = `${name}-${size}`;
-    if (!cart[key]) {
-        if (delta > 0) cart[key] = { name, size, price, qty: delta };
-    } else {
-        cart[key].qty += delta;
-        if (cart[key].qty <= 0) delete cart[key];
-    }
+    if (!cart[key]) { if (delta > 0) cart[key] = { name, size, price, qty: delta }; } 
+    else { cart[key].qty += delta; if (cart[key].qty <= 0) delete cart[key]; }
     saveCart();
     updateCartBar();
     if (currentCategoryKey) renderItems(menuData[currentCategoryKey]);
@@ -364,59 +367,41 @@ function showOrder() {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById("orderScreen").classList.add("active");
     
-    const list = document.getElementById("orderList"); 
-    list.innerHTML = "";
+    const list = document.getElementById("orderList"); list.innerHTML = "";
     let subtotal = 0;
     Object.values(cart).forEach(item => {
         subtotal += item.price * item.qty;
-        list.innerHTML += `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid var(--border)">
-                <div><b>${item.name}</b><br><small>${item.size}</small></div>
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <div class="p-pill">
-                        <button class="qty-control" onclick="changeQty('${item.name}', '${item.size}', ${item.price}, -1)">-</button>
-                        <span>${item.qty}</span>
-                        <button class="qty-control" onclick="changeQty('${item.name}', '${item.size}', ${item.price}, 1)">+</button>
-                    </div>
-                    <div>₹${item.price * item.qty}</div>
+        list.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid var(--border)">
+            <div><b>${item.name}</b><br><small>${item.size}</small></div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div class="p-pill">
+                    <button class="qty-control" onclick="changeQty('${item.name}', '${item.size}', ${item.price}, -1)">-</button>
+                    <span>${item.qty}</span>
+                    <button class="qty-control" onclick="changeQty('${item.name}', '${item.size}', ${item.price}, 1)">+</button>
                 </div>
-            </div>`;
+                <div>₹${item.price * item.qty}</div>
+            </div>
+        </div>`;
     });
     const tax = Math.round(subtotal * 0.025 * 100) / 100;
     document.getElementById("subTotal").textContent = `₹${subtotal}`;
     document.getElementById("cgst").textContent = `₹${tax}`;
     document.getElementById("sgst").textContent = `₹${tax}`;
     document.getElementById("grandTotal").textContent = `₹${subtotal + (tax * 2)}`;
-
-    // --- बैक बटन के लिए स्टेट पुश करें ---
     history.pushState({ screen: 'order' }, "");
-}
-
-// यह फंक्शन सिर्फ UI को रीसेट करता है (हिस्ट्री को नहीं छेड़ता)
-function goBackInternal() {
-    currentCategoryKey = null; 
-    document.getElementById("pageTitle").textContent = "MTC Menu";
-    document.getElementById("sliderContainer").style.display = "block";
-    document.getElementById("searchWrapper").style.display = "block";
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById("categoryScreen").classList.add("active");
 }
 
 function clearCart() {
     if (confirm("Clear order?")) {
-        cart = {};
-        clearStoredCart();
-        updateCartBar();
-        // कार्ट क्लियर होने पर होम स्क्रीन पर वापस जाएं
-        window.history.back(); 
+        cart = {}; clearStoredCart(); updateCartBar(); triggerBack();
     }
 }
 
 function handleSearch() {
     const query = document.getElementById("menuSearch").value;
-    const isCategoryScreen = document.getElementById("categoryScreen").classList.contains("active");
-    if (isCategoryScreen) { filterMenu('all', null, query); } 
-    else if (currentCategoryKey) { renderItems(menuData[currentCategoryKey], query); }
+    const isCat = document.getElementById("categoryScreen").classList.contains("active");
+    if (isCat) filterMenu('all', null, query);
+    else if (currentCategoryKey) renderItems(menuData[currentCategoryKey], query);
 }
 
 const swiper = new Swiper('.swiper', {
@@ -429,10 +414,7 @@ document.getElementById("themeToggle").onclick = () => {
     document.getElementById("themeToggle").textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
 };
 
-// Initialization
-loadCart();
-updateCartBar();
-initMenu();
+loadCart(); updateCartBar(); initMenu();
 </script>
 </body>
 </html>
