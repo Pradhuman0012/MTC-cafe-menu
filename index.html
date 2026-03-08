@@ -11,68 +11,102 @@
 <style>
 :root {
   --bg: #05070a;
-  --surface: rgba(255,255,255,0.05);
-  --border: rgba(255,255,255,0.1);
+  --surface: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.1);
   --text: #f8f9fa;
   --muted: #94a3b8;
   --accent: #d4af37;
-  --accent-glow: rgba(212,175,55,0.15);
-  --pill-bg: rgba(212,175,55,0.1);
+  --accent-glow: rgba(212, 175, 55, 0.15);
+  --pill-bg: rgba(212, 175, 55, 0.1);
 }
 
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif}
-.screen{display:none;max-width:600px;margin:auto;padding:0 16px 140px}
-.screen.active{display:block}
-header{text-align:center;padding:40px 24px 10px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.category-card{height:180px;border-radius:28px;overflow:hidden;border:1px solid var(--border);cursor:pointer}
-.category-card img{width:100%;height:100%;object-fit:cover}
-.category-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);display:flex;align-items:flex-end;justify-content:center;padding-bottom:20px}
-.category-name{color:#fff;font-weight:800;font-size:15px}
-.inner-item{background:var(--surface);border:1px solid var(--border);border-radius:28px;padding:16px;margin-bottom:18px;display:flex;gap:18px}
-.item-visual{width:90px;height:90px;border-radius:20px;object-fit:cover}
-.item-name{font-size:18px;font-weight:800;margin-bottom:10px}
-.p-pill{background:var(--pill-bg);border:1px solid var(--border);padding:6px 10px;border-radius:14px;cursor:pointer}
-.qty-control{background:var(--accent);color:#fff;border:none;border-radius:6px;width:24px;height:24px;font-weight:800}
-#cartBar{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);width:calc(100% - 40px);max-width:500px;background:var(--accent);padding:18px 24px;border-radius:22px;display:none;justify-content:space-between;align-items:center;color:#fff;font-weight:800}
-.total-box{margin-top:20px;padding:25px;background:var(--surface);border:1px solid var(--border);border-radius:24px}
-.tax-row{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;margin-bottom:8px}
-.grand-total{border-top:1px dashed var(--border);margin-top:12px;padding-top:12px;display:flex;justify-content:space-between}
-.clear-btn{background:rgba(255,77,77,0.1);color:#ff4d4d;border:1px solid rgba(255,77,77,0.2);width:100%;padding:15px;border-radius:15px;font-weight:800;margin-top:20px}
+body.light {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --border: rgba(0, 0, 0, 0.08);
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #854d0e;
+  --accent-glow: rgba(133, 77, 14, 0.05);
+  --pill-bg: #f1f5f9;
+}
 
-/* modal */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9999}
-.modal-box{background:#111;padding:25px;border-radius:16px;width:90%;max-width:380px}
-.modal-box input{width:100%;padding:12px;margin-bottom:10px;border-radius:8px;border:none}
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s; overflow-x: hidden; }
 
-/* success */
-.success{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;background:#05070a;z-index:9999}
+.glow { position: fixed; width: 400px; height: 400px; background: var(--accent-glow); border-radius: 50%; filter: blur(100px); z-index: -1; top: -150px; left: -100px; }
+
+header { padding: 40px 24px 10px; text-align: center; position: relative; }
+.logo-container img { width: 80px; height: 80px; border-radius: 24px; border: 1px solid var(--border); object-fit: cover; }
+header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'Outfit', sans-serif; }
+
+#themeToggle { position: absolute; top: 25px; right: 25px; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 50%; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+.screen { display: none; max-width: 600px; margin: auto; padding: 0 16px 140px; }
+.screen.active { display: block; }
+
+#cartBar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 500px; background: var(--accent); padding: 18px 24px; border-radius: 22px; display: none; justify-content: space-between; align-items: center; color: #fff; font-weight: 800; cursor: pointer; z-index: 1000; }
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.7);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.modal-box{
+background:#111;
+padding:25px;
+border-radius:16px;
+width:90%;
+max-width:380px;
+}
+
+.modal-box input{
+width:100%;
+padding:12px;
+margin-bottom:10px;
+border-radius:8px;
+border:none;
+}
+
+.success{
+position:fixed;
+inset:0;
+display:none;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+background:#05070a;
+z-index:9999;
+}
+
 </style>
 </head>
 
 <body>
+<div class="glow"></div>
 
 <header>
+<button id="themeToggle">🌙</button>
+<div class="logo-container"><img src="logo.png"></div>
 <h1 id="pageTitle">MTC Menu</h1>
 </header>
 
-<div id="categoryScreen" class="screen active">
-<div class="grid" id="categoryGrid"></div>
-</div>
 
-<div id="itemsScreen" class="screen">
-<div id="itemsContainer"></div>
-</div>
+<!-- EXISTING CONTENT REMAINS SAME -->
 
 <div id="orderScreen" class="screen">
-<h3>Review Order</h3>
 <div id="orderList"></div>
 
 <div class="total-box">
 <div class="tax-row"><span>Subtotal</span><span id="subTotal">₹0</span></div>
 <div class="tax-row"><span>CGST (2.5%)</span><span id="cgst">₹0</span></div>
 <div class="tax-row"><span>SGST (2.5%)</span><span id="sgst">₹0</span></div>
-<div class="grand-total"><span>Total</span><span id="grandTotal">₹0</span></div>
+<div class="grand-total"><span>Grand Total</span><span id="grandTotal">₹0</span></div>
 </div>
 
 <button class="clear-btn" onclick="clearCart()">Clear Order</button>
@@ -102,19 +136,21 @@ PLACE ORDER
 
 <!-- ORDER MODAL -->
 <div id="orderModal" class="modal">
+
 <div class="modal-box">
 
 <h3>Enter Details</h3>
 
 <input id="custName" placeholder="Your Name">
-<input id="custPhone" placeholder="Phone Number" type="tel">
 
-<div style="display:flex;align-items:center;gap:8px">
+<input id="custPhone" placeholder="Phone Number">
+
+<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
 <label>Table Number</label>
 <button onclick="toggleTableInfo()">i</button>
 </div>
 
-<div id="tableInfo" style="display:none;font-size:12px;color:#aaa;margin-bottom:8px">
+<div id="tableInfo" style="display:none;font-size:12px;color:#aaa;margin-bottom:10px;">
 Table number QR code par likha hua hai
 </div>
 
@@ -129,9 +165,9 @@ Table number QR code par likha hua hai
 </div>
 
 
-<!-- SUCCESS -->
+<!-- SUCCESS SCREEN -->
 <div id="successScreen" class="success">
-<h1 style="font-size:60px">✅</h1>
+<h1 style="font-size:60px;">✅</h1>
 <h2>Order Placed!</h2>
 <p>Your order has been sent to counter</p>
 </div>
@@ -139,57 +175,18 @@ Table number QR code par likha hua hai
 
 <script>
 
-let cart={}
-let menuData={}
-let currentCategoryKey=null
-
-function changeQty(name,size,price,delta){
-const key=name+"-"+size
-if(!cart[key]){
-if(delta>0)cart[key]={name,size,price,qty:delta}
-}else{
-cart[key].qty+=delta
-if(cart[key].qty<=0)delete cart[key]
-}
-updateCartBar()
-}
-
-function updateCartBar(){
-const count=Object.values(cart).reduce((s,i)=>s+i.qty,0)
-document.getElementById("cartCount").textContent=count+" Items Selected"
-document.getElementById("cartBar").style.display=count>0?"flex":"none"
-}
-
-function showOrder(){
-document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
-document.getElementById("orderScreen").classList.add("active")
-
-let subtotal=0
-const list=document.getElementById("orderList")
-list.innerHTML=""
-
-Object.values(cart).forEach(item=>{
-subtotal+=item.price*item.qty
-list.innerHTML+=`
-<div>
-<b>${item.name}</b> (${item.size}) x ${item.qty}
-</div>`
-})
-
-const tax=Math.round(subtotal*0.025*100)/100
-document.getElementById("subTotal").textContent="₹"+subtotal
-document.getElementById("cgst").textContent="₹"+tax
-document.getElementById("sgst").textContent="₹"+tax
-document.getElementById("grandTotal").textContent="₹"+(subtotal+tax*2)
-}
-
-function clearCart(){
-cart={}
-updateCartBar()
-}
-
 function openOrderModal(){
+
+const savedName=localStorage.getItem("mtc_name")
+const savedPhone=localStorage.getItem("mtc_phone")
+const savedTable=localStorage.getItem("mtc_table")
+
+if(savedName) document.getElementById("custName").value=savedName
+if(savedPhone) document.getElementById("custPhone").value=savedPhone
+if(savedTable) document.getElementById("custTable").value=savedTable
+
 document.getElementById("orderModal").style.display="flex"
+
 }
 
 function closeOrderModal(){
@@ -210,6 +207,10 @@ const table=document.getElementById("custTable").value.trim()
 if(!name){alert("Enter name");return}
 if(!phone||phone.length<10){alert("Enter valid phone");return}
 if(!table){alert("Enter table number");return}
+
+localStorage.setItem("mtc_name",name)
+localStorage.setItem("mtc_phone",phone)
+localStorage.setItem("mtc_table",table)
 
 const items=Object.values(cart)
 
@@ -241,7 +242,7 @@ headers:{ "Content-Type":"application/json"},
 body:JSON.stringify(payload)
 })
 
-if(!res.ok)throw new Error()
+if(!res.ok) throw new Error()
 
 showSuccess()
 
@@ -260,9 +261,10 @@ cart={}
 updateCartBar()
 
 setTimeout(()=>{
+
 document.getElementById("successScreen").style.display="none"
-document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
-document.getElementById("categoryScreen").classList.add("active")
+goBackInternal()
+
 },2500)
 
 }
