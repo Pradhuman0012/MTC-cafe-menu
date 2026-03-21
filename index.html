@@ -260,6 +260,7 @@ async function initMenu() {
         complete: function(results) {
             const formatted = {};
             results.data.forEach(row => {
+                if (row.Status === 'Inactive') return; 
                 const catKey = row.Category;
                 if(!catKey) return;
                 if(!formatted[catKey]) {
