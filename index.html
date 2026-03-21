@@ -82,6 +82,10 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 
 .back-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 800; color: var(--accent); cursor: pointer; margin: 10px 0 25px; }
 
+/* SORTING UI */
+.items-header { display: flex; justify-content: space-between; align-items: center; margin: 10px 0 25px; }
+.sort-select { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 12px; font-size: 12px; font-weight: 700; outline: none; }
+
 .inner-item { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; padding: 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 18px; }
 .item-visual { width: 90px; height: 90px; border-radius: 20px; object-fit: cover; }
 .item-info { flex: 1; }
@@ -155,9 +159,15 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 </div>
 
 <div id="itemsScreen" class="screen">
-  <div class="back-btn" onclick="triggerBack()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    CATEGORIES
+  <div class="items-header">
+    <div class="back-btn" style="margin:0;" onclick="triggerBack()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      CATEGORIES
+    </div>
+    <select id="priceSort" class="sort-select" onchange="handleSortChange()">
+      <option value="asc">Price: Low to High</option>
+      <option value="desc">Price: High to Low</option>
+    </select>
   </div>
   <div id="itemsContainer"></div>
 </div>
@@ -223,22 +233,16 @@ function clearStoredCart() { localStorage.removeItem(CART_KEY); }
 
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQWGG0hgrRrDuRFn4729qiS-iTLG-CD4R6fC9HwfiTZxbmiBnVtyzPB_HyoW1jxuDO5_0orKp07j_27/pub?gid=0&single=true&output=csv';
 
-// --- MOBILE BACK BUTTON FIX (HISTORY API) ---
-// जब यूजर मोबाइल का बैक बटन दबाएगा तो यह ट्रिगर होगा
 window.onpopstate = function(event) {
     const itemsScreen = document.getElementById("itemsScreen");
     const orderScreen = document.getElementById("orderScreen");
 
     if (itemsScreen.classList.contains("active") || orderScreen.classList.contains("active")) {
-        // अगर यूजर किसी सब-स्क्रीन पर है, तो उसे होम पर ले जाओ (बंद करने के बजाय)
         goBackInternal();
     }
 };
 
-// फिजिकल/जेस्चर बैक बटन और ऑन-स्क्रीन बैक बटन दोनों के लिए एक ही लॉजिक
 function triggerBack() {
-    // अगर ऑन-स्क्रीन बटन दबाया है, तो हम बस ब्राउज़र का बैक ट्रिगर करेंगे
-    // ताकि onpopstate उसे संभाल ले
     window.history.back();
 }
 
@@ -300,15 +304,30 @@ function openCategory(key) {
     document.getElementById("itemsScreen").classList.add("active");
     window.scrollTo(0, 0); 
     renderItems(menuData[key]);
-    
-    // --- बैक बटन के लिए स्टेट पुश करें ---
     history.pushState({ screen: 'items' }, "");
+}
+
+function handleSortChange() {
+    if (currentCategoryKey) {
+        renderItems(menuData[currentCategoryKey], document.getElementById("menuSearch").value);
+    }
 }
 
 function renderItems(category, query = "") {
     const container = document.getElementById("itemsContainer");
     container.innerHTML = "";
-    category.items.filter(i => i.name.toLowerCase().includes(query.toLowerCase())).forEach(item => {
+    
+    let filteredItems = category.items.filter(i => i.name.toLowerCase().includes(query.toLowerCase()));
+    
+    // --- SORTING LOGIC ---
+    const sortOrder = document.getElementById("priceSort").value;
+    filteredItems.sort((a, b) => {
+        const priceA = Object.values(a.prices)[0] || 0;
+        const priceB = Object.values(b.prices)[0] || 0;
+        return sortOrder === 'asc' ? priceA - priceB : priceB - priceA;
+    });
+
+    filteredItems.forEach(item => {
         let pricesHTML = "";
         for (const label in item.prices) {
             const finalPrice = item.prices[label];
@@ -346,7 +365,7 @@ function changeQty(name, size, price, delta) {
     }
     saveCart();
     updateCartBar();
-    if (currentCategoryKey) renderItems(menuData[currentCategoryKey]);
+    if (currentCategoryKey) renderItems(menuData[currentCategoryKey], document.getElementById("menuSearch").value);
     if (document.getElementById("orderScreen").classList.contains("active")) showOrder();
 }
 
@@ -387,12 +406,9 @@ function showOrder() {
     document.getElementById("cgst").textContent = `₹${tax}`;
     document.getElementById("sgst").textContent = `₹${tax}`;
     document.getElementById("grandTotal").textContent = `₹${subtotal + (tax * 2)}`;
-
-    // --- बैक बटन के लिए स्टेट पुश करें ---
     history.pushState({ screen: 'order' }, "");
 }
 
-// यह फंक्शन सिर्फ UI को रीसेट करता है (हिस्ट्री को नहीं छेड़ता)
 function goBackInternal() {
     currentCategoryKey = null; 
     document.getElementById("pageTitle").textContent = "MTC Menu";
@@ -407,7 +423,6 @@ function clearCart() {
         cart = {};
         clearStoredCart();
         updateCartBar();
-        // कार्ट क्लियर होने पर होम स्क्रीन पर वापस जाएं
         window.history.back(); 
     }
 }
@@ -429,7 +444,6 @@ document.getElementById("themeToggle").onclick = () => {
     document.getElementById("themeToggle").textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
 };
 
-// Initialization
 loadCart();
 updateCartBar();
 initMenu();
