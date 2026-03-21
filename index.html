@@ -70,26 +70,9 @@ header h1 { font-size: 28px; font-weight: 800; margin: 15px 0 0; font-family: 'O
 .tab-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 10px 20px; border-radius: 100px; font-weight: 700; font-size: 12px; cursor: pointer; text-transform: uppercase; }
 .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-/* SCREEN LOGIC - FIXED FOR SMOOTHNESS */
-.screen { 
-    display: none; 
-    max-width: 600px; 
-    margin: auto; 
-    padding: 0 16px 140px; 
-    animation: fadeIn 0.3s ease-out;
-}
-
-/* Category screen needs to stay in DOM but be hidden to keep scroll */
-#categoryScreen.hidden-but-kept {
-    display: none;
-}
-
-.screen.active { display: block; }
-
-@keyframes fadeIn { 
-    from { opacity: 0; transform: translateY(8px); } 
-    to { opacity: 1; transform: translateY(0); } 
-}
+.screen { display: none; max-width: 600px; margin: auto; padding: 0 16px 140px; }
+.screen.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .category-card { height: 180px; border-radius: 28px; overflow: hidden; border: 1px solid var(--border); position: relative; transition: 0.2s; cursor: pointer; }
@@ -131,50 +114,48 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 <body>
 <div class="glow"></div>
 
-<header id="mainHeader">
+<header>
   <button id="themeToggle">🌙</button>
   <div class="logo-container"><img src="logo.png" alt="MTC Logo"></div>
   <h1 id="pageTitle">MTC Menu</h1>
 </header>
 
-<div id="homeView">
-    <div id="sliderContainer" class="mini-offer-banner swiper">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <div class="slide-content" style="background: url('https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=600');">
-                    <div class="mini-offer-overlay"></div>
-                    <div class="mini-offer-text">
-                        <span class="mini-chip" style="background: var(--accent); color: #000;">House Special</span>
-                        <span class="mini-main">Try our new <strong>Cinnamon Flavor</strong> in Frappe & coffee! ✨</span>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="slide-content" style="background: url('https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=600');">
-                    <div class="mini-offer-overlay"></div>
-                    <div class="mini-offer-text">
-                        <span class="mini-chip" style="background: #ff8fab; color: #fff;">Chef's Special</span>
-                        <span class="mini-main">Try our creamy <strong>Pink Pasta (Mix)</strong> at just <strong>₹229/-</strong></span>
-                    </div>
+<div id="sliderContainer" class="mini-offer-banner swiper">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <div class="slide-content" style="background: url('https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=600');">
+                <div class="mini-offer-overlay"></div>
+                <div class="mini-offer-text">
+                    <span class="mini-chip" style="background: var(--accent); color: #000;">House Special</span>
+                    <span class="mini-main">Try our new <strong>Cinnamon Flavor</strong> in Frappe & coffee! ✨</span>
                 </div>
             </div>
         </div>
-        <div class="swiper-pagination"></div>
+        <div class="swiper-slide">
+            <div class="slide-content" style="background: url('https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=600');">
+                <div class="mini-offer-overlay"></div>
+                <div class="mini-offer-text">
+                    <span class="mini-chip" style="background: #ff8fab; color: #fff;">Chef's Special</span>
+                    <span class="mini-main">Try our creamy <strong>Pink Pasta (Mix)</strong> at just <strong>₹229/-</strong></span>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="swiper-pagination"></div>
+</div>
 
-    <div id="searchWrapper" class="search-container">
-      <input type="text" id="menuSearch" placeholder="Search for coffee, pizza, maggi..." onkeyup="handleSearch()">
-    </div>
+<div id="searchWrapper" class="search-container">
+  <input type="text" id="menuSearch" placeholder="Search for coffee, pizza, maggi..." onkeyup="handleSearch()">
+</div>
 
-    <div id="categoryScreen" class="screen active">
-      <div class="filter-tabs">
-        <button class="tab-btn active" onclick="filterMenu('all', this)">All</button>
-        <button class="tab-btn" onclick="filterMenu('drinks', this)">Drinks</button>
-        <button class="tab-btn" onclick="filterMenu('bites', this)">Food</button>
-        <button class="tab-btn" onclick="filterMenu('game', this)">Games</button>
-      </div>
-      <div class="grid" id="categoryGrid"></div>
-    </div>
+<div id="categoryScreen" class="screen active">
+  <div class="filter-tabs">
+    <button class="tab-btn active" onclick="filterMenu('all', this)">All</button>
+    <button class="tab-btn" onclick="filterMenu('drinks', this)">Drinks</button>
+    <button class="tab-btn" onclick="filterMenu('bites', this)">Food</button>
+    <button class="tab-btn" onclick="filterMenu('game', this)">Games</button>
+  </div>
+  <div class="grid" id="categoryGrid"></div>
 </div>
 
 <div id="itemsScreen" class="screen">
@@ -221,8 +202,9 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 let cart = {};
 let currentCategoryKey = null;
 let menuData = {};
-let lastScrollPos = 0; 
+let lastScrollPos = 0; // Fix: Store scroll position of the category screen
 
+// --- CART PERSISTENCE ---
 const CART_KEY = "mtc_cart_v1";
 const CART_EXPIRY_HOURS = 8;
 
@@ -253,7 +235,12 @@ function clearStoredCart() { localStorage.removeItem(CART_KEY); }
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQWGG0hgrRrDuRFn4729qiS-iTLG-CD4R6fC9HwfiTZxbmiBnVtyzPB_HyoW1jxuDO5_0orKp07j_27/pub?gid=0&single=true&output=csv';
 
 window.onpopstate = function(event) {
-    goBackInternal();
+    const itemsScreen = document.getElementById("itemsScreen");
+    const orderScreen = document.getElementById("orderScreen");
+
+    if (itemsScreen.classList.contains("active") || orderScreen.classList.contains("active")) {
+        goBackInternal();
+    }
 };
 
 function triggerBack() {
@@ -296,6 +283,7 @@ async function initMenu() {
 }
 
 function filterMenu(type, btn, query = "") {
+    document.getElementById("pageTitle").textContent = "MTC Menu";
     if (btn) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -312,17 +300,15 @@ function filterMenu(type, btn, query = "") {
 }
 
 function openCategory(key) {
-    // 1. Save scroll position
-    lastScrollPos = window.pageYOffset || document.documentElement.scrollTop;
-    
+    // Fix: Save current scroll position before switching screens
+    lastScrollPos = window.scrollY;
+
     currentCategoryKey = key; 
     document.getElementById("pageTitle").textContent = menuData[key].title;
-    
-    // 2. Hide home view and show items screen
-    document.getElementById("homeView").style.display = "none";
+    document.getElementById("categoryScreen").classList.remove("active"); 
     document.getElementById("itemsScreen").classList.add("active");
     
-    // 3. Scroll to top for items
+    // Always start at the top for items
     window.scrollTo(0, 0); 
     renderItems(menuData[key]);
     history.pushState({ screen: 'items' }, "");
@@ -337,6 +323,7 @@ function handleSortChange() {
 function renderItems(category, query = "") {
     const container = document.getElementById("itemsContainer");
     container.innerHTML = "";
+    
     let filteredItems = category.items.filter(i => i.name.toLowerCase().includes(query.toLowerCase()));
     
     const sortOrder = document.getElementById("priceSort").value;
@@ -396,12 +383,15 @@ function updateCartBar() {
 }
 
 function showOrder() {
-    if(document.getElementById("homeView").style.display !== "none") {
-        lastScrollPos = window.pageYOffset || document.documentElement.scrollTop;
+    // Fix: Save scroll position before opening order review too
+    if (document.getElementById("categoryScreen").classList.contains("active")) {
+        lastScrollPos = window.scrollY;
     }
+
     document.getElementById("pageTitle").textContent = "Review Order";
-    document.getElementById("homeView").style.display = "none";
-    document.getElementById("itemsScreen").classList.remove("active");
+    document.getElementById("sliderContainer").style.display = "none";
+    document.getElementById("searchWrapper").style.display = "none";
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById("orderScreen").classList.add("active");
     
     const list = document.getElementById("orderList"); 
@@ -433,16 +423,15 @@ function showOrder() {
 function goBackInternal() {
     currentCategoryKey = null; 
     document.getElementById("pageTitle").textContent = "MTC Menu";
-    
-    // Hide all secondary screens
-    document.getElementById("itemsScreen").classList.remove("active");
-    document.getElementById("orderScreen").classList.remove("active");
-    
-    // Show main view
-    document.getElementById("homeView").style.display = "block";
-    
-    // INSTANT RESTORE SCROLL
-    window.scrollTo(0, lastScrollPos);
+    document.getElementById("sliderContainer").style.display = "block";
+    document.getElementById("searchWrapper").style.display = "block";
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById("categoryScreen").classList.add("active");
+
+    // Fix: Restore the saved scroll position with a tiny delay
+    setTimeout(() => {
+        window.scrollTo(0, lastScrollPos);
+    }, 10);
 }
 
 function clearCart() {
@@ -456,8 +445,8 @@ function clearCart() {
 
 function handleSearch() {
     const query = document.getElementById("menuSearch").value;
-    const isHome = document.getElementById("homeView").style.display !== "none";
-    if (isHome) { filterMenu('all', null, query); } 
+    const isCategoryScreen = document.getElementById("categoryScreen").classList.contains("active");
+    if (isCategoryScreen) { filterMenu('all', null, query); } 
     else if (currentCategoryKey) { renderItems(menuData[currentCategoryKey], query); }
 }
 
