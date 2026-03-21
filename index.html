@@ -202,6 +202,7 @@ footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size:
 let cart = {};
 let currentCategoryKey = null;
 let menuData = {};
+let lastScrollPos = 0; // Fixed: Variable to store scroll position
 
 // --- CART PERSISTENCE ---
 const CART_KEY = "mtc_cart_v1";
@@ -299,6 +300,9 @@ function filterMenu(type, btn, query = "") {
 }
 
 function openCategory(key) {
+    // Fixed: Capture scroll position before switching
+    lastScrollPos = window.scrollY; 
+    
     currentCategoryKey = key; 
     document.getElementById("pageTitle").textContent = menuData[key].title;
     document.getElementById("categoryScreen").classList.remove("active"); 
@@ -320,7 +324,6 @@ function renderItems(category, query = "") {
     
     let filteredItems = category.items.filter(i => i.name.toLowerCase().includes(query.toLowerCase()));
     
-    // --- SORTING LOGIC ---
     const sortOrder = document.getElementById("priceSort").value;
     filteredItems.sort((a, b) => {
         const priceA = Object.values(a.prices)[0] || 0;
@@ -378,6 +381,11 @@ function updateCartBar() {
 }
 
 function showOrder() {
+    // Save scroll position if coming from main screen
+    if(document.getElementById("categoryScreen").classList.contains("active")) {
+        lastScrollPos = window.scrollY;
+    }
+
     document.getElementById("pageTitle").textContent = "Review Order";
     document.getElementById("sliderContainer").style.display = "none";
     document.getElementById("searchWrapper").style.display = "none";
@@ -417,6 +425,14 @@ function goBackInternal() {
     document.getElementById("searchWrapper").style.display = "block";
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById("categoryScreen").classList.add("active");
+
+    // Fixed: Restore scroll position with a tiny delay to ensure rendering
+    setTimeout(() => {
+        window.scrollTo({
+            top: lastScrollPos,
+            behavior: 'instant'
+        });
+    }, 10);
 }
 
 function clearCart() {
